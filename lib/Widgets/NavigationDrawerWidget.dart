@@ -5,6 +5,9 @@ import 'package:infectious_diseases_service/Controllers/NavigationDrawerControll
 import 'package:infectious_diseases_service/Screens/Dashboard.dart';
 import 'package:infectious_diseases_service/Screens/Patients.dart';
 
+import '../Screens/LoginPage.dart';
+import '../Services/Api.dart';
+
 class NavigationDrawerWidget extends StatelessWidget {
   final NavigationDrawerController _controller = Get.find();
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -164,14 +167,17 @@ class NavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  void selectedItem(BuildContext context, int index) {
+  Future<void> selectedItem(BuildContext context, int index) async {
 
     switch (index) {
       case 0:
-        Get.to(()=>DashboardScreen());
+        Get.toNamed('/dashboard');
         break;
       case 1:
-        Get.to(()=>PatientsScreen());
+        Get.toNamed('/patients');
+        break;
+      case 5:
+        Api.logout();
         break;
     }
   }

@@ -24,12 +24,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return  GetMaterialApp(
+      debugShowCheckedModeBanner: false,
 
-      // theme: ThemeData(
-      //   primarySwatch: Colors.blue,
-      // ),
+      theme: ThemeData(fontFamily: 'Rubik'),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      getPages: [
+        GetPage(name: '/dashboard', page: () => DashboardScreen()),
+        GetPage(name: '/patients', page: () => PatientsScreen()),
+        GetPage(name: '/login', page: () => LoginPage()),
+      ]
     );
   }
 }

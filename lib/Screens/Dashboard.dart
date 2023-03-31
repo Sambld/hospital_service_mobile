@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:infectious_diseases_service/Widgets/PatientTile.dart';
 
 import '../Widgets/NavigationDrawerWidget.dart';
 

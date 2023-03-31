@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as GET;
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
+
+import '../Screens/LoginPage.dart';
 
 class Api {
   static final dio = Dio(
@@ -28,19 +31,34 @@ class Api {
         return handler.next(request); //continue
       },
       onResponse: (response, handler) {
-        print('${response.data}');
-        if (response.statusCode != 200) throw response.data['message'];
+        // print('${response.data}');
+        if (response.statusCode == 404) {
+          throw response.data['message'];
+        };
 
         return handler.next(response); // continue
       },
       onError: (error, handler) {
+        // print("handler");
+        // print(handler);
+        if (error.response?.requestOptions.path == 'user') {
+          Get.offNamed('/login');
+          return handler.next(error); // continue without showing snack bar
+        }
+        if (error.response?.statusCode == 404) {
+          return handler.next(error); // continue without showing snack bar
+        }
+
+        if (error.response?.requestOptions.path == 'patients') {
+          return handler.next(error); // continue without showing snack bar
+        }
         if (GET.Get.isDialogOpen == true) {
           GET.Get.back();
         }
 
         GET.Get.snackbar(
           'error'.tr,
-          '${error.message}',
+          '${error.response?.data['message']}',
           snackPosition: GET.SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
@@ -49,7 +67,6 @@ class Api {
         return handler.next(error); //continue
       },
     ));
-    print("api inisialized");
   }
 
   static Future<Response> login(username , password) async{
@@ -58,6 +75,27 @@ class Api {
       'password': password,
     });
   }
+
+
+  static Future<void> logout() async{
+     await dio.post('logout');
+     await GetStorage().remove('token');
+     Get.offNamed('/login');
+
+  }
+
+
+
+  static Future<Response> getUser() async{
+    return dio.get('user' );
+  }
+
+
+  static Future<Response>getPatients({int? page = 1 , String? search = '' , bool? inHospitalOnly = false}) async {
+    final inHospital = inHospitalOnly == true ? 'inHospitalOnly' : '';
+    return dio.get('patients?page=$page&q=$search&$inHospital');
+  }
+
   // end of initializeInterceptor
 
   // static Future<Response> getGenres() async {

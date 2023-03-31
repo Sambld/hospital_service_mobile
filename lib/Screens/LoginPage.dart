@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Controllers/AuthController.dart';
 import 'package:infectious_diseases_service/Screens/Dashboard.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 import '../Services/Api.dart';
 
@@ -20,6 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
+
 
   @override
   void dispose() {
@@ -46,23 +52,30 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  void _submit() {
+
+  Future<void> login() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // TODO: perform login
+      try {
+        final res = await Api.login(_usernameController.text, _passwordController.text);
 
-      login(_usernameController.text, _passwordController.text);
-    }
-  }
-  Future<void> login(String username, String password) async {
-    try {
-      final res = await Api.login(username, password);
-      print(res);
-      if (res.statusCode == 200) {
+        if (res.statusCode == 200) {
 
-        print("success");
+          _btnController.reset();
+          _authController.user(res.data['user']);
+          print( res.data['access_token']);
+          print(_authController.user['first_name']);
+          GetStorage().write('token', res.data['access_token'].toString()) ;
+          Get.offNamed('/dashboard');
+
+        }
+      } catch (e) {
+        print("error");
+        _btnController.stop();
+        _btnController.reset();
+        print(e);
       }
-    } catch (e) {
-      print(e);
+    }else{
+      _btnController.reset();
     }
   }
   @override
@@ -180,23 +193,11 @@ class _LoginPageState extends State<LoginPage> {
                         validator: _validatePassword,
                       ),
                       const SizedBox(height: 25),
-                      TextButton(
-                        onPressed: _submit,
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          padding: EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          'LOGIN',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                      RoundedLoadingButton(
+                        child: Text('Log in', style: TextStyle(color: Colors.white)),
+                        controller: _btnController,
+                        onPressed: login,
+                        animateOnTap: false,
                       ),
                       // TextButton(
                       //   onPressed: () {},

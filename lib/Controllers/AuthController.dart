@@ -12,24 +12,42 @@ import '../Services/Api.dart';
 class AuthController extends GetxController {
 
   var isLoggedIn = true.obs;
-  var user = [].obs;
+  var _user = {}.obs;
+
+  get user => _user;
+
+  set user(value) {
+    _user = value;
+  }
 
   @override
   void onInit() {
+    // GetStorage().erase();
     redirect();
     // TODO: implement onInit
     super.onInit();
   }
 
   Future<void> redirect() async {
-    var token = await GetStorage().read('token');
-    if (token == null) {
-      print(isLoggedIn);
-      Get.off(() => LoginPage());
-    } else {
-      isLoggedIn = true.obs;
-      Get.off(() => DashboardScreen());
+
+    try {
+      var user = await Api.getUser();
+      if (user.statusCode == 200) {
+        isLoggedIn = true.obs;
+        Get.off(() => DashboardScreen());
+      } else {
+        isLoggedIn = false.obs;
+        Get.offNamed('/login');
+      }
+
+
+    } on DioError catch (e) {
+
     }
+
+
+
+
   }
 
 
