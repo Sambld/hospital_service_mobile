@@ -7,7 +7,7 @@ import '../Controllers/AuthController.dart';
 import '../Widgets/NavigationDrawerWidget.dart';
 import 'Dashboard.dart';
 import 'LoginPage.dart';
-import 'Patients.dart';
+import 'Patients/Patients.dart';
 import 'SplashScreen.dart';
 
 class HomeScreen extends StatefulWidget {

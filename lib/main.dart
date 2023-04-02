@@ -4,11 +4,14 @@ import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/PatientCard.dart';
 import 'package:infectious_diseases_service/Screens/Dashboard.dart';
 import 'package:infectious_diseases_service/Screens/LoginPage.dart';
+import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
 import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
 
 import 'Controllers/AuthController.dart';
 import 'Controllers/NavigationDrawerController.dart';
-import 'Screens/Patients.dart';
+import 'Screens/Patients/AddPatient.dart';
+import 'Screens/Patients/Patient.dart';
+import 'Screens/Patients/Patients.dart';
 import 'Services/Api.dart';
 import 'Widgets/NavigationDrawerWidget.dart';
 
@@ -33,6 +36,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/dashboard', page: () => DashboardScreen()),
         GetPage(name: '/patients', page: () => PatientsScreen()),
         GetPage(name: '/login', page: () => LoginPage()),
+        GetPage(name: '/patient-details', page: () => PatientScreen()),
+        GetPage(name: '/add-patient', page: ()=> AddPatientScreen()),
+        GetPage(name: '/edit-patient', page: ()=> EditPatientScreen()),
       ]
     );
   }

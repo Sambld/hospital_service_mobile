@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Models/Patient.dart';
 
-import '../Services/Api.dart';
+import '../../Services/Api.dart';
 
 class PatientsController extends GetxController {
   //patients controller
@@ -16,7 +17,6 @@ class PatientsController extends GetxController {
   @override
   void onInit() async {
     // print("getting patients");
-
     await getPatients();
     super.onInit();
   }

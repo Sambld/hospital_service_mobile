@@ -12,13 +12,9 @@ import '../Services/Api.dart';
 class AuthController extends GetxController {
 
   var isLoggedIn = true.obs;
-  var _user = {}.obs;
+  var user = {}.obs;
 
-  get user => _user;
 
-  set user(value) {
-    _user = value;
-  }
 
   @override
   void onInit() {
@@ -31,8 +27,10 @@ class AuthController extends GetxController {
   Future<void> redirect() async {
 
     try {
-      var user = await Api.getUser();
-      if (user.statusCode == 200) {
+      var res = await Api.getUser();
+      if (res.statusCode == 200) {
+        user(res.data);
+        print(user);
         isLoggedIn = true.obs;
         Get.off(() => DashboardScreen());
       } else {

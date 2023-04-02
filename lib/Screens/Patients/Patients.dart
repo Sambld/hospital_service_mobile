@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Widgets/PatientCard.dart';
 import 'package:number_paginator/number_paginator.dart';
 
-import '../Controllers/AuthController.dart';
-import '../Controllers/PatientsController.dart';
-import '../Models/Patient.dart';
-import '../Services/Api.dart';
-import '../Widgets/NavigationDrawerWidget.dart';
+import '../../Controllers/AuthController.dart';
+import '../../Controllers/Patients/PatientsController.dart';
+import '../../Widgets/NavigationDrawerWidget.dart';
+
+
 
 class PatientsScreen extends StatefulWidget {
   const PatientsScreen({Key? key}) : super(key: key);
@@ -29,6 +29,11 @@ class _PatientsScreenState extends State<PatientsScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +41,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
         actions: [
           Obx(
             () => Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(8.0),
               child: Text(
                 '(${_patientsController.totalPatients.value})',
                 style: const TextStyle(fontSize: 18),
@@ -49,6 +54,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: TextField(
+              // controller: TextEditingController(text: _patientsController.searchQuery.value),
               onSubmitted: _patientsController.searchPatients,
               decoration: InputDecoration(
                 hintText: 'Search',
@@ -102,11 +108,16 @@ class _PatientsScreenState extends State<PatientsScreen> {
                       itemBuilder: (context, index) {
                         final patient = patients[index];
                         return PatientCard(
+                          onTap: (){
+                            Get.toNamed('/patient-details', arguments: patient.id!);
+                          },
+                          id: patient.id!,
                           firstName: patient.firstName!,
                           lastName: patient.lastName!,
                           gender: patient.gender!,
                           phoneNumber: patient.phoneNumber!,
                           birthDate: patient.birthDate!,
+
                         );
                       },
                     ),

@@ -3,31 +3,31 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:infectious_diseases_service/Controllers/NavigationDrawerController.dart';
 import 'package:infectious_diseases_service/Screens/Dashboard.dart';
-import 'package:infectious_diseases_service/Screens/Patients.dart';
+import 'package:infectious_diseases_service/Screens/Patients/Patients.dart';
 
+import '../Controllers/AuthController.dart';
 import '../Screens/LoginPage.dart';
 import '../Services/Api.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final NavigationDrawerController _controller = Get.find();
+  final authController = Get.find<AuthController>();
   final padding = EdgeInsets.symmetric(horizontal: 20);
 
   @override
   Widget build(BuildContext context) {
-    final name = 'Sarah Abs';
-    final email = 'sarah@abs.com';
-    final urlImage =
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
+    final name = '${authController.user.value['first_name']} ${authController.user.value['last_name']}';
+    final role = authController.user.value['role'];
 
     return Drawer(
       child: Material(
-        color: Color.fromRGBO(50, 75, 205, 1),
+        color: Colors.blueAccent,
         child: ListView(
           children: <Widget>[
             buildHeader(
-              urlImage: urlImage,
+
               name: name,
-              role: email,
+              role: role,
               onClicked: () => print('Header'),
             ),
             Container(
@@ -89,7 +89,6 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 
   Widget buildHeader({
-    required String urlImage,
     required String name,
     required String role,
     required VoidCallback onClicked,
@@ -100,7 +99,7 @@ class NavigationDrawerWidget extends StatelessWidget {
           padding: padding.add(EdgeInsets.symmetric(vertical: 40)),
           child: Row(
             children: [
-              CircleAvatar(radius: 30, child: Icon(Icons.health_and_safety),),
+              CircleAvatar(radius: 30, child: Icon(Icons.health_and_safety_outlined , color: Colors.blue,size: 40,),backgroundColor: Colors.white,),
               SizedBox(width: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,10 +170,10 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     switch (index) {
       case 0:
-        Get.toNamed('/dashboard');
+        Get.offNamed('/dashboard');
         break;
       case 1:
-        Get.toNamed('/patients');
+        Get.offNamed('/patients');
         break;
       case 5:
         Api.logout();
