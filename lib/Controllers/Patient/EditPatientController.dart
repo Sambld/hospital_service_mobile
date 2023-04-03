@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:infectious_diseases_service/Controllers/Patients/PatientController.dart';
 import 'package:intl/intl.dart';
 
 import '../../Models/Patient.dart';

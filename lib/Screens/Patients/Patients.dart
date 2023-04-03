@@ -6,7 +6,7 @@ import 'package:infectious_diseases_service/Widgets/PatientCard.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 import '../../Controllers/AuthController.dart';
-import '../../Controllers/Patients/PatientsController.dart';
+import '../../Controllers/Patient/PatientsController.dart';
 import '../../Widgets/NavigationDrawerWidget.dart';
 
 

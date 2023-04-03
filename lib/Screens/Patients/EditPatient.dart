@@ -4,7 +4,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../Controllers/Patients/EditPatientController.dart';
+import '../../Controllers/Patient/EditPatientController.dart';
 
 class EditPatientScreen extends StatefulWidget {
   @override
@@ -22,6 +22,17 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
           ()=> Scaffold(
         appBar: AppBar(
           title:  Text('Edit Patient #${_editPatientController.patient.value.id}'),
+          actions: [
+            // save form
+            IconButton(
+              icon: const Icon(Icons.save),
+              onPressed: _editPatientController.isLoading.value
+                  ? null
+                  : () async {
+                _editPatientController.submitForm();
+              },
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -109,15 +120,7 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     const InputDecoration(labelText: 'Emergency Contact Number'),
                   ),
                   const SizedBox(height: 20.0),
-                  ElevatedButton(
 
-                    onPressed: _editPatientController.isLoading.value ? null : () async{
-                      _editPatientController.submitForm();
-
-                    },
-                    child: const Text('Edit Patient'),
-
-                  ),
                 ],
               ),
             ),

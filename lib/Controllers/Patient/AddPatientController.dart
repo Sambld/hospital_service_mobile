@@ -14,7 +14,6 @@ class AddPatientController extends GetxController{
 
 
   Future<void> submitForm() async {
-    isLoading(true);
     final DateFormat _dateFormat = DateFormat('yyyy/MM/dd');
 
     if (formKey.value.currentState!.saveAndValidate()) {
@@ -40,6 +39,7 @@ class AddPatientController extends GetxController{
       print(patientId);
       Get.offNamed('patient-details', arguments: patientId);
     }
+    isLoading(false);
 
   }
 

@@ -29,7 +29,7 @@ class PatientController extends GetxController {
       patient(Patient.fromJson(res.data['data']['patient']));
       // print(res.data['data']['patient']['medical_records'][0]['id']   );
       medicalRecords(res.data['data']['patient']['medical_records'].map<MedicalRecord>((item) => MedicalRecord.fromJson(item)).toList());
-      medicalRecords.sort((a, b) => b.patientEntryDate.compareTo(a.patientEntryDate));
+      medicalRecords.sort((a, b) => b.patientEntryDate!.compareTo(a.patientEntryDate!));
 
     isLoading(false);
     print(patient);

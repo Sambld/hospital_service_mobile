@@ -1,47 +1,49 @@
 class MedicalRecord {
   int? id;
-  int patientId;
-  int userId;
-  String medicalSpecialty;
-  String conditionDescription;
-  String stateUponEnter;
-  String standardTreatment;
+  int? patientId;
+  int? userId;
+  String? medicalSpecialty;
+  String? conditionDescription;
+  String? stateUponEnter;
+  String? standardTreatment;
   String? stateUponExit;
   int? bedNumber;
-  DateTime patientEntryDate;
+  DateTime? patientEntryDate;
   DateTime? patientLeavingDate;
   String? doctorName;
 
   MedicalRecord({
     this.id,
-    required this.patientId,
-    required this.userId,
-    required this.medicalSpecialty,
-    required this.conditionDescription,
-    required this.stateUponEnter,
-    required this.standardTreatment,
+    this.patientId,
+    this.userId,
+    this.medicalSpecialty,
+    this.conditionDescription,
+    this.stateUponEnter,
+    this.standardTreatment,
     this.stateUponExit,
     this.bedNumber,
-    required this.patientEntryDate,
+    this.patientEntryDate,
     this.patientLeavingDate,
     this.doctorName,
   });
 
   factory MedicalRecord.fromJson(Map<String, dynamic> json) {
     return MedicalRecord(
-      id: json['id'],
-      patientId: json['patient_id'],
-      userId: json['user_id'],
-      medicalSpecialty: json['medical_specialty'],
-      conditionDescription: json['condition_description'],
-      stateUponEnter: json['state_upon_enter'],
-      standardTreatment: json['standard_treatment'],
-      stateUponExit: json['state_upon_exit'],
-      bedNumber: json['bed_number'],
-      patientEntryDate: DateTime.parse(json['patient_entry_date']),
-      patientLeavingDate: json['patient_leaving_date'] != null ? DateTime.parse(json['patient_leaving_date']) : null,
-      doctorName: "${json['assigned_doctor']['first_name']} ${json['assigned_doctor']['last_name']}"
-    );
+        id: json['id'],
+        patientId: json['patient_id'],
+        userId: json['user_id'],
+        medicalSpecialty: json['medical_specialty'],
+        conditionDescription: json['condition_description'],
+        stateUponEnter: json['state_upon_enter'],
+        standardTreatment: json['standard_treatment'],
+        stateUponExit: json['state_upon_exit'],
+        bedNumber: json['bed_number'],
+        patientEntryDate: DateTime.parse(json['patient_entry_date']),
+        patientLeavingDate: json['patient_leaving_date'] != null
+            ? DateTime.parse(json['patient_leaving_date'])
+            : null,
+        doctorName:
+            "${json['assigned_doctor']['first_name']} ${json['assigned_doctor']['last_name']}");
   }
 
   Map<String, dynamic> toJson() {
@@ -55,7 +57,7 @@ class MedicalRecord {
     data['standard_treatment'] = standardTreatment;
     data['state_upon_exit'] = stateUponExit;
     data['bed_number'] = bedNumber;
-    data['patient_entry_date'] = patientEntryDate.toIso8601String();
+    data['patient_entry_date'] = patientEntryDate?.toIso8601String();
     data['patient_leaving_date'] = patientLeavingDate?.toIso8601String();
     return data;
   }

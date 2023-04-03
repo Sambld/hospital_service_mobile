@@ -125,45 +125,13 @@ class Api {
     return dio.put('patients/$id', data: formData);
   }
 
-// end of initializeInterceptor
 
-// static Future<Response> getGenres() async {
-//   return dio.get('/api/genres');
-// } //end of getGenres
-//
-// static Future<Response> getMovies({
-//   int page = 1,
-//   String? type,
-//   int? genreId,
-//   int? actorId,
-// }) async {
-//   return dio.get('/api/movies', queryParameters: {
-//     'page': page,
-//     'type': type,
-//     'genre_id': genreId,
-//     'actor_id': actorId,
-//   });
-// } //end of getMovies
-//
-// static Future<Response> getActors({required int movieId}) async {
-//   return dio.get('/api/movies/${movieId}/actors');
-// } //end of actors
-//
-// static Future<Response> getRelatedMovies({required int movieId}) async {
-//   return dio.get('/api/movies/${movieId}/related_movies');
-// } //end of actors
-//
-// static Future<Response> login({required Map<String, dynamic> loginData}) async {
-//   FormData formData = FormData.fromMap(loginData);
-//   return dio.post('/api/login', data: loginData);
-// } //end of login
-//
-// static Future<Response> register({required Map<String, dynamic> registerData}) async {
-//   FormData formData = FormData.fromMap(registerData);
-//   return dio.post('/api/register', data: formData);
-// } //end of register
-//
-// static Future<Response> getUser() async {
-//   return dio.get('/api/user');
-// } //end of getUser
+  static Future<Response> getMedicalRecord({required int patientId , required int medicalRecordId}) async {
+    return dio.get('patients/$patientId/medical-records/$medicalRecordId?withDoctor=true');
+  }
+
+
+
+
+
 } //end of api

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infectious_diseases_service/Screens/Medical%20record/MedicalRecord.dart';
 import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Controllers/AuthController.dart';
-import '../../Controllers/Patients/PatientController.dart';
+import '../../Controllers/Patient/PatientController.dart';
 
 class PatientScreen extends StatefulWidget {
   const PatientScreen({Key? key}) : super(key: key);
@@ -357,22 +358,29 @@ class _PatientScreenState extends State<PatientScreen> {
                                                     ),
                                             ],
                                           ),
-                                          subtitle: Row(children: [
-                                            const Text("Doctor: "),
-                                            Text(
-                                              medicalRecord.doctorName!,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: medicalRecord.userId
-                                                              .toString() ==
-                                                          _authController
-                                                              .user['id']
-                                                              .toString()
-                                                      ? Colors.green
-                                                      : Colors.black),
-                                            ),
-                                          ]),
+                                          subtitle: Row(
+                                            children: [
+                                              const Text("Doctor: "),
+                                              Text(
+                                                medicalRecord.doctorName!,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: medicalRecord.userId
+                                                                .toString() ==
+                                                            _authController
+                                                                .user['id']
+                                                                .toString()
+                                                        ? Colors.green
+                                                        : Colors.black),
+                                              ),
+                                            ],
+                                          ),
                                           children: <Widget>[
+                                            const Divider(
+                                              height: 0.5,
+                                              thickness: 0.2,
+                                              color: Colors.grey,
+                                            ),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
@@ -449,8 +457,9 @@ class _PatientScreenState extends State<PatientScreen> {
 
                                             ElevatedButton(
                                               onPressed: () {
-                                                print(
-                                                    "going to medical record page");
+                                                // print(
+                                                //     "going to medical record page");
+                                                Get.to(()=>MedicalRecordScreen() , arguments: {'patient': _patientController.patient.value, 'medicalRecordId': medicalRecord.id});
                                               },
                                               child: const Text("View Details"),
                                             ),
