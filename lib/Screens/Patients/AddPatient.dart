@@ -45,43 +45,53 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
               child: Column(
                 children: [
                   FormBuilderTextField(
+
                     name: 'first_name',
                     decoration:
-                        const InputDecoration(labelText: 'First Name *'),
+                        inputDecoration('First Name *' , Icons.person),
                     validator: FormBuilderValidators.required(
                         errorText: 'first name is required'),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     name: 'last_name',
-                    decoration: const InputDecoration(labelText: 'Last Name *'),
+                    decoration: inputDecoration( 'Last Name *' , Icons.person),
                     validator: FormBuilderValidators.required(
                         errorText: 'last name is required'),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderDateTimePicker(
                     name: 'birth_date',
                     inputType: InputType.date,
                     decoration:
-                        const InputDecoration(labelText: 'Birth Date *'),
+                        inputDecoration( 'Birth Date *' , Icons.date_range  ),
                     validator: FormBuilderValidators.required(
                         errorText: 'birthdate is required'),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderTextField(
                     name: 'phone_number',
                     decoration:
-                        const InputDecoration(labelText: 'Phone Number'),
+                        inputDecoration( 'Phone Number' , Icons.phone    ),
                     validator: FormBuilderValidators.numeric(
                         errorText: 'phone number contains only numbers'),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderTextField(
                     name: 'place_of_birth',
                     decoration:
-                        const InputDecoration(labelText: 'Place of Birth *'),
+                        inputDecoration( 'Place of Birth *' , Icons.location_city),
                     validator: FormBuilderValidators.required(
                         errorText: 'birth date is required'),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderDropdown(
                     name: 'gender',
-                    decoration: const InputDecoration(labelText: 'Gender *'),
+                    decoration: inputDecoration( 'Gender *' , Icons.wc),
                     validator: FormBuilderValidators.required(
                         errorText: 'Gender number is required'),
                     initialValue: 'Male',
@@ -90,34 +100,42 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                             value: gender, child: Text(gender)))
                         .toList(),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderTextField(
                     name: 'address',
-                    decoration: const InputDecoration(labelText: 'Address *'),
+                    decoration: inputDecoration( 'Address *' , Icons.location_on),
                     validator: FormBuilderValidators.required(
                         errorText: 'Address is required'),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderTextField(
                     name: 'nationality',
                     decoration:
-                        const InputDecoration(labelText: 'Nationality  *'),
+                        inputDecoration( 'Nationality  *' , Icons.flag),
                     initialValue: 'DZ',
                     validator: FormBuilderValidators.required(
                         errorText: 'Nationality is required'),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderTextField(
                     name: 'family_situation',
                     decoration:
-                        const InputDecoration(labelText: 'Family Situation'),
+                        inputDecoration( 'Family Situation' , Icons.family_restroom),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderTextField(
                     name: 'emergency_contact_name',
-                    decoration: const InputDecoration(
-                        labelText: 'Emergency Contact Name'),
+                    decoration: inputDecoration('Emergency Contact Name' , Icons.person),
                   ),
+                  SizedBox(height: 15),
+
                   FormBuilderTextField(
                     name: 'emergency_contact_number',
-                    decoration: const InputDecoration(
-                        labelText: 'Emergency Contact Number'),
+                    decoration: inputDecoration( 'Emergency Contact Number' , Icons.phone),
                   ),
                   const SizedBox(height: 20.0),
 
@@ -126,6 +144,39 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+  InputDecoration inputDecoration(String label , IconData icon ) {
+    return InputDecoration(
+      prefixIcon: Icon(icon),
+      labelText: label,
+      labelStyle: TextStyle(
+        fontWeight: FontWeight.normal,
+        color: Colors.grey[700],
+      ),
+      // filled: true,
+      fillColor: Colors.grey[200],
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.grey[400]!,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.red,
+          width: 1.0,
+
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.blue,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
       ),
     );
   }

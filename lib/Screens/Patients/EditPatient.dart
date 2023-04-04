@@ -15,13 +15,13 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
   final _editPatientController = Get.put(EditPatientController());
   final DateFormat _dateFormat = DateFormat('yyyy/MM/dd');
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(
-          ()=> Scaffold(
+      () => Scaffold(
         appBar: AppBar(
-          title:  Text('Edit Patient #${_editPatientController.patient.value.id}'),
+          title:
+              Text('Edit Patient #${_editPatientController.patient.value.id}'),
           actions: [
             // save form
             IconButton(
@@ -29,8 +29,8 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
               onPressed: _editPatientController.isLoading.value
                   ? null
                   : () async {
-                _editPatientController.submitForm();
-              },
+                      _editPatientController.submitForm();
+                    },
             ),
           ],
         ),
@@ -46,86 +46,134 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.firstName,
                     name: 'first_name',
-                    decoration: const InputDecoration(labelText: 'First Name *'),
-                    validator: FormBuilderValidators.required(errorText: 'first name is required'),
-
+                    decoration: inputDecoration('First Name *', Icons.person),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'first name is required'),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.lastName,
                     name: 'last_name',
-                    decoration: const InputDecoration(labelText: 'Last Name *'),
-                    validator: FormBuilderValidators.required(errorText: 'last name is required'),
+                    decoration: inputDecoration('Last Name *', Icons.person),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'last name is required'),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderDateTimePicker(
                     initialValue: _editPatientController.patient.value.birthDate,
                     name: 'birth_date',
                     inputType: InputType.date,
-                    decoration: const InputDecoration(labelText: 'Birth Date *'),
-                    format: _dateFormat,
-                    validator: FormBuilderValidators.required(errorText: 'birthdate is required'),
+                    decoration:
+                        inputDecoration('Birth Date *', Icons.date_range),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'birthdate is required'),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.phoneNumber,
                     name: 'phone_number',
-                    decoration: const InputDecoration(labelText: 'Phone Number'),
-                    validator: FormBuilderValidators.numeric(errorText: 'phone number contains only numbers'),
+                    decoration: inputDecoration('Phone Number', Icons.phone),
+                    validator: FormBuilderValidators.numeric(
+                        errorText: 'phone number contains only numbers'),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.placeOfBirth,
                     name: 'place_of_birth',
-                    decoration: const InputDecoration(labelText: 'Place of Birth *'),
-                    validator: FormBuilderValidators.required(errorText: 'birth date is required'),
-
+                    decoration: inputDecoration(
+                        'Place of Birth *', Icons.location_city),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'birth date is required'),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderDropdown(
-                    initialValue: _editPatientController.patient.value.gender,
                     name: 'gender',
-                    decoration: const InputDecoration(labelText: 'Gender *'),
-                    validator: FormBuilderValidators.required(errorText: 'Gender number is required'),
+                    decoration: inputDecoration('Gender *', Icons.wc),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'Gender number is required'),
+                    initialValue: _editPatientController.patient.value.gender,
                     items: ['Male', 'Female']
-                        .map((gender) =>
-                        DropdownMenuItem(value: gender, child: Text(gender)))
+                        .map((gender) => DropdownMenuItem(
+                            value: gender, child: Text(gender)))
                         .toList(),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.address,
                     name: 'address',
-                    decoration: const InputDecoration(labelText: 'Address *'),
-                    validator: FormBuilderValidators.required(errorText: 'Address is required'),
-
+                    decoration: inputDecoration('Address *', Icons.location_on),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'Address is required'),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.nationality,
+
                     name: 'nationality',
-                    decoration: const InputDecoration(labelText: 'Nationality'),
-                    validator: FormBuilderValidators.required(errorText: 'Nationality is required'),
-
+                    decoration: inputDecoration('Nationality  *', Icons.flag),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'Nationality is required'),
                   ),
-
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.familySituation,
                     name: 'family_situation',
-                    decoration: const InputDecoration(labelText: 'Family Situation'),
+                    decoration: inputDecoration(
+                        'Family Situation', Icons.family_restroom),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.emergencyContactName,
                     name: 'emergency_contact_name',
                     decoration:
-                    const InputDecoration(labelText: 'Emergency Contact Name'),
+                        inputDecoration('Emergency Contact Name', Icons.person),
                   ),
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.emergencyContactNumber,
                     name: 'emergency_contact_number',
-                    decoration:
-                    const InputDecoration(labelText: 'Emergency Contact Number'),
+                    decoration: inputDecoration(
+                        'Emergency Contact Number', Icons.phone),
                   ),
                   const SizedBox(height: 20.0),
-
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  InputDecoration inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      prefixIcon: Icon(icon),
+      labelText: label,
+      labelStyle: TextStyle(
+        fontWeight: FontWeight.normal,
+        color: Colors.grey[700],
+      ),
+      // filled: true,
+      fillColor: Colors.grey[200],
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.grey[400]!,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.red,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.blue,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
       ),
     );
   }

@@ -13,6 +13,8 @@ class PatientsController extends GetxController {
   var totalPatients = 0.obs;
   var searchQuery = ''.obs;
   var inHospitalOnly = false.obs;
+  var searchController = TextEditingController().obs;
+
 
   @override
   void onInit() async {
@@ -20,6 +22,8 @@ class PatientsController extends GetxController {
     await getPatients();
     super.onInit();
   }
+
+
 
   Future<List<Patient>> getPatients() async {
     isLoading(true);

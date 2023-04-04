@@ -4,6 +4,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/PatientCard.dart';
 import 'package:infectious_diseases_service/Screens/Dashboard.dart';
 import 'package:infectious_diseases_service/Screens/LoginPage.dart';
+import 'package:infectious_diseases_service/Screens/Medical%20record/AddMedicalRecord.dart';
+import 'package:infectious_diseases_service/Screens/Medical%20record/EditMedicalRecord.dart';
+import 'package:infectious_diseases_service/Screens/Medical%20record/MedicalRecord.dart';
 import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
 import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
 
@@ -23,31 +26,39 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key , } );
+  const MyApp({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return  GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-
-      theme: ThemeData(fontFamily: 'Rubik'),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-      getPages: [
-        GetPage(name: '/dashboard', page: () => DashboardScreen()),
-        GetPage(name: '/patients', page: () => PatientsScreen()),
-        GetPage(name: '/login', page: () => LoginPage()),
-        GetPage(name: '/patient-details', page: () => PatientScreen()),
-        GetPage(name: '/add-patient', page: ()=> AddPatientScreen()),
-        GetPage(name: '/edit-patient', page: ()=> EditPatientScreen()),
-      ]
-    );
+    return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        darkTheme: ThemeData.dark(),
+        theme: ThemeData(fontFamily: 'Rubik'),
+        home: const MyHomePage(),
+        getPages: [
+          GetPage(name: '/dashboard', page: () => const DashboardScreen()),
+          GetPage(name: '/patients', page: () => const PatientsScreen()),
+          GetPage(name: '/login', page: () => const LoginPage()),
+          GetPage(name: '/patient-details', page: () => const PatientScreen()),
+          GetPage(name: '/add-patient', page: () => AddPatientScreen()),
+          GetPage(name: '/edit-patient', page: () => EditPatientScreen()),
+          GetPage(
+              name: '/medical-record-details',
+              page: () => MedicalRecordScreen()),
+          GetPage(
+              name: '/add-medical-record',
+              page: () => AddMedicalRecordScreen()),
+          GetPage(
+              name: '/edit-medical-record',
+              page: () => const EditMedicalRecordScreen()),
+        ]);
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -56,15 +67,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _navigationDrawerController = Get.put(NavigationDrawerController());
 
-
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-
-        body: SplashScreen(),
+    return const Scaffold(
+      body: SplashScreen(),
     );
-
   }
 }

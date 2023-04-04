@@ -11,6 +11,7 @@ class MedicalRecord {
   DateTime? patientEntryDate;
   DateTime? patientLeavingDate;
   String? doctorName;
+  bool? canEdit;
 
   MedicalRecord({
     this.id,
@@ -25,6 +26,7 @@ class MedicalRecord {
     this.patientEntryDate,
     this.patientLeavingDate,
     this.doctorName,
+    this.canEdit,
   });
 
   factory MedicalRecord.fromJson(Map<String, dynamic> json) {
@@ -43,7 +45,8 @@ class MedicalRecord {
             ? DateTime.parse(json['patient_leaving_date'])
             : null,
         doctorName:
-            "${json['assigned_doctor']['first_name']} ${json['assigned_doctor']['last_name']}");
+            "${json['assigned_doctor']['first_name']} ${json['assigned_doctor']['last_name']}",
+        canEdit: json['can_update']);
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +62,7 @@ class MedicalRecord {
     data['bed_number'] = bedNumber;
     data['patient_entry_date'] = patientEntryDate?.toIso8601String();
     data['patient_leaving_date'] = patientLeavingDate?.toIso8601String();
+    data['can_update'] = canEdit;
     return data;
   }
 }

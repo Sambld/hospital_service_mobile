@@ -53,7 +53,6 @@ class EditPatientController extends GetxController{
       Get.back();
 
     }
-    await Future.delayed(Duration(seconds: 2));
   }
 
 

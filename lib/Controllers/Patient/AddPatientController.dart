@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:infectious_diseases_service/Controllers/Patient/PatientsController.dart';
 import 'package:intl/intl.dart';
 
 import '../../Services/Api.dart';
@@ -33,11 +34,12 @@ class AddPatientController extends GetxController{
       final res = await Api.addPatient(modifiableFormData);
 
       isLoading(false);
-      await Future.delayed(Duration(seconds: 1));
 
       final patientId = res.data['patient']['id'];
       print(patientId);
-      Get.offNamed('patient-details', arguments: patientId);
+
+      Get.find<PatientsController>().getPatients();
+      Get.offNamed('/patient-details', arguments: patientId);
     }
     isLoading(false);
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infectious_diseases_service/Controllers/Patient/PatientsController.dart';
 import 'package:infectious_diseases_service/Screens/Medical%20record/MedicalRecord.dart';
 import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../Constants/Constants.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/Patient/PatientController.dart';
 
@@ -19,7 +21,9 @@ class _PatientScreenState extends State<PatientScreen> {
 
   @override
   void dispose() {
+    // _patientsController.getPatients();
     _patientController.dispose();
+
     super.dispose();
   }
 
@@ -62,6 +66,7 @@ class _PatientScreenState extends State<PatientScreen> {
               ),
             ),
             centerTitle: true,
+            flexibleSpace: kAppBarColor,
           ),
           body: _patientController.isLoading.value
               ? const Center(child: CircularProgressIndicator())
@@ -89,204 +94,53 @@ class _PatientScreenState extends State<PatientScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
-                              'Name',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            _patientInfoRow(
+                                title: "Name",
+                                value:
+                                    '${_patientController.patient.value.firstName} ${_patientController.patient.value.lastName}'),
+                            _patientInfoRow(
+                              title: 'Gender',
+                              value: _patientController.patient.value.gender!,
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${_patientController.patient.value.firstName} ${_patientController.patient.value.lastName}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black87,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Gender',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${_patientController.patient.value.gender}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Birth Date',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _patientController.patient.value.birthDate
+                            _patientInfoRow(
+                              title: 'Birth Date',
+                              value: _patientController.patient.value.birthDate!
                                   .toString()
                                   .substring(0, 10),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
                             ),
-                            const Divider(),
-                            const Text(
-                              'Place of Birth',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${_patientController.patient.value.placeOfBirth}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Address',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${_patientController.patient.value.address}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Phone Number',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${_patientController.patient.value.phoneNumber}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Nationality',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${_patientController.patient.value.nationality}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Family Situation',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _patientController
-                                      .patient.value.familySituation ??
-                                  'No Family Situation',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Emergency Contact Name',
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _patientController
-                                      .patient.value.emergencyContactName ??
-                                  'No Emergency Contact',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Emergency Contact Phone Number',
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _patientController
-                                      .patient.value.emergencyContactNumber ??
-                                  'No Emergency Contact',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Divider(),
+                            _patientInfoRow(
+                                title: 'Place of Birth',
+                                value: _patientController
+                                    .patient.value.placeOfBirth!),
+                            _patientInfoRow(
+                                title: 'Address',
+                                value:
+                                    _patientController.patient.value.address!),
+                            _patientInfoRow(
+                                title: 'Phone Number',
+                                value: _patientController
+                                    .patient.value.phoneNumber!),
+                            _patientInfoRow(
+                                title: "Nationality",
+                                value: _patientController
+                                    .patient.value.nationality!),
+                            _patientInfoRow(
+                                title: 'Family Situation',
+                                value: _patientController
+                                        .patient.value.familySituation ??
+                                    'No Family Situation'),
+                            _patientInfoRow(
+                                title: 'Emergency Contact Phone Number',
+                                value: _patientController
+                                        .patient.value.emergencyContactName ??
+                                    'No Emergency Contact',
+                                titleColor: Colors.redAccent),
+                            _patientInfoRow(
+                                title: 'Emergency Contact Phone Number',
+                                value: _patientController
+                                        .patient.value.emergencyContactNumber ??
+                                    'No Emergency Contact',
+                                titleColor: Colors.redAccent),
                           ],
                         ),
                       ),
@@ -296,26 +150,25 @@ class _PatientScreenState extends State<PatientScreen> {
                             child:
                                 //button to add new medical record
                                 TextButton(
-                              onPressed: () {
-                                print("add new medical record");
-                              },
+                              onPressed: addMedicalRecord,
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.blue),
+                                padding: MaterialStateProperty.all(
+                                  const EdgeInsets.all(12),
+                                ),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
                               child: const Text(
                                 'Add Medical Record',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.blue),
-                                padding: MaterialStateProperty.all(
-                                    const EdgeInsets.all(12)),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
                                 ),
                               ),
                             ),
@@ -348,11 +201,10 @@ class _PatientScreenState extends State<PatientScreen> {
                                                           color: Colors.green),
                                                     )
                                                   : Text(
-                                                      " =>   " +
-                                                          medicalRecord
+                                                      " =>   ${medicalRecord
                                                               .patientLeavingDate!
                                                               .toString()
-                                                              .substring(0, 10),
+                                                              .substring(0, 10)}",
                                                       style: const TextStyle(
                                                           color: Colors.red),
                                                     ),
@@ -459,7 +311,15 @@ class _PatientScreenState extends State<PatientScreen> {
                                               onPressed: () {
                                                 // print(
                                                 //     "going to medical record page");
-                                                Get.to(()=>MedicalRecordScreen() , arguments: {'patient': _patientController.patient.value, 'medicalRecordId': medicalRecord.id});
+                                                Get.toNamed(
+                                                    "/medical-record-details",
+                                                    arguments: {
+                                                      'patient':
+                                                          _patientController
+                                                              .patient.value,
+                                                      'medicalRecordId':
+                                                          medicalRecord.id
+                                                    });
                                               },
                                               child: const Text("View Details"),
                                             ),
@@ -474,9 +334,7 @@ class _PatientScreenState extends State<PatientScreen> {
                               ],
                             ),
                             floatingActionButton: FloatingActionButton(
-                              onPressed: () {
-                                print("add new medical record");
-                              },
+                              onPressed: addMedicalRecord,
                               child: const Icon(Icons.add),
                             ),
                           ),
@@ -484,6 +342,44 @@ class _PatientScreenState extends State<PatientScreen> {
                 ),
         ),
       ),
+    );
+  }
+
+  void addMedicalRecord() {
+    Get.toNamed('/add-medical-record',
+            arguments: _patientController.patient.value)
+        ?.then((value) {
+      print('returned from add medical record page');
+      _patientController.refresh();
+    });
+  }
+
+  Column _patientInfoRow(
+      {required String title,
+      required String value,
+      Color? titleColor = Colors.grey}) {
+    return Column(
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: titleColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.black87,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const Divider(),
+      ],
     );
   }
 }

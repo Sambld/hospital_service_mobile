@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Widgets/PatientCard.dart';
 import 'package:number_paginator/number_paginator.dart';
 
+import '../../Constants/Constants.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/Patient/PatientsController.dart';
 import '../../Widgets/NavigationDrawerWidget.dart';
@@ -25,11 +26,11 @@ class _PatientsScreenState extends State<PatientsScreen> {
   @override
   void initState() {
     super.initState();
-    print(_authController.user);
   }
 
   @override
   void dispose() {
+    print('dispose  called');
     super.dispose();
   }
 
@@ -53,26 +54,40 @@ class _PatientsScreenState extends State<PatientsScreen> {
           preferredSize: const Size.fromHeight(50),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: TextField(
-              // controller: TextEditingController(text: _patientsController.searchQuery.value),
-              onSubmitted: _patientsController.searchPatients,
-              decoration: InputDecoration(
-                hintText: 'Search',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide.none,
+            child: Obx(
+              ()=> TextField(
+                controller: _patientsController.searchController.value,
+                // controller: TextEditingController(text: _patientsController.searchQuery.value),
+                onSubmitted: _patientsController.searchPatients,
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  suffixIcon: _patientsController.searchQuery.value.isNotEmpty
+                      ? IconButton(
+                    onPressed: () {
+                      _patientsController.searchController.value.clear();
+                      _patientsController.searchQuery('');
+                      _patientsController.getPatients();
+                    },
+                    icon: const Icon(Icons.clear),
+                  )
+                      : null,
                 ),
-                filled: true,
-                fillColor: Colors.grey[200],
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                onChanged: (value) {
+                  _patientsController.searchQuery(value);
+                },
               ),
-              onChanged: (value) {
-                _patientsController.searchQuery(value);
-              },
             ),
           ),
         ),
+        flexibleSpace: kAppBarColor,
       ),
       drawer: NavigationDrawerWidget(),
       body: Column(
@@ -96,10 +111,11 @@ class _PatientsScreenState extends State<PatientsScreen> {
                   child: Text('No patients found'),
                 );
               }
-              if (_patientsController.isLoading.value)
+              if (_patientsController.isLoading.value) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
+              }
               return Column(
                 children: [
                   Expanded(
@@ -109,7 +125,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
                         final patient = patients[index];
                         return PatientCard(
                           onTap: (){
-                            Get.toNamed('/patient-details', arguments: patient.id!);
+                            Get.toNamed('/patient-details', arguments: patient.id!)?.then((value) => _patientsController.getPatients());
                           },
                           id: patient.id!,
                           firstName: patient.firstName!,

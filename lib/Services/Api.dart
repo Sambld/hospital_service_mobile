@@ -47,7 +47,7 @@ class Api {
             colorText: Colors.white,
           );
           Future.delayed(Duration(seconds: 2))
-              .then((value) => exit(0));
+              .then((value) => Get.offNamed('dashboard'));
           return handler.next(error);
           // continue
         }
@@ -83,8 +83,8 @@ class Api {
     BaseOptions(
       baseUrl: 'http://10.0.2.2:8000/api/',
       receiveDataWhenStatusError: true,
-      connectTimeout: Duration(seconds: 5), // 5 seconds
-      receiveTimeout: Duration(seconds: 5), // 5 seconds
+      connectTimeout: Duration(seconds: 15),
+      receiveTimeout: Duration(seconds: 15), 
 
     ),
   );
@@ -128,6 +128,13 @@ class Api {
 
   static Future<Response> getMedicalRecord({required int patientId , required int medicalRecordId}) async {
     return dio.get('patients/$patientId/medical-records/$medicalRecordId?withDoctor=true');
+  }
+
+  static Future<Response> addMedicalRecord(int patientId , Map<String, dynamic> formData) async {
+    return dio.post('patients/$patientId/medical-records', data: formData);
+  }
+  static Future<Response> editMedicalRecord(int patientId, int medicalRecordId , Map<String, dynamic> formData) async {
+    return dio.put('patients/$patientId/medical-records/$medicalRecordId', data: formData);
   }
 
 
