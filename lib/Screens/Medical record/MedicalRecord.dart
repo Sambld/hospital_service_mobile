@@ -21,7 +21,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
         child: Scaffold(
           appBar: AppBar(
             flexibleSpace: kAppBarColor,
-            title: const Text('Medical Record'),
+            title: Text('Medical Record (#${_medicalRecordController.medicalRecord.value.id ?? "0"})'),
             bottom: const TabBar(
               tabs: [
                 Tab(child: Text("information")),

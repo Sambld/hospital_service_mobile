@@ -81,7 +81,9 @@ class Api {
 
   static final dio = Dio(
     BaseOptions(
+      // baseUrl: 'http://134.122.75.238:8000/api/',
       baseUrl: 'http://10.0.2.2:8000/api/',
+      // baseUrl: 'http://192.168.1.8:8001/api/',
       receiveDataWhenStatusError: true,
       connectTimeout: Duration(seconds: 15),
       receiveTimeout: Duration(seconds: 15), 
@@ -135,6 +137,10 @@ class Api {
   }
   static Future<Response> editMedicalRecord(int patientId, int medicalRecordId , Map<String, dynamic> formData) async {
     return dio.put('patients/$patientId/medical-records/$medicalRecordId', data: formData);
+  }
+
+  static Future<Response> getMonitoringSheets({required int patientId , required int medicalRecordId}) async {
+    return dio.get('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets');
   }
 
 

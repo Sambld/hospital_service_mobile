@@ -98,6 +98,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
               value: _patientsController.inHospitalOnly.value,
               onChanged: (value) {
                 _patientsController.inHospitalOnly(value);
+                _patientsController.currentPage(1);
                 _patientsController.getPatients();
               },
             ),

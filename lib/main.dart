@@ -7,6 +7,7 @@ import 'package:infectious_diseases_service/Screens/LoginPage.dart';
 import 'package:infectious_diseases_service/Screens/Medical%20record/AddMedicalRecord.dart';
 import 'package:infectious_diseases_service/Screens/Medical%20record/EditMedicalRecord.dart';
 import 'package:infectious_diseases_service/Screens/Medical%20record/MedicalRecord.dart';
+import 'package:infectious_diseases_service/Screens/MonitoringSheet/MonitoringSheet.dart';
 import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
 import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
 
@@ -53,6 +54,9 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: '/edit-medical-record',
               page: () => const EditMedicalRecordScreen()),
+          GetPage(
+              name: '/monitoring_sheet',
+              page: () =>  MonitoringSheetScreen()),
         ]);
   }
 }

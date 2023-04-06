@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../Controllers/MedicalRecord/MedicalRecordController.dart';
 
 class SecondTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _medicalRecordController = Get.find<MedicalRecordController>();
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints boxConstraints) { //
+      builder: (BuildContext context, BoxConstraints boxConstraints) {
+        //
         final axisCount = boxConstraints.maxWidth ~/ 170;
         return Container(
           color: Colors.white,
@@ -19,36 +23,18 @@ class SecondTab extends StatelessWidget {
                     crossAxisSpacing: 16.0,
                     mainAxisSpacing: 16.0,
                     children: [
-                      _buildButton(
-                        'Monitoring Sheets',
-                        Icons.monitor,
-                        Colors.blue.shade400,
-                        context,
-                      ),
-                      _buildButton(
-                        'Observations',
-                        Icons.remove_red_eye,
-                        Colors.purple.shade400,
-                        context,
-                      ),
-                      _buildButton(
-                        'Complementary Examinations',
-                        Icons.assignment,
-                        Colors.green.shade400,
-                        context,
-                      ),
-                      _buildButton(
-                        'Medicine Requests',
-                        Icons.medication,
-                        Colors.red.shade400,
-                        context,
-                      ),
-                      _buildButton(
-                        'Medicine Requests',
-                        Icons.medication,
-                        Colors.red.shade400,
-                        context,
-                      ),
+                      _buildButton('Monitoring Sheets', Icons.monitor,
+                          Colors.blue.shade400, () {
+                        Get.toNamed('/monitoring_sheet' , arguments: {"patient" : _medicalRecordController.patient.value , "medicalRecord" : _medicalRecordController.medicalRecord.value} );
+                          }),
+                      _buildButton('Observations', Icons.remove_red_eye,
+                          Colors.purple.shade400, () {}),
+                      _buildButton('Complementary Examinations',
+                          Icons.assignment, Colors.green.shade400, () {}),
+                      _buildButton('Medicine Requests', Icons.medication,
+                          Colors.red.shade400, () {}),
+                      _buildButton('Medicine Requests', Icons.medication,
+                          Colors.red.shade400, () {}),
                     ],
                   ),
                 ),
@@ -57,19 +43,14 @@ class SecondTab extends StatelessWidget {
           ),
         );
       },
-
     );
   }
 
   Widget _buildButton(
-      String title, IconData iconData, Color color, BuildContext context) {
+      String title, IconData iconData, Color color, Function onTap) {
     return InkWell(
       onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('You tapped $title'),
-          ),
-        );
+        onTap();
       },
       child: Container(
         decoration: BoxDecoration(
