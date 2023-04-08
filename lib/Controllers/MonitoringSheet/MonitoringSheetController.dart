@@ -5,18 +5,22 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../Models/MedicalRecord.dart';
+import '../../Models/Medicine.dart';
 import '../../Models/MonitoringSheet.dart';
 import '../../Models/Patient.dart';
 import '../../Services/Api.dart';
 
 class MonitoringSheetController extends GetxController {
 
+  var patientId = 0.obs;
+  var medicalRecordId = 0.obs;
   var patient = Patient().obs;
   var medicalRecord = MedicalRecord().obs;
   var isLoading = false.obs;
   var monitoringSheetList = <MonitoringSheet>[].obs;
   var currentMonitoringSheet = MonitoringSheet().obs;
   var currentMonitoringSheetIndex = 0.obs;
+  var medicinesList = <Medicine>[].obs;
 
 
 
@@ -25,34 +29,29 @@ class MonitoringSheetController extends GetxController {
   void onInit() {
     // TODO: implement onInit
 
-    patient(Get.arguments['patient']);
-    medicalRecord(Get.arguments['medicalRecord']);
+    patientId(Get.arguments['patientId']);
+    medicalRecordId(Get.arguments['medicalRecordId']);
     getMonitoringSheets();
-    print(patient);
+    // getMedicines();
+
     super.onInit();
   }
 
-  // Future<void> updateMonitoringSheet() async {
-  //   isLoading(true);
-  //   final res = await Api.updateMonitoringSheet(
-  //       patientId: patient.value.id!,
-  //       medicalRecordId: medicalRecord.value.id!,
-  //       monitoringSheetId: currentMonitoringSheet.value.id!,
-  //       monitoringSheet: currentMonitoringSheet.value);
-  //   if (res.statusCode == 200) {
-  //     isLoading(false);
-  //     // handle success
-  //   } else {
-  //     isLoading(false);
-  //     // handle error
-  //   }
-  // }
+
 
 
   Future<void> getMonitoringSheets() async {
     isLoading(true);
+
+    final patientReq = await Api.getPatient(id: patientId.value , withMedicalRecords: false );
+    patient(Patient.fromJson(patientReq.data['data']['patient']));
+
+    final medicalRecordReq = await Api.getMedicalRecord(patientId: patientId.value, medicalRecordId: medicalRecordId.value);
+    medicalRecord(MedicalRecord.fromJson(medicalRecordReq.data['data']));
+
+
     final res = await Api.getMonitoringSheets(
-        patientId: patient.value.id!, medicalRecordId: medicalRecord.value.id!);
+        patientId: patientId.value, medicalRecordId: medicalRecordId.value);
     if (res.statusCode == 200) {
       final data = res.data['data'] as List<dynamic>;
       final monitoringsheetslist = List.generate(data.length, (index) => MonitoringSheet.fromJson(data[index])) ;
@@ -61,26 +60,31 @@ class MonitoringSheetController extends GetxController {
       DateTime today = DateTime(now.year, now.month, now.day);
 
 // Find today's monitoring sheet from the list
-      if (monitoringSheetList.isNotEmpty){
-        try {
-          final todayMonitoringSheet = monitoringSheetList.firstWhere(
-                  (sheet) => sheet.fillingDate == today
-            // Return null if not found
-          );
-          currentMonitoringSheet(todayMonitoringSheet);
-          currentMonitoringSheetIndex(monitoringSheetList.indexOf(todayMonitoringSheet));
-          print(currentMonitoringSheetIndex);
-        } catch (e) {
-          currentMonitoringSheet(monitoringsheetslist[0]);
-          currentMonitoringSheetIndex(0);
-        }
+      if (currentMonitoringSheetIndex.value != 0){
+        currentMonitoringSheet(monitoringsheetslist[currentMonitoringSheetIndex.value]);
       }else{
-        print("monitoring sheet list is empty ");
+        if (monitoringSheetList.isNotEmpty){
+          try {
+            final todayMonitoringSheet = monitoringSheetList.firstWhere(
+                    (sheet) => sheet.fillingDate == today
+              // Return null if not found
+            );
+            currentMonitoringSheet(todayMonitoringSheet);
+            currentMonitoringSheetIndex(monitoringSheetList.indexOf(todayMonitoringSheet));
+            print(currentMonitoringSheetIndex);
+          } catch (e) {
+            currentMonitoringSheet(monitoringsheetslist[0]);
+            currentMonitoringSheetIndex(0);
+          }
+        }else{
+          print("monitoring sheet list is empty ");
+        }
       }
 
-      for (var sheet in monitoringSheetList) {
-        print(sheet.fillingDate);
-      }
+
+      // for (var sheet in monitoringSheetList) {
+      //   print(sheet.fillingDate);
+      // }
       isLoading(false);
 
       // final data = res.data['data'] as List<dynamic>;
@@ -118,4 +122,16 @@ class MonitoringSheetController extends GetxController {
       currentMonitoringSheet(monitoringSheetList[currentMonitoringSheetIndex.value]);
     }
   }
+
+
+  // Future<void> getMedicines() async {
+  //   final res = await Api.getMedicines();
+  //   if (res.statusCode == 200) {
+  //     final data = res.data['data'] as List<dynamic>;
+  //     final medicineslist = List.generate(data.length, (index) => Medicine.fromJson(data[index])) ;
+  //     medicinesList(medicineslist);
+  //     print(medicinesList);
+  //
+  //   }
+  // }
 }

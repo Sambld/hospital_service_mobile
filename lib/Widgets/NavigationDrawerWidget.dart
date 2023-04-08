@@ -21,7 +21,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     return Drawer(
       child: Material(
-        color: Colors.blueAccent,
+        color: Colors.blueGrey[900],
         child: ListView(
           children: <Widget>[
             buildHeader(
@@ -99,14 +99,15 @@ class NavigationDrawerWidget extends StatelessWidget {
           padding: padding.add(EdgeInsets.symmetric(vertical: 40)),
           child: Row(
             children: [
-              CircleAvatar(radius: 30, child: Icon(Icons.health_and_safety_outlined , color: Colors.blue,size: 40,),backgroundColor: Colors.white,),
-              SizedBox(width: 20),
+              CircleAvatar(radius: 23, child: Icon(Icons.health_and_safety_outlined , color: Colors.blue,size: 30,),backgroundColor: Colors.white,),
+              SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                   const SizedBox(height: 4),
                   Text(

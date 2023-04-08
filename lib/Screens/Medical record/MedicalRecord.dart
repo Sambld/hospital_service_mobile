@@ -20,23 +20,34 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            flexibleSpace: kAppBarColor,
-            title: Text('Medical Record (#${_medicalRecordController.medicalRecord.value.id ?? "0"})'),
-            bottom: const TabBar(
-              tabs: [
-                Tab(child: Text("information")),
-                Tab(icon: Text("others")),
-              ],
-            ),
-            actions: [
-               !_medicalRecordController.isLoading.value && _medicalRecordController.medicalRecord.value.canEdit!  ? IconButton(
-                onPressed: () {
-                  Get.toNamed('/edit-medical-record', arguments: {"patient" : _medicalRecordController.patient.value, "medicalRecord" : _medicalRecordController.medicalRecord.value});
-                },
-                icon: const Icon(Icons.edit),
-              ) : Container(),
-            ],
-          ),
+                  flexibleSpace: kAppBarColor,
+                  title: Text(
+                      'Medical Record (#${_medicalRecordController.medicalRecord.value.id ?? "0"})'),
+                  bottom: const TabBar(
+                    tabs: [
+                      Tab(child: Text("information")),
+                      Tab(icon: Text("others")),
+                    ],
+                  ),
+                  actions: [
+                    !_medicalRecordController.isLoading.value &&
+                            (_medicalRecordController
+                                    .medicalRecord.value?.canEdit ??
+                                false)
+                        ? IconButton(
+                            onPressed: () {
+                              Get.toNamed('/edit-medical-record', arguments: {
+                                "patient":
+                                    _medicalRecordController.patient.value,
+                                "medicalRecord":
+                                    _medicalRecordController.medicalRecord.value
+                              });
+                            },
+                            icon: const Icon(Icons.edit),
+                          )
+                        : Container(),
+                  ],
+                ),
           body: _medicalRecordController.isLoading.value
               ? const Center(
                   child: CircularProgressIndicator(),
@@ -63,7 +74,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         const Text(
                                           "Patient : ",
@@ -206,8 +218,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                     value: 'Recovered',
                                     borderColor: Colors.redAccent)
                                 : Container(),
-                            _medicalRecordController
-                                        .medicalRecord.value.patientLeavingDate !=
+                            _medicalRecordController.medicalRecord.value
+                                        .patientLeavingDate !=
                                     null
                                 ? _medicalRecordInfoRow(context,
                                     title: 'Patient Leaving Date',
@@ -220,7 +232,6 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                     ),
                     SecondTab(),
                   ],
-
                 ),
         ),
       ),

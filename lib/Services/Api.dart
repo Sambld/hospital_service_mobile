@@ -116,8 +116,8 @@ class Api {
     return dio.get('patients?page=$page&q=$search&$inHospital');
   }
 
-  static Future<Response> getPatient({required int id}) async {
-    return dio.get('patients/$id?withMedicalRecords');
+  static Future<Response> getPatient({required int id , bool? withMedicalRecords = true}) async {
+    return dio.get('patients/$id?${withMedicalRecords == true ? 'withMedicalRecords' : ''}');
   }
 
   static Future<Response> addPatient(Map<String, dynamic> formData) async {
@@ -141,6 +141,31 @@ class Api {
 
   static Future<Response> getMonitoringSheets({required int patientId , required int medicalRecordId}) async {
     return dio.get('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets');
+  }
+
+  static Future<Response> addMonitoringSheet(int patientId , int medicalRecordId , Map<String, dynamic> formData) async {
+    return dio.post('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets', data: formData);
+  }
+  static Future<Response> editMonitoringSheet(int patientId, int medicalRecordId , int monitoringSheetId , Map<String, dynamic> formData) async {
+    return dio.put('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId', data: formData);
+  }
+
+  static Future<Response> addMonitoringSheetTretment(int patientId , int medicalRecordId , int monitoringSheetId , Map<String, dynamic> formData) async {
+    return dio.post('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId/treatments', data: formData);
+  }
+
+  static Future<Response> updateMonitoringSheetDay( int patientId , int medicalRecordId , int monitoringSheetId , Map<String, dynamic> formData) async {
+    return dio.put('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId' , data: formData);
+  }
+
+  static Future<Response> deleteMonitoringSheetDay( int patientId , int medicalRecordId , int monitoringSheetId) async {
+    return dio.delete('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId' );
+  }
+
+
+
+  static Future<Response> getMedicines() async {
+    return dio.get('medicines?all');
   }
 
 

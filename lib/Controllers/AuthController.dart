@@ -49,6 +49,13 @@ class AuthController extends GetxController {
 
   }
 
+  bool isDoctor() {
+    return user.value['role'] == 'doctor';
+  }
+  bool isNurse() {
+    return user.value['role'] == 'nurse';
+  }
+
 
 
 }

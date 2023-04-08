@@ -46,7 +46,7 @@ class _PatientScreenState extends State<PatientScreen> {
             ),
             actions: [
               //edit button
-              IconButton(
+              _authController.isDoctor() ? IconButton(
                 onPressed: () {
                   Get.toNamed('/edit-patient',
                           arguments: _patientController.patient.value)
@@ -54,7 +54,7 @@ class _PatientScreenState extends State<PatientScreen> {
                   print('edit button pressed');
                 },
                 icon: const Icon(Icons.edit),
-              ),
+              ) : Container(),
             ],
             // backgroundColor: Colors.transparent,
             title: Text(
@@ -201,10 +201,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                           color: Colors.green),
                                                     )
                                                   : Text(
-                                                      " =>   ${medicalRecord
-                                                              .patientLeavingDate!
-                                                              .toString()
-                                                              .substring(0, 10)}",
+                                                      " =>   ${medicalRecord.patientLeavingDate!.toString().substring(0, 10)}",
                                                       style: const TextStyle(
                                                           color: Colors.red),
                                                     ),
@@ -314,10 +311,10 @@ class _PatientScreenState extends State<PatientScreen> {
                                                 Get.toNamed(
                                                     "/medical-record-details",
                                                     arguments: {
-                                                      'patient':
+                                                      "patientId":
                                                           _patientController
-                                                              .patient.value,
-                                                      'medicalRecordId':
+                                                              .patient.value.id,
+                                                      "medicalRecordId":
                                                           medicalRecord.id
                                                     });
                                               },
@@ -333,10 +330,10 @@ class _PatientScreenState extends State<PatientScreen> {
                                 )
                               ],
                             ),
-                            floatingActionButton: FloatingActionButton(
+                            floatingActionButton: _authController.isDoctor() ? FloatingActionButton(
                               onPressed: addMedicalRecord,
                               child: const Icon(Icons.add),
-                            ),
+                            ) : null,
                           ),
                   ],
                 ),

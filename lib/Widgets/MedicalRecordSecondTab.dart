@@ -25,7 +25,7 @@ class SecondTab extends StatelessWidget {
                     children: [
                       _buildButton('Monitoring Sheets', Icons.monitor,
                           Colors.blue.shade400, () {
-                        Get.toNamed('/monitoring_sheet' , arguments: {"patient" : _medicalRecordController.patient.value , "medicalRecord" : _medicalRecordController.medicalRecord.value} );
+                        Get.toNamed('/monitoring_sheet' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
                           }),
                       _buildButton('Observations', Icons.remove_red_eye,
                           Colors.purple.shade400, () {}),

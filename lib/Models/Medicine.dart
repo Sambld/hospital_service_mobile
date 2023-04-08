@@ -1,30 +1,30 @@
 class Medicine {
-  final int id;
-  final String name;
-  final String category;
-  final String description;
+  final int? id;
+  final String? name;
+  final String? category;
+  final String? description;
   final double? price;
-  final int quantity;
-  final bool isPharmaceutical;
+  final int? quantity;
+  final int? isPharmaceutical;
   final String? manufacturer;
   final String? supplier;
-  final DateTime expirationDate;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? expirationDate;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Medicine({
-    required this.id,
-    required this.name,
-    required this.category,
-    required this.description,
+     this.id,
+     this.name,
+     this.category,
+     this.description,
     this.price,
-    required this.quantity,
-    required this.isPharmaceutical,
+     this.quantity,
+     this.isPharmaceutical,
     this.manufacturer,
     this.supplier,
-    required this.expirationDate,
-    required this.createdAt,
-    required this.updatedAt,
+     this.expirationDate,
+     this.createdAt,
+     this.updatedAt,
   });
 
   factory Medicine.fromJson(Map<String, dynamic> json) {
@@ -53,6 +53,14 @@ class Medicine {
     'is_pharmaceutical': isPharmaceutical,
     'manufacturer': manufacturer,
     'supplier': supplier,
-    'expiration_date': expirationDate.toIso8601String(),
+    'expiration_date': expirationDate!.toIso8601String(),
   };
+
+  static fromJsonList(data) {
+    List<Medicine> medicines = [];
+    for (var item in data) {
+      medicines.add(Medicine.fromJson(item));
+    }
+    return medicines;
+  }
 }

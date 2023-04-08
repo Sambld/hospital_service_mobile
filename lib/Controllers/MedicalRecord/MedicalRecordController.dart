@@ -17,11 +17,11 @@ class MedicalRecordController extends GetxController{
   void onInit() {
 
 
-    patientId(Get.arguments['patient'].id);
-    patient(Get.arguments['patient']);
+
     medicalRecordId(Get.arguments['medicalRecordId']);
-    // print(patientId);
-    // print(medicalRecordId);
+    patientId(Get.arguments['patientId']);
+    print(patientId);
+    print(medicalRecordId);
     getMedicalRecord();
     super.onInit();
   }
@@ -31,11 +31,18 @@ class MedicalRecordController extends GetxController{
 
 
     try{
-      final res = await Api.getMedicalRecord(patientId: patientId.value, medicalRecordId: medicalRecordId.value);
-      final data = res.data['data'];
-      print(data);
-      medicalRecord(MedicalRecord.fromJson(data));
-      print(medicalRecord.value.id);
+
+      final patientReq = await Api.getPatient(id: patientId.value , withMedicalRecords: false );
+      patient(Patient.fromJson(patientReq.data['data']['patient']));
+      print(patient);
+
+      // final medicalRecordReq = await Api.getMedicalRecord(patientId: patientId.value, medicalRecordId: medicalRecordId.value);
+      // medicalRecord(MedicalRecord.fromJson(medicalRecordReq.data['data']));
+      // print(medicalRecord);
+
+
+      final medicalRecordReq = await Api.getMedicalRecord(patientId: patientId.value, medicalRecordId: medicalRecordId.value);
+      medicalRecord(MedicalRecord.fromJson(medicalRecordReq.data['data']));
       isLoading(false);
     }catch(e){
       e.printError();
