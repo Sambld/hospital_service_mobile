@@ -32,7 +32,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                   actions: [
                     !_medicalRecordController.isLoading.value &&
                             (_medicalRecordController
-                                    .medicalRecord.value?.canEdit ??
+                                    .medicalRecord.value.canEdit ??
                                 false)
                         ? IconButton(
                             onPressed: () {

@@ -60,7 +60,9 @@ class MonitoringSheetController extends GetxController {
       DateTime today = DateTime(now.year, now.month, now.day);
 
 // Find today's monitoring sheet from the list
-      if (currentMonitoringSheetIndex.value != 0){
+      print(currentMonitoringSheetIndex.value);
+      if (currentMonitoringSheetIndex.value != 0 && currentMonitoringSheetIndex.value < monitoringsheetslist.length){
+
         currentMonitoringSheet(monitoringsheetslist[currentMonitoringSheetIndex.value]);
       }else{
         if (monitoringSheetList.isNotEmpty){

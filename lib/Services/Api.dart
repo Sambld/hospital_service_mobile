@@ -82,8 +82,8 @@ class Api {
   static final dio = Dio(
     BaseOptions(
       // baseUrl: 'http://134.122.75.238:8000/api/',
-      baseUrl: 'http://10.0.2.2:8000/api/',
-      // baseUrl: 'http://192.168.1.8:8001/api/',
+      // baseUrl: 'http://10.0.2.2:8000/api/',
+      baseUrl: 'http://192.168.1.13:8001/api/',
       receiveDataWhenStatusError: true,
       connectTimeout: Duration(seconds: 15),
       receiveTimeout: Duration(seconds: 15), 
@@ -150,11 +150,9 @@ class Api {
     return dio.put('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId', data: formData);
   }
 
-  static Future<Response> addMonitoringSheetTretment(int patientId , int medicalRecordId , int monitoringSheetId , Map<String, dynamic> formData) async {
-    return dio.post('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId/treatments', data: formData);
-  }
 
-  static Future<Response> updateMonitoringSheetDay( int patientId , int medicalRecordId , int monitoringSheetId , Map<String, dynamic> formData) async {
+
+  static Future<Response> editMonitoringSheetDay( int patientId , int medicalRecordId , int monitoringSheetId , Map<String, dynamic> formData) async {
     return dio.put('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId' , data: formData);
   }
 
@@ -162,11 +160,31 @@ class Api {
     return dio.delete('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId' );
   }
 
+  static Future<Response> getMonitoringSheetTreatments({required int patientId , required int medicalRecordId , required int monitoringSheetId}) async {
+    return dio.get('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId/treatments');
+  }
+
+  static Future<Response> addMonitoringSheetTretment(int patientId , int medicalRecordId , int monitoringSheetId , Map<String, dynamic> formData) async {
+    return dio.post('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId/treatments', data: formData);
+  }
+  static Future<Response> editMonitoringSheetTretment(int patientId, int medicalRecordId , int monitoringSheetId , int treatmentId , Map<String, dynamic> formData) async {
+    return dio.put('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId/treatments/$treatmentId', data: formData);
+  }
+  static Future<Response> deleteMonitoringSheetTreatment( int patientId , int medicalRecordId , int monitoringSheetId , int treatmentId) async {
+    return dio.delete('patients/$patientId/medical-records/$medicalRecordId/monitoring-sheets/$monitoringSheetId/treatments/$treatmentId' );
+  }
+  static Future<Response> getMedicineById({required int id}) async {
+    return dio.get('medicines/$id');
+  }
+
+
 
 
   static Future<Response> getMedicines() async {
     return dio.get('medicines?all');
   }
+
+
 
 
 

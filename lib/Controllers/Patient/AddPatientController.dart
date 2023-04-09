@@ -36,8 +36,6 @@ class AddPatientController extends GetxController{
       isLoading(false);
 
       final patientId = res.data['patient']['id'];
-      print(patientId);
-
       Get.find<PatientsController>().getPatients();
       Get.offNamed('/patient-details', arguments: patientId);
     }

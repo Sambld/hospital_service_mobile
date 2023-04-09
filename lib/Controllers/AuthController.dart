@@ -31,7 +31,6 @@ class AuthController extends GetxController {
       var res = await Api.getUser();
       if (res.statusCode == 200) {
         user(res.data);
-        print(user);
         isLoggedIn = true.obs;
         Get.off(() => PatientsScreen());
       } else {

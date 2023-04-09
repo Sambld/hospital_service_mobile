@@ -176,11 +176,26 @@ class _PatientScreenState extends State<PatientScreen> {
                         : Scaffold(
                             body: Column(
                               children: [
+                                // a switch toggle for active medical records and closed ones
+                                SwitchListTile(
+                                    title: const Text("Show only active records"),
+                                    value: _patientController.recordsFilter.value,
+                                    onChanged: (value) {
+                                      _patientController.recordsFilter.value =
+                                          value;
+                                      _patientController.filterRecords();
+
+
+                                    },
+                                  ),
+
+
+
                                 Expanded(
                                   child: ListView.builder(
                                     itemBuilder: (context, index) {
                                       final medicalRecord = _patientController
-                                          .medicalRecords[index];
+                                          .filteredMedicalRecords[index];
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: ExpansionTile(
@@ -325,7 +340,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                       );
                                     },
                                     itemCount: _patientController
-                                        .medicalRecords.length,
+                                        .filteredMedicalRecords.length,
                                   ),
                                 )
                               ],

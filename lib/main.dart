@@ -13,6 +13,8 @@ import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
 
 import 'Controllers/AuthController.dart';
 import 'Controllers/NavigationDrawerController.dart';
+import 'Screens/MonitoringSheet/AddMonitoringSheetDay.dart';
+import 'Screens/MonitoringSheet/UpdateMonitoringSheetTreatments.dart';
 import 'Screens/Patients/AddPatient.dart';
 import 'Screens/Patients/Patient.dart';
 import 'Screens/Patients/Patients.dart';
@@ -57,6 +59,12 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: '/monitoring_sheet',
               page: () =>  MonitoringSheetScreen()),
+          GetPage(
+              name: '/add-monitoring_sheet',
+              page: () =>  AddMonitoringSheetDayScreen()),
+          GetPage(
+              name: '/update-monitoring_sheet-treatments',
+              page: () =>  UpdateMonitoringSheetTreatments()),
         ]);
   }
 }

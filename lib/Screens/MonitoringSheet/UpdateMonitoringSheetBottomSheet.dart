@@ -116,7 +116,7 @@ class _UpdateMonitoringSheetBottomSheetState
       });
       final formData = _formKey.currentState!.value;
       print(formData);
-      final res = await Api.updateMonitoringSheetDay(_monitoringSheetController.patientId.value, _monitoringSheetController.medicalRecordId.value, _monitoringSheetController.currentMonitoringSheet.value.id!,
+      final res = await Api.editMonitoringSheetDay(_monitoringSheetController.patientId.value, _monitoringSheetController.medicalRecordId.value, _monitoringSheetController.currentMonitoringSheet.value.id!,
           formData);
       print(res );
       setState(() {

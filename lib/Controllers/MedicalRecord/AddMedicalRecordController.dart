@@ -51,8 +51,8 @@ class AddMedicalRecordController extends GetxController{
       Get.offNamed(
           "/medical-record-details",
           arguments: {
-            'patient':
-            patient.value,
+            'patientId':
+            patient.value.id,
             'medicalRecordId':
            res.data['data']['id']
           });

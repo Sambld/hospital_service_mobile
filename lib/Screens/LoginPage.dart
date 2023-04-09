@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
           print( res.data['access_token']);
           print(_authController.user['first_name']);
           GetStorage().write('token', res.data['access_token'].toString()) ;
-          Get.offNamed('/dashboard');
+          Get.offNamed('/patients');
 
         }
       } catch (e) {
