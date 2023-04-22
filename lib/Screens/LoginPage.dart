@@ -62,8 +62,6 @@ class _LoginPageState extends State<LoginPage> {
 
           _btnController.reset();
           _authController.user(res.data['user']);
-          print( res.data['access_token']);
-          print(_authController.user['first_name']);
           GetStorage().write('token', res.data['access_token'].toString()) ;
           Get.offNamed('/patients');
 
@@ -127,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 50,
                       ),
                       Text(
-                        'Welcome back',
+                        'Welcome back'.tr,
                         style: TextStyle(
                           fontSize: 17,
                           color: Colors.black,
@@ -135,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Login to your account',
+                        'Login to your account'.tr,
                         style: TextStyle(
                           fontSize: 23,
                           color: Colors.black,
@@ -194,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 25),
                       RoundedLoadingButton(
-                        child: Text('Log in', style: TextStyle(color: Colors.white)),
+                        child: Text('Log in'.tr, style: TextStyle(color: Colors.white)),
                         controller: _btnController,
                         onPressed: login,
                         animateOnTap: false,

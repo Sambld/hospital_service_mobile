@@ -18,7 +18,6 @@ class PatientsController extends GetxController {
 
   @override
   void onInit() async {
-    // print("getting patients");
     await getPatients();
     super.onInit();
   }

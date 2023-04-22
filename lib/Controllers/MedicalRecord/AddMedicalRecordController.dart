@@ -28,7 +28,6 @@ class AddMedicalRecordController extends GetxController{
 
     if (formKey.value.currentState!.saveAndValidate()) {
 
-      print (formKey.value.currentState!.value['patient_entry_date'])  ;
       final formData = formKey.value.currentState!.value;
       final modifiableFormData = Map<String, dynamic>.from(formData);
       modifiableFormData.removeWhere((key, value) => value == null);
@@ -39,10 +38,7 @@ class AddMedicalRecordController extends GetxController{
         modifiableFormData['patient_entry_date'] = formattedpatientEntryDate;
       }
 
-      print(modifiableFormData);
-      // final formattedFormData = modifiableFormData.map((key, value) => MapEntry(key.toString(), value.toString()));
 
-      // print(formattedFormData);
 
       final res = await Api.addMedicalRecord( patient.value.id! , modifiableFormData);
       isLoading(false);

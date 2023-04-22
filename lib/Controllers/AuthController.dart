@@ -20,9 +20,22 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     // GetStorage().erase();
+
     redirect();
+    setLanguage();
     // TODO: implement onInit
     super.onInit();
+  }
+
+  Future<void> setLanguage() async {
+    String lang = await GetStorage().read('language');
+    if (lang == null) {
+      await GetStorage().write('language', 'en');
+      Get.updateLocale(Locale('en'));
+    } else {
+      Get.updateLocale(Locale(lang));
+    }
+
   }
 
   Future<void> redirect() async {
@@ -32,7 +45,7 @@ class AuthController extends GetxController {
       if (res.statusCode == 200) {
         user(res.data);
         isLoggedIn = true.obs;
-        Get.off(() => PatientsScreen());
+        Get.offNamed('/medical-records');
       } else {
         isLoggedIn = false.obs;
         Get.offNamed('/login');

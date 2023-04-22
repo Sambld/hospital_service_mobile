@@ -60,7 +60,6 @@ class MonitoringSheetController extends GetxController {
       DateTime today = DateTime(now.year, now.month, now.day);
 
 // Find today's monitoring sheet from the list
-      print(currentMonitoringSheetIndex.value);
       if (currentMonitoringSheetIndex.value != 0 && currentMonitoringSheetIndex.value < monitoringsheetslist.length){
 
         currentMonitoringSheet(monitoringsheetslist[currentMonitoringSheetIndex.value]);
@@ -73,26 +72,16 @@ class MonitoringSheetController extends GetxController {
             );
             currentMonitoringSheet(todayMonitoringSheet);
             currentMonitoringSheetIndex(monitoringSheetList.indexOf(todayMonitoringSheet));
-            print(currentMonitoringSheetIndex);
           } catch (e) {
             currentMonitoringSheet(monitoringsheetslist[0]);
             currentMonitoringSheetIndex(0);
           }
         }else{
-          print("monitoring sheet list is empty ");
+          print("Monitoring Sheet list is empty");
         }
       }
 
-
-      // for (var sheet in monitoringSheetList) {
-      //   print(sheet.fillingDate);
-      // }
       isLoading(false);
-
-      // final data = res.data['data'] as List<dynamic>;
-      // final monitoringSheetssList = data.map((e) => MonitoringSheet.fromJson(e))
-      //     .toList();
-      // monitoringSheets.assignAll(monitoringSheetssList);
     } else {
       isLoading(false);
 

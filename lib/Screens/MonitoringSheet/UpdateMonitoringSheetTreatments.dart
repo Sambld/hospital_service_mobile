@@ -22,14 +22,14 @@ class UpdateMonitoringSheetTreatments extends StatefulWidget {
 
 class _UpdateMonitoringSheetTreatmentsState
     extends State<UpdateMonitoringSheetTreatments> {
-  final _updateMonitoringSheetTreatmentsController =
+  final _controller =
       Get.put(UpdateMonitoringSheetTreatmentsController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(title: const Text('update Monitoring Sheet Day'),
+      appBar: AppBar(title:  Text('Update Monitoring Sheet Day'.tr),
         flexibleSpace: kAppBarColor,
 
       ),
@@ -43,19 +43,19 @@ class _UpdateMonitoringSheetTreatmentsState
                 name: 'day',
                 enabled: false,
                 initialValue:
-                    _updateMonitoringSheetTreatmentsController.day.value,
+                    _controller.day.value,
                 inputType: InputType.date,
                 format: DateFormat('yyyy-MM-dd'),
                 decoration:
                     GlobalWidgets.inputDecoration("Day", Icons.calendar_today),
-                onChanged: (value) => _updateMonitoringSheetTreatmentsController
+                onChanged: (value) => _controller
                     .day.value = value!,
               ),
               const SizedBox(height: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Treatments'),
+                  Text('Treatments'.tr),
                   // icon button to add new treatment
                   IconButton(
                     onPressed: () {
@@ -70,21 +70,21 @@ class _UpdateMonitoringSheetTreatmentsState
                     // treatmetns list with remove and update button
                     ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _updateMonitoringSheetTreatmentsController
+                  itemCount: _controller
                       .treatmentList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
-                          '${_updateMonitoringSheetTreatmentsController.treatmentList[index].name}'),
+                          '${_controller.treatmentList[index].name}'),
                       subtitle: Text(
-                          '${_updateMonitoringSheetTreatmentsController.treatmentList[index].dose}'),
+                          '${_controller.treatmentList[index].dose}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
                             onPressed: () async {
                               final medRequest = await Api.getMedicineById(
-                                      id: _updateMonitoringSheetTreatmentsController
+                                      id: _controller
                                           .treatmentList[index].medicineId!)
                                   .then((res) {
                                 final Medicine medicine =
@@ -92,10 +92,9 @@ class _UpdateMonitoringSheetTreatmentsState
                                 Get.dialog(EditTreatmentDialog(
                                   medicine: medicine,
                                   treatment:
-                                      _updateMonitoringSheetTreatmentsController
+                                      _controller
                                           .treatmentList[index],
                                 ));
-                                print(medicine.name!);
                               });
                             },
                             icon: const Icon(
@@ -107,25 +106,25 @@ class _UpdateMonitoringSheetTreatmentsState
                             onPressed: () {
                               // delete treatment dialog confirmation
                               Get.defaultDialog(
-                                title: 'Delete Treatment',
+                                title: 'Delete Treatment'.tr,
                                 middleText:
-                                    'Are you sure you want to delete this treatment?',
-                                textConfirm: 'Yes',
-                                textCancel: 'No',
+                                    'Are you sure you want to delete this treatment?'.tr,
+                                textConfirm: 'Yes'.tr,
+                                textCancel: 'No'.tr,
                                 buttonColor: Colors.redAccent,
                                 confirmTextColor: Colors.white,
                                 cancelTextColor: Colors.redAccent,
                                 onConfirm: () {
                                   Api.deleteMonitoringSheetTreatment(
-                                      _updateMonitoringSheetTreatmentsController
+                                      _controller
                                           .MC.patientId.value,
-                                      _updateMonitoringSheetTreatmentsController
+                                      _controller
                                           .MC.medicalRecordId.value,
-                                      _updateMonitoringSheetTreatmentsController
+                                      _controller
                                           .MC.currentMonitoringSheet.value.id!,
-                                      _updateMonitoringSheetTreatmentsController
+                                      _controller
                                           .treatmentList[index].id!);
-                                  _updateMonitoringSheetTreatmentsController
+                                  _controller
                                       .getTreatments();
                                   Get.back();
                                 },
@@ -150,9 +149,9 @@ class _UpdateMonitoringSheetTreatmentsState
               // Center(
               //   child: RoundedLoadingButton(
               //     onPressed: () {
-              //       _updateMonitoringSheetTreatmentsController.addMonitoringSheetDay();
+              //       _controller.addMonitoringSheetDay();
               //     },
-              //     controller: _updateMonitoringSheetTreatmentsController.loadingButtonController.value,
+              //     controller: _controller.loadingButtonController.value,
               //     animateOnTap: false,
               //     child: const Text('Save'),
               //   ),
@@ -176,16 +175,17 @@ class AddTreatmentDialog extends StatefulWidget {
 
 class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final _updateMonitoringSheetTreatmentsController =
+  final _controller =
       Get.find<UpdateMonitoringSheetTreatmentsController>();
   Medicine? _selectedMedicine;
 
   @override
   Widget build(BuildContext context) {
     return Center(
+
       child: SingleChildScrollView(
         child: AlertDialog(
-          title: const Text('Add Treatment'),
+          title:  Text('Add Treatment'.tr),
           content: SizedBox(
             width: 400,
             child: FormBuilder(
@@ -196,14 +196,17 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                   DropdownSearch<Medicine>(
                     // filterFn: (Medicine? m, String? filter) =>
                     //     m!.quantity! > 0,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(),
+                    ]),
 
                     itemAsString: (Medicine? m) => "${m?.name!} ",
                     asyncItems: (String filter) async {
-                      print(filter);
                       var response = await Api.getMedicines();
                       var models = Medicine.fromJsonList(response.data['data']);
                       return models;
                     },
+
                     onChanged: (Medicine? data) {
                       setState(() {
                         _selectedMedicine = data;
@@ -218,8 +221,8 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                     dropdownDecoratorProps: DropDownDecoratorProps(
                       dropdownSearchDecoration: InputDecoration(
                         labelText: _selectedMedicine?.quantity != null
-                            ? 'Medicine quantity ${_selectedMedicine?.quantity ?? ''}'
-                            : 'Medicine',
+                            ? '${"Medicine Quantity".tr} ${_selectedMedicine?.quantity ?? ''}'
+                            : 'Medicine'.tr,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -229,15 +232,15 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
 
                   FormBuilderTextField(
                     name: 'name',
-                    initialValue: "${_selectedMedicine?.name ?? ''}",
-                    decoration: const InputDecoration(labelText: 'Name'),
+                    initialValue: _selectedMedicine?.name ?? '',
+                    decoration:  InputDecoration(labelText: 'Name'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
                   ),
                   FormBuilderTextField(
                     name: 'dose',
-                    decoration: const InputDecoration(labelText: 'Dose'),
+                    decoration:  InputDecoration(labelText: 'Dose'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
@@ -246,22 +249,22 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                   FormBuilderDropdown(
                     name: 'type',
                     decoration:
-                        const InputDecoration(labelText: 'Treatment Type'),
+                         InputDecoration(labelText: 'Treatment Type'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
-                    items: const [
+                    items:  [
                       DropdownMenuItem(
                         value: 'injection',
-                        child: Text('Injection'),
+                        child: Text('Injection'.tr),
                       ),
                       DropdownMenuItem(
                         value: 'tablet',
-                        child: Text('Tablet'),
+                        child: Text('Tablet'.tr),
                       ),
                       DropdownMenuItem(
                         value: 'syrup',
-                        child: Text('Syrup'),
+                        child: Text('Syrup'.tr),
                       ),
                     ],
                   ),
@@ -272,19 +275,18 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CANCEL'),
+              child:  Text('Cancel'.tr),
             ),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.saveAndValidate()) {
                   final values = _formKey.currentState!.value;
-                  // print(values);
                   Api.addMonitoringSheetTretment(
-                      _updateMonitoringSheetTreatmentsController
+                      _controller
                           .MC.patientId.value,
-                      _updateMonitoringSheetTreatmentsController
+                      _controller
                           .MC.medicalRecordId.value,
-                      _updateMonitoringSheetTreatmentsController
+                      _controller
                           .MC.currentMonitoringSheet.value.id!,
                       {
                         'medicine_id': _selectedMedicine!.id,
@@ -292,11 +294,11 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                         'dose': values['dose'],
                         'type': values['type'],
                       });
-                  _updateMonitoringSheetTreatmentsController.getTreatments();
+                  _controller.getTreatments();
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text('ADD'),
+              child:  Text('Add'.tr),
             ),
           ],
         ),
@@ -320,7 +322,7 @@ class EditTreatmentDialog extends StatefulWidget {
 
 class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final _updateMonitoringSheetTreatmentsController =
+  final _controller =
       Get.find<UpdateMonitoringSheetTreatmentsController>();
   Medicine? _selectedMedicine;
 
@@ -352,7 +354,6 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                     selectedItem: _selectedMedicine,
                     itemAsString: (Medicine? m) => "${m?.name!} ",
                     asyncItems: (String filter) async {
-                      print(filter);
                       var response = await Api.getMedicines();
                       var models = Medicine.fromJsonList(response.data['data']);
                       return models;
@@ -371,8 +372,8 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                     dropdownDecoratorProps: DropDownDecoratorProps(
                       dropdownSearchDecoration: InputDecoration(
                         labelText: _selectedMedicine?.quantity != null
-                            ? 'Medicine quantity ${_selectedMedicine?.quantity ?? ''}'
-                            : 'Medicine',
+                            ? '${"Medicine Quantity".tr} ${_selectedMedicine?.quantity ?? ''}'
+                            : 'Medicine'.tr,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -384,7 +385,7 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                     name: 'name',
                     initialValue:
                         "${_selectedMedicine?.name ?? widget.treatment.name}",
-                    decoration: const InputDecoration(labelText: 'Name'),
+                    decoration:  InputDecoration(labelText: 'Name'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
@@ -406,18 +407,18 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
-                    items: const [
+                    items:  [
                       DropdownMenuItem(
-                        value: 'injection',
-                        child: Text('Injection'),
+                        value: 'Injection',
+                        child: Text('Injection'.tr),
                       ),
                       DropdownMenuItem(
-                        value: 'tablet',
-                        child: Text('Tablet'),
+                        value: 'Oral',
+                        child: Text('Tablet'.tr),
                       ),
                       DropdownMenuItem(
-                        value: 'syrup',
-                        child: Text('Syrup'),
+                        value: 'Topical',
+                        child: Text('Syrup'.tr),
                       ),
                     ],
                   ),
@@ -428,19 +429,18 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CANCEL' , style: TextStyle(color: Colors.green),),
+              child:  Text('Cancel'.tr , style: TextStyle(color: Colors.green),),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.saveAndValidate()) {
                   final values = _formKey.currentState!.value;
-                  // print(values);
                   Api.editMonitoringSheetTretment(
-                      _updateMonitoringSheetTreatmentsController
+                      _controller
                           .MC.patientId.value,
-                      _updateMonitoringSheetTreatmentsController
+                      _controller
                           .MC.medicalRecordId.value,
-                      _updateMonitoringSheetTreatmentsController
+                      _controller
                           .MC.currentMonitoringSheet.value.id!,
                       widget.treatment.id!,
                       {
@@ -449,7 +449,7 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                         'dose': values['dose'],
                         'type': values['type'],
                       });
-                  _updateMonitoringSheetTreatmentsController.getTreatments();
+                  await _controller.getTreatments();
                   Navigator.of(context).pop();
                 }
               },

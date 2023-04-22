@@ -20,8 +20,6 @@ class MedicalRecordController extends GetxController{
 
     medicalRecordId(Get.arguments['medicalRecordId']);
     patientId(Get.arguments['patientId']);
-    print(patientId);
-    print(medicalRecordId);
     getMedicalRecord();
     super.onInit();
   }
@@ -34,13 +32,6 @@ class MedicalRecordController extends GetxController{
 
       final patientReq = await Api.getPatient(id: patientId.value , withMedicalRecords: false );
       patient(Patient.fromJson(patientReq.data['data']['patient']));
-      print(patient);
-
-      // final medicalRecordReq = await Api.getMedicalRecord(patientId: patientId.value, medicalRecordId: medicalRecordId.value);
-      // medicalRecord(MedicalRecord.fromJson(medicalRecordReq.data['data']));
-      // print(medicalRecord);
-
-
       final medicalRecordReq = await Api.getMedicalRecord(patientId: patientId.value, medicalRecordId: medicalRecordId.value);
       medicalRecord(MedicalRecord.fromJson(medicalRecordReq.data['data']));
       isLoading(false);

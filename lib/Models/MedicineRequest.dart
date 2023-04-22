@@ -1,24 +1,28 @@
+import 'Medicine.dart';
+
 class MedicineRequest {
-  final int id;
-  final int userId;
-  final int recordId;
-  final int medicineId;
-  final int quantity;
-  final String status;
+  final int? id;
+  final int? userId;
+  final int? recordId;
+  final int? medicineId;
+  final int? quantity;
+  final String? status;
   final String? review;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final Medicine? medicine;
 
   MedicineRequest({
-    required this.id,
-    required this.userId,
-    required this.recordId,
-    required this.medicineId,
-    required this.quantity,
-    required this.status,
-    required this.review,
-    required this.createdAt,
-    required this.updatedAt,
+     this.id,
+     this.userId,
+     this.recordId,
+     this.medicineId,
+     this.quantity,
+     this.status,
+     this.review,
+      this.medicine,
+     this.createdAt,
+     this.updatedAt,
   });
 
   factory MedicineRequest.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,7 @@ class MedicineRequest {
       review: json['review'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      medicine: json['medicine'] != null ? Medicine.fromJson(json['medicine']) : null,
     );
   }
 
@@ -42,5 +47,6 @@ class MedicineRequest {
     'quantity': quantity,
     'status': status,
     'review': review,
+
   };
 }

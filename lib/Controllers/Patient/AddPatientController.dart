@@ -27,9 +27,6 @@ class AddPatientController extends GetxController{
         final formattedBirthDate = _dateFormat.format(birthDate);
         modifiableFormData['birth_date'] = formattedBirthDate;
       }
-      // final formattedFormData = modifiableFormData.map((key, value) => MapEntry(key.toString(), value.toString()));
-
-      // print(formattedFormData);
 
       final res = await Api.addPatient(modifiableFormData);
 

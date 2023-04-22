@@ -3,7 +3,7 @@ class Medicine {
   final String? name;
   final String? category;
   final String? description;
-  final double? price;
+  final dynamic? price;
   final int? quantity;
   final int? isPharmaceutical;
   final String? manufacturer;

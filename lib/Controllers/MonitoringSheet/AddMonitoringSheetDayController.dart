@@ -39,7 +39,6 @@ class AddMonitoringSheetDayController extends GetxController{
     final _monitoringSheetController = Get.find<MonitoringSheetController>();
     final patientId = _monitoringSheetController.patientId.value;
     final medicalRecordId = _monitoringSheetController.medicalRecordId.value;
-    // print(DateFormat('yyyy/MM/dd').format(day.value).toString());
     final res = await Api.addMonitoringSheet(patientId,medicalRecordId , {'filling_date' : DateFormat('yyyy/MM/dd').format(day.value).toString()});
     if (res.statusCode == 200) {
       int newMonitoringSheetId = res.data['data']['id'];

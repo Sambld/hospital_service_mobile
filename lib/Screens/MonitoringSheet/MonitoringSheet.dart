@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:infectious_diseases_service/Screens/MonitoringSheet/AddMonitoringSheetDay.dart';
 import 'package:infectious_diseases_service/Services/Api.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
 import 'package:intl/intl.dart';
 
 import '../../Constants/Constants.dart';
@@ -18,7 +14,7 @@ class MonitoringSheetScreen extends StatefulWidget {
 }
 
 class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
-  final _monitoringSheetController = Get.put(MonitoringSheetController());
+  final _controller = Get.put(MonitoringSheetController());
   final authController = Get.find<AuthController>();
 
   DateTime _selectedDate = DateTime.now();
@@ -30,31 +26,35 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
         appBar: AppBar(
             flexibleSpace: kAppBarColor,
             title: Text(
-              'Monitoring Sheet   ${_monitoringSheetController.monitoringSheetList.value.isNotEmpty ? "( " + _monitoringSheetController.monitoringSheetList.length.toString() + " days )" : ""}',
+              '${"Monitoring Sheet".tr}   ${_controller.monitoringSheetList.value.isNotEmpty ? "( " + _controller.monitoringSheetList.length.toString() + " days )" : ""}',
               style: const TextStyle(fontSize: 16),
             )),
-        body: _monitoringSheetController.isLoading.value
+        body: _controller.isLoading.value
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : _monitoringSheetController.monitoringSheetList.isEmpty
+            : _controller.monitoringSheetList.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("No monitoring sheet found "),
+                         Text("No Monitoring Sheet found".tr),
                         const SizedBox(
                           height: 10,
                         ),
-                        _monitoringSheetController.medicalRecord.value.userId == authController.user['id'] ? ElevatedButton(
-                            onPressed: () {
-                              Get.toNamed(
-                                '/add-monitoring_sheet',
-                                // pass the last monitoring sheet day of the list to the next screen
-                                arguments: DateTime.now().subtract(Duration(days: 1)),
-                              );
-                            },
-                            child: const Text("Create new")):Container(),
+                        _controller.medicalRecord.value.userId ==
+                                authController.user['id'] && !_controller.medicalRecord.value.isClosed()
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  Get.toNamed(
+                                    '/add-monitoring-sheet',
+                                    // pass the last monitoring sheet day of the list to the next screen
+                                    arguments: DateTime.now()
+                                        .subtract(const Duration(days: 1)),
+                                  );
+                                },
+                                child: const Text("Create new"))
+                            : Container(),
                       ],
                     ),
                   )
@@ -76,14 +76,14 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        const Text(
-                                          "medical record : ",
+                                         Text(
+                                          "${"Medical Record".tr} : ",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                            "#${_monitoringSheetController.medicalRecord.value.id}"),
+                                            "#${_controller.medicalRecord.value.id}"),
                                       ],
                                     ),
                                     const SizedBox(height: 4),
@@ -93,14 +93,14 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        const Text(
-                                          "Patient : ",
+                                         Text(
+                                          "${"Patient".tr} : ",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                            "${_monitoringSheetController.patient.value.firstName} ${_monitoringSheetController.patient.value.lastName} #${_monitoringSheetController.patient.value.id}"),
+                                            "${_controller.patient.value.firstName} ${_controller.patient.value.lastName} #${_controller.patient.value.id}"),
                                       ],
                                     ),
                                     const SizedBox(height: 4),
@@ -110,14 +110,14 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        const Text(
-                                          "Doctor : ",
+                                        Text(
+                                          "${"Doctor".tr} : ".tr,
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                            "${_monitoringSheetController.medicalRecord.value.doctorName}"),
+                                            "${_controller.medicalRecord.value.doctorName}"),
                                       ],
                                     ),
                                   ], Colors.green),
@@ -129,11 +129,11 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   IconButton(
-                                    onPressed: _monitoringSheetController
+                                    onPressed: _controller
                                             .isFirstMonitoringSheet()
                                         ? null
                                         : () {
-                                            _monitoringSheetController
+                                            _controller
                                                 .previousMonitoringSheet();
                                           },
                                     icon: const Icon(
@@ -143,16 +143,18 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                   ),
                                   const SizedBox(width: 16),
                                   Text(
-                                    "${_monitoringSheetController.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10)} (${DateFormat('EEEE').format(_monitoringSheetController.currentMonitoringSheet.value.fillingDate!).substring(0, 3)})",
-                                    style: const TextStyle(fontSize: 16),
+                                    "${_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10)} (${DateFormat('yyyy-MM-dd').format(DateTime.now()) == _controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10) ? "Today".tr :
+                                        // show only three caracter of the day name
+                                        DateFormat('EEE').format(DateTime.parse(_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10))).substring(0, 3)})",
+                                    style: const TextStyle(fontSize: 16 , fontWeight: FontWeight.w500),
                                   ),
                                   const SizedBox(width: 16),
                                   IconButton(
-                                    onPressed: _monitoringSheetController
+                                    onPressed: _controller
                                             .isLastMonitoringSheet()
                                         ? null
                                         : () {
-                                            _monitoringSheetController
+                                            _controller
                                                 .nextMonitoringSheet();
                                           },
                                     icon: const Icon(
@@ -162,22 +164,22 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                   ),
                                 ],
                               ),
-                              _monitoringSheetController.currentMonitoringSheet
+                              _controller.currentMonitoringSheet
                                           .value.filledBy?.isNotEmpty ??
                                       false
-                                  ? _monitoringSheetController
+                                  ? ( _controller
                                                   .currentMonitoringSheet
                                                   .value
                                                   .filledById ==
                                               authController.user.value['id'] ||
-                                          _monitoringSheetController
+                                          _controller
                                                   .medicalRecord.value.userId ==
-                                              authController.user.value['id']
+                                              authController.user.value['id']) &&  !_controller.medicalRecord.value.isClosed()
                                       ?
                                       // if the monitoring sheet is filled by the current user , a button to update it
                                       Column(
-                                        children: [
-                                          Row(
+                                          children: [
+                                            Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
                                               crossAxisAlignment:
@@ -185,12 +187,12 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                               children: [
                                                 Expanded(
                                                   child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 12.0),
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 12.0),
                                                     child: ElevatedButton(
-                                                      style:
-                                                          ElevatedButton.styleFrom(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
                                                         backgroundColor:
                                                             Colors.green,
                                                       ),
@@ -203,16 +205,18 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                                             isScrollControlled:
                                                                 true);
                                                       },
-                                                      child: const Text("Update"),
+                                                      child:
+                                                           Text("Update".tr),
                                                     ),
                                                   ),
                                                 ),
                                                 // a icon button to delete the monitoring sheet
-                                                _monitoringSheetController
+                                                _controller
                                                             .medicalRecord
                                                             .value
                                                             .userId ==
-                                                        authController.user['id']
+                                                        authController
+                                                            .user['id']  && !_controller.medicalRecord.value.isClosed()
                                                     ? IconButton(
                                                         onPressed: DeleteDay,
                                                         icon: const Icon(
@@ -221,57 +225,60 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                                         ),
                                                       )
                                                     : Container(),
-
                                               ],
                                             ),
-                                          filledByCard()
-                                        ],
-                                      )
+                                            filledByCard()
+                                          ],
+                                        )
                                       :
                                       // if the monitoring sheet is filled by another user , text to show who filled it
                                       filledByCard()
-                                  : _monitoringSheetController
+                                  : _controller
                                                   .medicalRecord.value.userId ==
                                               authController.user.value['id'] &&
-                                          (_monitoringSheetController
+                                          (_controller
                                                   .currentMonitoringSheet
                                                   .value
                                                   .filledBy
                                                   ?.isNotEmpty ??
                                               false)
                                       ? Row(
-                                        children: [
-                                          filledByCard(),
-                                        ],
-                                      )
+                                          children: [
+                                            filledByCard(),
+                                          ],
+                                        )
                                       :
-                              // delete button
-                              _monitoringSheetController
-                                          .medicalRecord.value.userId ==
-                                      authController.user.value['id']
-                                  ? Row(
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12.0),
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.red,
-                                              ),
-                                              onPressed: DeleteDay,
-                                              child: const Text("Delete"),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Container()
-                              ,
+                                      // delete button
+                                      _controller
+                                                  .medicalRecord.value.userId ==
+                                              authController.user.value['id']  && !_controller.medicalRecord.value.isClosed()
+                                          ? Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 12.0),
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                      ),
+                                                      onPressed: DeleteDay,
+                                                      child:
+                                                           Text("Delete".tr),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : Container(),
                               // if the monitoring sheet is not filled yet , a button to fill it
-                              _monitoringSheetController.currentMonitoringSheet
-                                          .value.filledById ==
-                                      null && authController.isNurse()
+                              _controller.currentMonitoringSheet
+                                              .value.filledById ==
+                                          null &&
+                                      authController.isNurse()  && !_controller.medicalRecord.value.isClosed()
                                   ? Row(
                                       children: [
                                         Expanded(
@@ -288,20 +295,15 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                                       return const UpdateMonitoringSheetBottomSheet();
                                                     },
                                                     isScrollControlled: true);
-                                                print(_monitoringSheetController
-                                                    .currentMonitoringSheet
-                                                    .value
-                                                    .filledById);
-                                                // Get.toNamed(
-                                                //     '/fillMonitoringSheet/${_monitoringSheetController.currentMonitoringSheet.value.id}');
-                                              },
-                                              child: const Text("Fill"),
+
+                                             },
+                                              child:  Text("Fill".tr),
                                             ),
                                           ),
                                         ),
-                                        _monitoringSheetController.medicalRecord
+                                        _controller.medicalRecord
                                                     .value.userId ==
-                                                authController.user['id']
+                                                authController.user['id']  && !_controller.medicalRecord.value.isClosed()
                                             ? IconButton(
                                                 onPressed: DeleteDay,
                                                 icon: const Icon(
@@ -323,16 +325,16 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                     DataColumn(
                                       label: Expanded(
                                         child: Text(
-                                          'checkup #${_monitoringSheetController.currentMonitoringSheet.value.id}',
+                                          '${"Checkup".tr} #${_controller.currentMonitoringSheet.value.id}',
                                           style: const TextStyle(
                                               fontStyle: FontStyle.italic),
                                         ),
                                       ),
                                     ),
-                                    const DataColumn(
+                                    DataColumn(
                                       label: Expanded(
                                         child: Text(
-                                          'result',
+                                          'Result'.tr,
                                           style: TextStyle(
                                               fontStyle: FontStyle.italic),
                                         ),
@@ -342,69 +344,132 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                   rows: <DataRow>[
                                     DataRow(
                                       cells: <DataCell>[
-                                        const DataCell(
-                                          Text('temperature',
+                                         DataCell(
+                                          Text('Temperature'.tr,
                                               style: Styles.type,
                                               textAlign: TextAlign.center),
                                         ),
-                                        DataCell(Text(
-                                          '${_monitoringSheetController.currentMonitoringSheet.value.temperature ?? "-"}',
-                                          style: Styles.result,
-                                        )),
+                                        DataCell(_controller
+                                                    .currentMonitoringSheet
+                                                    .value
+                                                    .temperature !=
+                                                null
+                                            ? Text(
+                                                "${_controller.currentMonitoringSheet.value.temperature}°C",
+                                                style: Styles.result,
+                                              )
+                                            :  Chip(
+                                                label: Text(
+                                                  'Empty'.tr,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12),
+                                                ),
+                                                backgroundColor:
+                                                    Colors.deepOrangeAccent,
+                                              )),
                                       ],
                                     ),
                                     DataRow(
                                       cells: <DataCell>[
-                                        const DataCell(Text(
-                                          'blood_pressure',
+                                         DataCell(Text(
+                                          'Blood Pressure'.tr,
                                           style: Styles.type,
                                         )),
-                                        DataCell(Text(
-                                          _monitoringSheetController
-                                                  .currentMonitoringSheet
-                                                  .value
-                                                  .bloodPressure ??
-                                              '-',
-                                          style: Styles.result,
-                                        )),
+                                        DataCell(
+                                          _controller
+                                                      .currentMonitoringSheet
+                                                      .value
+                                                      .bloodPressure !=
+                                                  null
+                                              ? Text(
+                                                  "${_controller.currentMonitoringSheet.value.bloodPressure}",
+                                                  style: Styles.result,
+                                                )
+                                              :  Chip(
+                                                  label: Text(
+                                                    'Empty'.tr,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12),
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.deepOrangeAccent,
+                                                ),
+                                        ),
                                       ],
                                     ),
                                     DataRow(
                                       cells: <DataCell>[
-                                        const DataCell(Text(
-                                          'urine',
+                                         DataCell(Text(
+                                          'Urine'.tr,
                                           style: Styles.type,
                                         )),
-                                        DataCell(Text(
-                                          "${_monitoringSheetController.currentMonitoringSheet.value.urine ?? "-"}",
-                                          style: Styles.result,
-                                        )),
+                                        DataCell(
+                                          _controller
+                                                      .currentMonitoringSheet
+                                                      .value
+                                                      .urine !=
+                                                  null
+                                              ? Text(
+                                                  "${_controller.currentMonitoringSheet.value.urine}",
+                                                  style: Styles.result,
+                                                )
+                                              :  Chip(
+                                                  label: Text(
+                                                    'Empty'.tr,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12),
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.deepOrangeAccent,
+                                                ),
+                                        ),
                                       ],
                                     ),
                                     DataRow(
                                       cells: <DataCell>[
-                                        const DataCell(Text(
-                                          'weight',
+                                         DataCell(Text(
+                                          'Weight'.tr,
                                           style: Styles.type,
                                         )),
-                                        DataCell(Text(
-                                          "${_monitoringSheetController.currentMonitoringSheet.value.weight ?? "-"}",
-                                          style: Styles.result,
-                                        )),
+                                        DataCell(
+                                          _controller
+                                                      .currentMonitoringSheet
+                                                      .value
+                                                      .weight !=
+                                                  null
+                                              ? Text(
+                                                  "${_controller.currentMonitoringSheet.value.weight} Kg",
+                                                  style: Styles.result,
+                                                )
+                                              :  Chip(
+                                                  label: Text(
+                                                    'Empty'.tr,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12),
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.deepOrangeAccent,
+                                                ),
+                                        ),
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-                              _monitoringSheetController.currentMonitoringSheet
+                              _controller.currentMonitoringSheet
                                           .value.progressReport?.isEmpty ??
                                       true
                                   ? Container()
                                   : Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                    child: infoCard([
-                                        const Text(
-                                          "report",
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      child: infoCard([
+                                         Text(
+                                          "Report".tr,
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.w600,
@@ -413,7 +478,7 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                         ),
                                         const SizedBox(height: 8.0),
                                         Text(
-                                          _monitoringSheetController
+                                          _controller
                                                   .currentMonitoringSheet
                                                   .value
                                                   .progressReport ??
@@ -424,47 +489,24 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                           // textAlign: TextAlign.center,
                                         ),
                                       ], Colors.blue, vMargin: 0.0),
-                                  ),
+                                    ),
 
                               const SizedBox(
                                 height: 20,
                               ),
 
-
                               // update treatment button
-                              _monitoringSheetController
-                                          .medicalRecord.value.userId ==
-                                      authController.user.value['id']
-                                  ? Row(
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12.0),
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.blue,
-                                              ),
-                                              onPressed: () {
-                                                Get.toNamed('/update-monitoring_sheet-treatments' )?.then((value) => _monitoringSheetController.getMonitoringSheets());
-                                              },
-                                              child: _monitoringSheetController.currentMonitoringSheet.value.treatments?.isNotEmpty ?? true ?  Text("Update treatments") : Text("Add treatments"),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Container(),
+
 
                               // table of monitoring sheet treatments
-                              _monitoringSheetController.currentMonitoringSheet
+                              _controller.currentMonitoringSheet
                                           .value.treatments?.isEmpty ??
                                       true
                                   ? Container()
                                   : ExpansionTile(
-                                      title: const Center(
+                                      title:  Center(
                                         child: Text(
-                                          "Treatments",
+                                          "Treatments".tr,
                                           style: TextStyle(fontSize: 20),
                                         ),
                                       ),
@@ -478,11 +520,11 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                               DataTable(
                                                 dataRowHeight: 50,
                                                 columnSpacing: 50,
-                                                columns: const <DataColumn>[
+                                                columns: <DataColumn>[
                                                   DataColumn(
                                                     label: Expanded(
                                                       child: Text(
-                                                        'treatment',
+                                                        'Treatment'.tr,
                                                         style: TextStyle(
                                                             fontStyle: FontStyle
                                                                 .italic),
@@ -492,7 +534,7 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                                   DataColumn(
                                                     label: Expanded(
                                                       child: Text(
-                                                        'dose',
+                                                        'Dose'.tr,
                                                         style: TextStyle(
                                                             fontStyle: FontStyle
                                                                 .italic),
@@ -502,7 +544,7 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                                   DataColumn(
                                                     label: Expanded(
                                                       child: Text(
-                                                        'type',
+                                                        'Type'.tr,
                                                         style: TextStyle(
                                                             fontStyle: FontStyle
                                                                 .italic),
@@ -510,7 +552,7 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                                     ),
                                                   ),
                                                 ],
-                                                rows: _monitoringSheetController
+                                                rows: _controller
                                                     .currentMonitoringSheet
                                                     .value
                                                     .treatments!
@@ -540,6 +582,40 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                                         )
                                       ],
                                     ),
+                              _controller
+                                  .medicalRecord.value.userId ==
+                                  authController.user.value['id']  && !_controller.medicalRecord.value.isClosed()
+                                  ? Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12.0),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue,
+                                        ),
+                                        onPressed: () {
+                                          Get.toNamed(
+                                              '/update-monitoring-sheet-treatments')
+                                              ?.then((value) =>
+                                              _controller
+                                                  .getMonitoringSheets());
+                                        },
+                                        child: _controller
+                                            .currentMonitoringSheet
+                                            .value
+                                            .treatments
+                                            ?.isNotEmpty ??
+                                            true
+                                            ?  Text("Update Treatments".tr)
+                                            :  Text("Add treatments".tr),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                                  : Container(),
                               const SizedBox(
                                 height: 60,
                               ),
@@ -551,20 +627,19 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
                       // monitoring sheet treatments list
                     ),
                     floatingActionButton:
-                        _monitoringSheetController.medicalRecord.value.userId ==
-                                authController.user['id']
+                        _controller.medicalRecord.value.userId ==
+                                authController.user['id'] && !_controller.medicalRecord.value.isClosed()
                             ? FloatingActionButton(
                                 onPressed: () {
                                   Get.toNamed(
-                                    '/add-monitoring_sheet',
+                                    '/add-monitoring-sheet',
                                     // pass the last monitoring sheet day of the list to the next screen
-                                    arguments: _monitoringSheetController
+                                    arguments: _controller
                                         .monitoringSheetList.last.fillingDate,
                                   )?.then((value) {
-                                    print('back from add new day ');
-                                    _monitoringSheetController
+                                    _controller
                                         .currentMonitoringSheetIndex(
-                                            _monitoringSheetController
+                                            _controller
                                                 .monitoringSheetList.length);
                                   });
                                 },
@@ -578,22 +653,21 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
 
   void DeleteDay() {
     Get.defaultDialog(
-        title: "Delete",
-        middleText: "Are you sure you want to delete this day?",
-        textConfirm: "Yes",
-        textCancel: "No",
+        title: "Delete".tr,
+        middleText: "Are you sure you want to delete this day?".tr,
+        textConfirm: "Yes".tr,
+        textCancel: "No".tr,
         confirmTextColor: Colors.white,
         cancelTextColor: Colors.redAccent,
         buttonColor: Colors.red,
         backgroundColor: Colors.white,
         onConfirm: () async {
-          print("deleting monitoring sheet");
           await Api.deleteMonitoringSheetDay(
-              _monitoringSheetController.patientId.value,
-              _monitoringSheetController.medicalRecordId.value,
-              _monitoringSheetController.currentMonitoringSheet.value.id!);
-          // _monitoringSheetController.currentMonitoringSheetIndex.value--;
-          _monitoringSheetController.getMonitoringSheets();
+              _controller.patientId.value,
+              _controller.medicalRecordId.value,
+              _controller.currentMonitoringSheet.value.id!);
+          // _controller.currentMonitoringSheetIndex.value--;
+          _controller.getMonitoringSheets();
           Get.back();
         });
   }
@@ -605,12 +679,12 @@ class _MonitoringSheetScreenState extends State<MonitoringSheetScreen> {
         [
           Row(
             children: [
-              const Text(
-                "Filled by : ",
+               Text(
+                "${"Filled by".tr} : ",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               Text(
-                  "${_monitoringSheetController.currentMonitoringSheet.value.filledBy!['first_name']} ${_monitoringSheetController.currentMonitoringSheet.value.filledBy!['last_name']}"),
+                  "${_controller.currentMonitoringSheet.value.filledBy!['first_name']} ${_controller.currentMonitoringSheet.value.filledBy!['last_name']}"),
             ],
           )
         ],

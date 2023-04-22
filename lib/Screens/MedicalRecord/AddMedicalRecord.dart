@@ -4,6 +4,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../Constants/Constants.dart';
 import '../../Controllers/MedicalRecord/AddMedicalRecordController.dart';
 import '../../Services/Api.dart';
 
@@ -13,20 +14,22 @@ class AddMedicalRecordScreen extends StatefulWidget {
 }
 
 class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
-  final _addMedicalRecordController = Get.put(AddMedicalRecordController());
+  final _controller = Get.put(AddMedicalRecordController());
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
           appBar: AppBar(
-            title: const Text('Add new Medical Record'),
+            flexibleSpace: kAppBarColor,
+
+            title:  Text('Add New Medical Record'.tr),
             actions: [
               IconButton(
                 icon: const Icon(Icons.save),
-                onPressed: _addMedicalRecordController.isLoading.value
+                onPressed: _controller.isLoading.value
                     ? null
                     : () async {
-                        _addMedicalRecordController.submitForm();
+                        _controller.submitForm();
                       },
               ),
             ],
@@ -35,12 +38,12 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: FormBuilder(
-                key: _addMedicalRecordController.formKey.value,
+                key: _controller.formKey.value,
                 child: Column(
                   children: [
                     TextFormField(
                       enabled: false,
-                      initialValue: "${_addMedicalRecordController.patient.value.firstName} ${_addMedicalRecordController.patient.value.lastName }",
+                      initialValue: "${_controller.patient.value.firstName} ${_controller.patient.value.lastName }",
                       decoration: inputDecoration('Patient', Icons.person),
                     ),
                     SizedBox(height: 15),
@@ -50,7 +53,7 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       initialValue: DateTime.now(),
                       format: DateFormat('yyyy-MM-dd'),
                       decoration: inputDecoration(
-                          'Date of Visit *', Icons.calendar_today),
+                          '${"Patient Entering Date".tr} *', Icons.calendar_today),
                       validator: FormBuilderValidators.required(
                           errorText: 'date of visit is required'),
                     ),
@@ -58,10 +61,10 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
 
                     FormBuilderTextField(
                       name: 'medical_specialty',
-                      initialValue: "infectious diseases",
+                      initialValue: "infectious diseases".tr,
                       enabled: false,
                       decoration: inputDecoration(
-                          'Medical Specialty *', Icons.local_hospital),
+                          '${"Medical Specialty".tr} *', Icons.local_hospital),
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
@@ -70,9 +73,9 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       minLines: 1,
                       maxLines: 6,
                       decoration: inputDecoration(
-                          'Condition Description *', Icons.description),
+                          '${"Condition Description"} *', Icons.description),
                       validator: FormBuilderValidators.required(
-                          errorText: 'condition description is required'),
+                          errorText: 'Condition Description is required'.tr),
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
@@ -81,24 +84,24 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       minLines: 1,
                       maxLines: 6,
                       decoration: inputDecoration(
-                          'Standard Treatment *', Icons.medical_services),
+                          '${"Standard Treatment".tr} *', Icons.medical_services),
                       validator: FormBuilderValidators.required(
-                          errorText: 'standard treatment is required'),
+                          errorText: 'Standard Treatment is required'.tr),
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
                       name: 'state_upon_enter',
-                      decoration: inputDecoration('State upon Enter *',
+                      decoration: inputDecoration('${"State Upon Enter".tr} *',
                           Icons.airline_seat_individual_suite),
                       validator: FormBuilderValidators.required(
-                          errorText: 'state upon enter is required'),
+                          errorText: 'State Upon Enter is required'.tr),
                     ),
                     SizedBox(height: 15),
                     FormBuilderTextField(
                       name: 'bed_number',
-                      decoration: inputDecoration('Bed Number', Icons.king_bed),
+                      decoration: inputDecoration('Bed Number'.tr, Icons.king_bed),
                       validator: FormBuilderValidators.numeric(
-                          errorText: 'bed number should contain numbers only'),
+                          errorText: 'Bed Number is required'.tr),
                     ),
                     const SizedBox(height: 20.0),
                   ],

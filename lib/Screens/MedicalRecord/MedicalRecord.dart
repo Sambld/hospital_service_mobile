@@ -11,7 +11,7 @@ class MedicalRecordScreen extends StatefulWidget {
 }
 
 class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
-  final _medicalRecordController = Get.put(MedicalRecordController());
+  final _controller = Get.put(MedicalRecordController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,35 +20,33 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-                  flexibleSpace: kAppBarColor,
-                  title: Text(
-                      'Medical Record (#${_medicalRecordController.medicalRecord.value.id ?? "0"})'),
-                  bottom: const TabBar(
-                    tabs: [
-                      Tab(child: Text("information")),
-                      Tab(icon: Text("others")),
-                    ],
-                  ),
-                  actions: [
-                    !_medicalRecordController.isLoading.value &&
-                            (_medicalRecordController
-                                    .medicalRecord.value.canEdit ??
-                                false)
-                        ? IconButton(
-                            onPressed: () {
-                              Get.toNamed('/edit-medical-record', arguments: {
-                                "patient":
-                                    _medicalRecordController.patient.value,
-                                "medicalRecord":
-                                    _medicalRecordController.medicalRecord.value
-                              });
-                            },
-                            icon: const Icon(Icons.edit),
-                          )
-                        : Container(),
-                  ],
-                ),
-          body: _medicalRecordController.isLoading.value
+            flexibleSpace: kAppBarColor,
+            title: Text(
+                '${"Medical Record".tr} (#${_controller.medicalRecord.value.id ?? "0"})'),
+            bottom:  TabBar(
+              tabs: [
+                Tab(child: Text("Informations")),
+                Tab(icon: Text("Other".tr)),
+              ],
+            ),
+            actions: [
+              !_controller.isLoading.value &&
+                      (_controller.medicalRecord.value.canEdit ??
+                          false) && !_controller.medicalRecord.value.isClosed()
+                  ? IconButton(
+                      onPressed: () {
+                        Get.toNamed('/edit-medical-record', arguments: {
+                          "patient": _controller.patient.value,
+                          "medicalRecord":
+                              _controller.medicalRecord.value
+                        })?.then((value) => _controller.getMedicalRecord());
+                      },
+                      icon: const Icon(Icons.edit),
+                    )
+                  : Container(),
+            ],
+          ),
+          body: _controller.isLoading.value
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
@@ -77,15 +75,15 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        const Text(
-                                          "Patient : ",
-                                          style: TextStyle(
+                                         Text(
+                                          "${"Patient".tr} : ",
+                                          style: const TextStyle(
                                             fontSize: 15.0,
                                           ),
                                         ),
                                         Text(
                                           // "a sdfas df ",
-                                          "${_medicalRecordController.patient.value.firstName!} ${_medicalRecordController.patient.value.lastName!}",
+                                          "${_controller.patient.value.firstName!} ${_controller.patient.value.lastName!}",
                                           style: const TextStyle(
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w600,
@@ -97,7 +95,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                         const SizedBox(width: 8.0),
                                         Text(
                                           // "Age",
-                                          "( Age ${Functions.calculateAge(_medicalRecordController.patient.value.birthDate!)})",
+                                          "( ${"Age".tr} ${Functions.calculateAge(_controller.patient.value.birthDate!)})",
                                           style: const TextStyle(
                                             fontSize: 14.0,
                                           ),
@@ -109,15 +107,15 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          "Doctor: ",
-                                          style: TextStyle(
+                                         Text(
+                                          "${"Doctor".tr}: ",
+                                          style: const TextStyle(
                                             fontSize: 15.0,
                                           ),
                                         ),
                                         Text(
                                           // "doctor name",
-                                          _medicalRecordController
+                                          _controller
                                               .medicalRecord.value.doctorName!,
                                           style: const TextStyle(
                                             fontSize: 15.0,
@@ -131,27 +129,27 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          "status: ",
-                                          style: TextStyle(
+                                         Text(
+                                          "${"Status".tr}: ",
+                                          style: const TextStyle(
                                             fontSize: 15.0,
                                           ),
                                         ),
-                                        _medicalRecordController.medicalRecord
+                                        _controller.medicalRecord
                                                     .value.patientLeavingDate ==
                                                 null
-                                            ? const Text(
+                                            ?  Text(
                                                 // "doctor name",
-                                                "Active",
-                                                style: TextStyle(
+                                                "Active".tr,
+                                                style: const TextStyle(
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.green,
                                                 ),
                                               )
-                                            : const Text(
+                                            :  Text(
                                                 // "doctor name",
-                                                "Closed",
+                                                "Closed".tr,
                                                 style: TextStyle(
                                                     fontSize: 15.0,
                                                     fontWeight: FontWeight.w600,
@@ -167,8 +165,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
 
                             const Divider(),
                             _medicalRecordInfoRow(context,
-                                title: 'Patient Entering Date',
-                                value: _medicalRecordController
+                                title: 'Patient Entering Date'.tr,
+                                value: _controller
                                     .medicalRecord.value.patientEntryDate!
                                     .toString()
                                     .substring(0, 10)),
@@ -176,53 +174,53 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
 
                             _medicalRecordInfoRow(
                               context,
-                              title: 'Medical Specialty',
-                              value: _medicalRecordController
+                              title: 'Medical Specialty'.tr,
+                              value: _controller
                                   .medicalRecord.value.medicalSpecialty!,
                               // value: "Cardiology"
                             ),
                             _medicalRecordInfoRow(
                               context,
-                              title: 'Condition Description',
-                              value: _medicalRecordController
+                              title: 'Condition Description'.tr,
+                              value: _controller
                                   .medicalRecord.value.conditionDescription!,
                               // value:"Cardiac Arrest",
                             ),
                             _medicalRecordInfoRow(
                               context,
-                              title: 'Standard Treatment',
-                              value: _medicalRecordController
+                              title: 'Standard Treatment'.tr,
+                              value: _controller
                                   .medicalRecord.value.standardTreatment!,
                               // value: "Cardiac Arrest",
                             ),
                             _medicalRecordInfoRow(
                               context,
-                              title: 'State Upon Enter',
-                              value: _medicalRecordController
+                              title: 'State Upon Enter'.tr,
+                              value: _controller
                                   .medicalRecord.value.stateUponEnter!,
                               // value: "kljsdf",
                             ),
 
                             _medicalRecordInfoRow(
                               context,
-                              title: 'Bed Number',
-                              value: _medicalRecordController
+                              title: 'Bed Number'.tr,
+                              value: _controller
                                   .medicalRecord.value.bedNumber!
                                   .toString(),
                             ),
-                            _medicalRecordController
+                            _controller
                                         .medicalRecord.value.stateUponExit !=
                                     null
                                 ? _medicalRecordInfoRow(context,
-                                    title: 'State Upon Exit',
+                                    title: 'State Upon Exit'.tr,
                                     value: 'Recovered',
                                     borderColor: Colors.redAccent)
                                 : Container(),
-                            _medicalRecordController.medicalRecord.value
+                            _controller.medicalRecord.value
                                         .patientLeavingDate !=
                                     null
                                 ? _medicalRecordInfoRow(context,
-                                    title: 'Patient Leaving Date',
+                                    title: 'Patient Leaving Date'.tr,
                                     value: '2022-01-01',
                                     borderColor: Colors.redAccent)
                                 : Container(),

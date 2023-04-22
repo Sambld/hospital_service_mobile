@@ -14,13 +14,13 @@ import '../../Models/Medicine.dart';
 import '../../Services/Api.dart';
 
 class AddMonitoringSheetDayScreen extends StatelessWidget {
-  final AddMonitoringSheetDayController _monitoringSheetDayController =
+  final  _controller =
       Get.put(AddMonitoringSheetDayController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Monitoring Sheet Day'),        flexibleSpace: kAppBarColor,
+      appBar: AppBar(title:  Text('Add Monitoring Sheet Day'.tr),        flexibleSpace: kAppBarColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,18 +30,18 @@ class AddMonitoringSheetDayScreen extends StatelessWidget {
             children: [
               FormBuilderDateTimePicker(
                 name: 'day',
-                initialValue: _monitoringSheetDayController.day.value,
+                initialValue: _controller.day.value,
                 inputType: InputType.date,
                 format: DateFormat('yyyy-MM-dd'),
-                decoration: GlobalWidgets.inputDecoration('Day', Icons.calendar_today),
+                decoration: GlobalWidgets.inputDecoration('Day'.tr, Icons.calendar_today),
                 onChanged: (value) =>
-                    _monitoringSheetDayController.day.value = value!,
+                    _controller.day.value = value!,
               ),
               const SizedBox(height: 16.0),
                Row(
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: [
-                   Text('Treatments'),
+                   Text('Treatments'.tr),
                    // icon button to add new treatment
                     IconButton(
                       onPressed: () {
@@ -56,21 +56,21 @@ class AddMonitoringSheetDayScreen extends StatelessWidget {
                     // treatmetns list with remove and update button
                     ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _monitoringSheetDayController.treatmentList.length,
+                  itemCount: _controller.treatmentList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
-                          '${_monitoringSheetDayController.treatmentList[index].name}'),
+                          '${_controller.treatmentList[index].name}'),
                       subtitle: Text(
-                          '${_monitoringSheetDayController.treatmentList[index].dose}'),
+                          '${_controller.treatmentList[index].dose}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
 
                           IconButton(
                             onPressed: () {
-                              _monitoringSheetDayController.removeTreatment(
-                                  _monitoringSheetDayController
+                              _controller.removeTreatment(
+                                  _controller
                                       .treatmentList[index]);
                             },
                             icon: Icon(Icons.delete , color: Colors.redAccent,),
@@ -86,11 +86,11 @@ class AddMonitoringSheetDayScreen extends StatelessWidget {
               Center(
                 child: RoundedLoadingButton(
                   onPressed: () {
-                    _monitoringSheetDayController.addMonitoringSheetDay();
+                    _controller.addMonitoringSheetDay();
                   },
-                  controller: _monitoringSheetDayController.loadingButtonController.value,
+                  controller: _controller.loadingButtonController.value,
                   animateOnTap: false,
-                  child: const Text('Save'),
+                  child:  Text('Save'.tr),
                 ),
               ),
             ],
@@ -110,7 +110,7 @@ class AddTreatmentDialog extends StatefulWidget {
 
 class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final _monitoringSheetDayController =
+  final _controller =
       Get.find<AddMonitoringSheetDayController>();
   Medicine? _selectedMedicine;
 
@@ -119,7 +119,7 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
     return Center(
       child: SingleChildScrollView(
         child: AlertDialog(
-          title: const Text('Add Treatment'),
+          title:  Text('Add Treatment'.tr),
           content: SizedBox(
             width: 400,
             child: FormBuilder(
@@ -152,7 +152,7 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                     dropdownDecoratorProps: DropDownDecoratorProps(
                       dropdownSearchDecoration: InputDecoration(
                         labelText:
-                        _selectedMedicine?.quantity != null ?  'Medicine quantity ${_selectedMedicine?.quantity ?? ''}' : 'Medicine',
+                        _selectedMedicine?.quantity != null ?  '${"Medicine Quantity".tr} ${_selectedMedicine?.quantity ?? ''}' : 'Medicine',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -163,14 +163,14 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                   FormBuilderTextField(
                     name: 'name',
                     initialValue: "${_selectedMedicine?.name ?? ''}",
-                    decoration: const InputDecoration(labelText: 'Name'),
+                    decoration:  InputDecoration(labelText: 'Name'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
                   ),
                   FormBuilderTextField(
                     name: 'dose',
-                    decoration: const InputDecoration(labelText: 'Dose'),
+                    decoration:  InputDecoration(labelText: 'Dose'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
@@ -178,22 +178,22 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                   // treatment type dropdown
                   FormBuilderDropdown(
                     name: 'type',
-                    decoration: const InputDecoration(labelText: 'Treatment Type'),
+                    decoration:  InputDecoration(labelText: 'Treatment Type'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
-                    items: const [
+                    items:  [
                       DropdownMenuItem(
                         value: 'injection',
-                        child: Text('Injection'),
+                        child: Text('Injection'.tr),
                       ),
                       DropdownMenuItem(
                         value: 'tablet',
-                        child: Text('Tablet'),
+                        child: Text('Tablet'.tr),
                       ),
                       DropdownMenuItem(
                         value: 'syrup',
-                        child: Text('Syrup'),
+                        child: Text('Syrup'.tr),
                       ),
                     ],
                   ),
@@ -204,27 +204,22 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CANCEL'),
+              child:  Text('Cancel'.tr),
             ),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.saveAndValidate()) {
                   final values = _formKey.currentState!.value;
-                  // print(values);
-                  _monitoringSheetDayController.treatmentList.add(TreatmentData(
+                  _controller.treatmentList.add(TreatmentData(
                       name: values['name'],
                       dose: values['dose'],
                       type: values['type'],
                       medicineId: _selectedMedicine?.id ?? 0));
-                  // print(_monitoringSheetDayController.treatmentList);
-                  // for (var item in _monitoringSheetDayController.treatmentList) {
-                  //   print(item.toJson());
-                  // }
-                  // TODO: save values to database or send to API
+
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text('ADD'),
+              child:  Text('Add'.tr),
 
             ),
           ],

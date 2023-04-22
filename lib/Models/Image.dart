@@ -1,20 +1,20 @@
-class ImageModel {
-  int id;
-  String path;
-  int observationId;
-  DateTime createdAt;
-  DateTime updatedAt;
+class Image {
+  int? id;
+  String? path;
+  int? observationId;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
-  ImageModel({
-    required this.id,
-    required this.path,
-    required this.observationId,
-    required this.createdAt,
-    required this.updatedAt,
+  Image({
+     this.id,
+     this.path,
+     this.observationId,
+     this.createdAt,
+     this.updatedAt,
   });
 
-  factory ImageModel.fromJson(Map<String, dynamic> json) {
-    return ImageModel(
+  factory Image.fromJson(Map<String, dynamic> json) {
+    return Image(
       id: json['id'],
       path: json['path'],
       observationId: json['observation_id'],
@@ -28,8 +28,8 @@ class ImageModel {
       'id': id,
       'path': path,
       'observation_id': observationId,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 }

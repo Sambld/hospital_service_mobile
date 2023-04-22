@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:infectious_diseases_service/PatientCard.dart';
+import 'package:infectious_diseases_service/Screens/ComplementaryExamination/ComplementaryExaminations.dart';
 import 'package:infectious_diseases_service/Screens/Dashboard.dart';
+import 'package:infectious_diseases_service/Screens/Dashboard/DoctorDashboard.dart';
 import 'package:infectious_diseases_service/Screens/LoginPage.dart';
-import 'package:infectious_diseases_service/Screens/Medical%20record/AddMedicalRecord.dart';
-import 'package:infectious_diseases_service/Screens/Medical%20record/EditMedicalRecord.dart';
-import 'package:infectious_diseases_service/Screens/Medical%20record/MedicalRecord.dart';
 import 'package:infectious_diseases_service/Screens/MonitoringSheet/MonitoringSheet.dart';
+import 'package:infectious_diseases_service/Screens/Observation/Observations.dart';
 import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
 import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
-
-import 'Controllers/AuthController.dart';
 import 'Controllers/NavigationDrawerController.dart';
+import 'Screens/MedicalRecord/AddMedicalRecord.dart';
+import 'Screens/MedicalRecord/EditMedicalRecord.dart';
+import 'Screens/MedicalRecord/MedicalRecord.dart';
+import 'Screens/MedicalRecord/MedicalRecords.dart';
+import 'Screens/MedicineResquests/MedicineResquests.dart';
 import 'Screens/MonitoringSheet/AddMonitoringSheetDay.dart';
 import 'Screens/MonitoringSheet/UpdateMonitoringSheetTreatments.dart';
+import 'Screens/Observation/Observation.dart';
 import 'Screens/Patients/AddPatient.dart';
 import 'Screens/Patients/Patient.dart';
 import 'Screens/Patients/Patients.dart';
 import 'Services/Api.dart';
-import 'Widgets/NavigationDrawerWidget.dart';
+import 'languages.dart';
 
 void main() async {
   await GetStorage.init();
@@ -36,36 +39,56 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        darkTheme: ThemeData.dark(),
-        theme: ThemeData(fontFamily: 'Rubik'),
-        home: const MyHomePage(),
-        getPages: [
-          GetPage(name: '/dashboard', page: () => const DashboardScreen()),
-          GetPage(name: '/patients', page: () => const PatientsScreen()),
-          GetPage(name: '/login', page: () => const LoginPage()),
-          GetPage(name: '/patient-details', page: () => const PatientScreen()),
-          GetPage(name: '/add-patient', page: () => AddPatientScreen()),
-          GetPage(name: '/edit-patient', page: () => EditPatientScreen()),
-          GetPage(
-              name: '/medical-record-details',
-              page: () => MedicalRecordScreen()),
-          GetPage(
-              name: '/add-medical-record',
-              page: () => AddMedicalRecordScreen()),
-          GetPage(
-              name: '/edit-medical-record',
-              page: () => const EditMedicalRecordScreen()),
-          GetPage(
-              name: '/monitoring_sheet',
-              page: () =>  MonitoringSheetScreen()),
-          GetPage(
-              name: '/add-monitoring_sheet',
-              page: () =>  AddMonitoringSheetDayScreen()),
-          GetPage(
-              name: '/update-monitoring_sheet-treatments',
-              page: () =>  UpdateMonitoringSheetTreatments()),
-        ]);
+      debugShowCheckedModeBanner: false,
+      translations: Languages(),
+      // locale: Locale('FR'),
+      darkTheme: ThemeData.dark(),
+      theme: ThemeData(fontFamily: 'Rubik'),
+      home: const MyHomePage(),
+      getPages: [
+        GetPage(name: '/dashboard', page: () => const DashboardScreen()),
+        GetPage(name: '/patients', page: () => const PatientsScreen()),
+        GetPage(name: '/login', page: () => const LoginPage()),
+        GetPage(name: '/patient-details', page: () => const PatientScreen()),
+        GetPage(name: '/add-patient', page: () => AddPatientScreen()),
+        GetPage(name: '/edit-patient', page: () => EditPatientScreen()),
+        GetPage(
+            name: '/medical-record-details', page: () => MedicalRecordScreen()),
+        GetPage(name: '/medical-records', page: () => const MedicalRecordsScreen()),
+        GetPage(
+            name: '/add-medical-record', page: () => AddMedicalRecordScreen()),
+        GetPage(
+            name: '/edit-medical-record',
+            page: () => const EditMedicalRecordScreen()),
+        GetPage(name: '/monitoring-sheet', page: () => MonitoringSheetScreen()),
+        GetPage(
+            name: '/add-monitoring-sheet',
+            page: () => AddMonitoringSheetDayScreen()),
+        GetPage(
+            name: '/update-monitoring-sheet-treatments',
+            page: () => const UpdateMonitoringSheetTreatments()),
+        GetPage(
+            name: '/observations',
+            page: () => const ObservationsScreen(),
+            transition: Transition.fade),
+        GetPage(
+            name: '/observation',
+            page: () => const ObservationScreen(),
+            transition: Transition.fade),
+        GetPage(
+            name: '/complementary-examinations',
+            page: () => const ComplementaryExaminationsScreen(),
+            transition: Transition.fade),
+        GetPage(
+            name: '/medicine-requests',
+            page: () => MedicineRequestsScreen(),
+            transition: Transition.fade),
+       GetPage(
+            name: '/doctor-dashboard',
+            page: () =>  DoctorDashboardScreen(),
+            transition: Transition.fade),
+      ],
+    );
   }
 }
 

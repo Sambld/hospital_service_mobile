@@ -16,7 +16,6 @@ class EditPatientController extends GetxController{
 
   @override
   void onInit() {
-    print('getting patient informations');
     patient(Get.arguments);
 
     super.onInit();
@@ -38,7 +37,6 @@ class EditPatientController extends GetxController{
         final formattedBirthDate = _dateFormat.format(birthDate);
         modifiableFormData['birth_date'] = formattedBirthDate;
       }
-      print(modifiableFormData);
       //
       try {
         await Api.editPatient(patient.value.id, modifiableFormData);

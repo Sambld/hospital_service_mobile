@@ -16,7 +16,6 @@ class PatientController extends GetxController {
 
   @override
   void onInit()  {
-    ever(id, (index) => {print('id changed to $index')});
     id(Get.arguments);
     getPatient();
     super.onInit();
@@ -29,7 +28,6 @@ class PatientController extends GetxController {
     isLoading(true);
       final res = await Api.getPatient(id: id.value);
       patient(Patient.fromJson(res.data['data']['patient']));
-      // print(res.data['data']['patient']['medical_records'][0]['id']   );
       medicalRecords(res.data['data']['patient']['medical_records'].map<MedicalRecord>((item) => MedicalRecord.fromJson(item)).toList());
       medicalRecords.sort((a, b) => b.patientEntryDate!.compareTo(a.patientEntryDate!));
       filterRecords();
@@ -45,7 +43,6 @@ class PatientController extends GetxController {
 
   void filterRecords() {
     if(medicalRecords.isNotEmpty){
-      print(filteredMedicalRecords);
       filteredMedicalRecords.value =
       // filter medicalRecords by patientleavingdate is null
       medicalRecords.value.where((record) => (record.patientLeavingDate == null) == recordsFilter.value ).toList();

@@ -20,7 +20,6 @@ class UpdateMonitoringSheetTreatmentsController extends GetxController{
     // TODO: implement onInit
     day(MC.currentMonitoringSheet.value.fillingDate);
     getTreatments();
-    print(day);
     super.onInit();
   }
 
@@ -32,7 +31,6 @@ class UpdateMonitoringSheetTreatmentsController extends GetxController{
       final List<dynamic> jsonList = res.data['data'];
       final List<Treatment> treatments = jsonList.map((e) => Treatment.fromJson(e)).toList();
       treatmentList(treatments);
-      print(treatmentList);
     }
   }
 

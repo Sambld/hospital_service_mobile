@@ -65,12 +65,12 @@ class PatientCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Birthdate: ${birthDate.day}/${birthDate.month}/${birthDate.year}',
+                    '${"Birth Date".tr}: ${birthDate.day}/${birthDate.month}/${birthDate.year}',
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Phone Number: $phoneNumber',
+                    '${"Phone Number".tr}: $phoneNumber',
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ],

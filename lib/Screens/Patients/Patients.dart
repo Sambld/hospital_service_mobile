@@ -28,17 +28,12 @@ class _PatientsScreenState extends State<PatientsScreen> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    print('dispose  called');
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Patients '),
+        title: Text('Patients '.tr),
         actions: [
           Obx(
             () => Padding(
@@ -60,7 +55,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
                 // controller: TextEditingController(text: _patientsController.searchQuery.value),
                 onSubmitted: _patientsController.searchPatients,
                 decoration: InputDecoration(
-                  hintText: 'Search',
+                  hintText: 'Search'.tr,
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
@@ -94,7 +89,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
         children: [
           Obx(
             () => SwitchListTile(
-              title: const Text('In Hospital Only'),
+              title:  Text('In Hospital Only'.tr),
               value: _patientsController.inHospitalOnly.value,
               onChanged: (value) {
                 _patientsController.inHospitalOnly(value);

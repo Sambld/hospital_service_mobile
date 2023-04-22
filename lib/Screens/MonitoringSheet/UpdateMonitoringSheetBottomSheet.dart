@@ -19,13 +19,13 @@ class _UpdateMonitoringSheetBottomSheetState
     extends State<UpdateMonitoringSheetBottomSheet> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _isLoading = false;
-  final _monitoringSheetController = Get.find<MonitoringSheetController>();
+  final _controller = Get.find<MonitoringSheetController>();
 
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics:  ClampingScrollPhysics(),
+      physics:  const ClampingScrollPhysics(),
       child: Padding(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -41,17 +41,16 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Temperature field
                 FormBuilderTextField(
                   name: 'temperature',
-                  initialValue: "${_monitoringSheetController.currentMonitoringSheet.value.temperature ?? ''}",
+                  initialValue: "${_controller.currentMonitoringSheet.value.temperature ?? ''}",
                   decoration: GlobalWidgets.inputDecoration(
                     'Temperature',
                     Icons.thermostat,
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  valueTransformer: (value) => double.tryParse(value ?? ''),// enable decimal point
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
-                    FormBuilderValidators.numeric(),
-                    FormBuilderValidators.max( 50),
-                    FormBuilderValidators.min( 0),
+
                   ])
 
                 ),
@@ -59,8 +58,8 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Blood pressure field
                 FormBuilderTextField(
                   name: 'blood_pressure',
-                  initialValue: _monitoringSheetController.currentMonitoringSheet.value.bloodPressure ?? '',
-                  decoration: GlobalWidgets.inputDecoration('Blood pressure', Icons.bloodtype),
+                  initialValue: _controller.currentMonitoringSheet.value.bloodPressure ?? '',
+                  decoration: GlobalWidgets.inputDecoration('Blood Pressure'.tr, Icons.bloodtype),
                   keyboardType: TextInputType.number,
 
                 ),
@@ -68,9 +67,10 @@ class _UpdateMonitoringSheetBottomSheetState
 
                 // Urine field
                 FormBuilderTextField(
-                  name: 'urine',
-                  initialValue: "${_monitoringSheetController.currentMonitoringSheet.value.urine ?? ''}",
-                  decoration: GlobalWidgets.inputDecoration('Urine', Icons.water),
+                  name:
+                      'urine',
+                  initialValue: "${_controller.currentMonitoringSheet.value.urine ?? ''}",
+                  decoration: GlobalWidgets.inputDecoration('Urine'.tr, Icons.water),
                   keyboardType: TextInputType.number,
 
                 ),
@@ -79,8 +79,8 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Weight field
                 FormBuilderTextField(
                   name: 'weight',
-                  initialValue: "${_monitoringSheetController.currentMonitoringSheet.value.weight ?? ''}",
-                  decoration: GlobalWidgets.inputDecoration('Weight', Icons.line_weight),
+                  initialValue: "${_controller.currentMonitoringSheet.value.weight ?? ''}",
+                  decoration: GlobalWidgets.inputDecoration('Weight'.tr, Icons.line_weight),
                   keyboardType: TextInputType.number,
 
                 ),
@@ -88,8 +88,8 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Progress status field
                 FormBuilderTextField(
                   name: 'progress_report',
-                  initialValue: _monitoringSheetController.currentMonitoringSheet.value.progressReport ?? '',
-                  decoration: GlobalWidgets.inputDecoration('Progress Status', Icons.text_fields),
+                  initialValue: _controller.currentMonitoringSheet.value.progressReport ?? '',
+                  decoration: GlobalWidgets.inputDecoration('Report'.tr, Icons.text_fields),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                 ),
@@ -99,7 +99,7 @@ class _UpdateMonitoringSheetBottomSheetState
                   onPressed: _isLoading ? null : _saveMonitoringSheet,
                   child: _isLoading
                       ? SizedBox(child: const CircularProgressIndicator(strokeWidth: 2,) , height: 18, width: 18,)
-                      : const Text('Save'),
+                      :  Text('Save'.tr),
                 ),
               ],
             ),
@@ -115,15 +115,13 @@ class _UpdateMonitoringSheetBottomSheetState
         _isLoading = true;
       });
       final formData = _formKey.currentState!.value;
-      print(formData);
-      final res = await Api.editMonitoringSheetDay(_monitoringSheetController.patientId.value, _monitoringSheetController.medicalRecordId.value, _monitoringSheetController.currentMonitoringSheet.value.id!,
+      final res = await Api.editMonitoringSheetDay(_controller.patientId.value, _controller.medicalRecordId.value, _controller.currentMonitoringSheet.value.id!,
           formData);
-      print(res );
       setState(() {
         _isLoading = false;
       });
       if (res.statusCode == 200) {
-        _monitoringSheetController.getMonitoringSheets();
+        _controller.getMonitoringSheets();
         Get.back();
       }
     }

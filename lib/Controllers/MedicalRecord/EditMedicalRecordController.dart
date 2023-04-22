@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Controllers/MedicalRecord/MedicalRecordController.dart';
+import 'package:infectious_diseases_service/Controllers/Patient/PatientController.dart';
 import 'package:infectious_diseases_service/Models/MedicalRecord.dart';
 import 'package:intl/intl.dart';
 import '../../Models/Patient.dart';
@@ -44,13 +45,16 @@ class EditMedicalRecordController extends GetxController {
 
       final formattedFormData = modifiableFormData.map((key, value) => MapEntry(key.toString(), value.toString()));
 
-      print(formattedFormData);
 
       final res = await Api.editMedicalRecord( medicalRecord.value.patientId! , medicalRecord.value.id! , modifiableFormData);
       isLoading(false);
 
 
-      Get.find<MedicalRecordController>().getMedicalRecord();
+      try {
+        await Get.find<PatientController>().getPatient();
+      } catch (e) {
+        print(e);
+      }
       Get.back();
 
     }

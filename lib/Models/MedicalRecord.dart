@@ -1,3 +1,5 @@
+import 'package:infectious_diseases_service/Models/Patient.dart';
+
 class MedicalRecord {
   int? id;
   int? patientId;
@@ -11,6 +13,7 @@ class MedicalRecord {
   DateTime? patientEntryDate;
   DateTime? patientLeavingDate;
   String? doctorName;
+  Patient? patient;
   bool? canEdit;
 
   MedicalRecord({
@@ -27,6 +30,7 @@ class MedicalRecord {
     this.patientLeavingDate,
     this.doctorName,
     this.canEdit,
+    this.patient
   });
 
   factory MedicalRecord.fromJson(Map<String, dynamic> json) {
@@ -46,7 +50,9 @@ class MedicalRecord {
             : null,
         doctorName:
             "${json['assigned_doctor']['first_name']} ${json['assigned_doctor']['last_name']}",
-        canEdit: json['can_update']);
+        canEdit: json['can_update'],
+        patient: json['patient'] != null ? Patient.fromJson(json['patient']) : null
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -64,5 +70,12 @@ class MedicalRecord {
     data['patient_leaving_date'] = patientLeavingDate?.toIso8601String();
     data['can_update'] = canEdit;
     return data;
+  }
+
+  bool isClosed() {
+    return patientLeavingDate != null;
+  }
+  bool isActive() {
+    return patientLeavingDate == null;
   }
 }

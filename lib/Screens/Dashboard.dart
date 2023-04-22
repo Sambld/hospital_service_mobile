@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../Widgets/NavigationDrawerWidget.dart';
 
@@ -14,10 +15,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title:  Text('Dashboard'.tr),
       ),
       drawer: NavigationDrawerWidget(),
-      body: Center(child: Text("dashborad"),),
+      body: Center(child: Text("greeting".tr),),
     );
   }
 }

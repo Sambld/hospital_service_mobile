@@ -1,89 +1,111 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Controllers/NavigationDrawerController.dart';
-import 'package:infectious_diseases_service/Screens/Dashboard.dart';
-import 'package:infectious_diseases_service/Screens/Patients/Patients.dart';
-
 import '../Controllers/AuthController.dart';
-import '../Screens/LoginPage.dart';
 import '../Services/Api.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final NavigationDrawerController _controller = Get.find();
   final authController = Get.find<AuthController>();
-  final padding = EdgeInsets.symmetric(horizontal: 20);
+  final padding = const EdgeInsets.symmetric(horizontal: 20);
+  final selectedLanguage = 'en'.obs;
 
   @override
   Widget build(BuildContext context) {
-    final name = '${authController.user.value['first_name']} ${authController.user.value['last_name']}';
+    final name =
+        '${authController.user.value['first_name']} ${authController.user.value['last_name']}';
     final role = authController.user.value['role'];
 
     return Drawer(
-      child: Material(
-        color: Colors.blueGrey[900],
-        child: ListView(
-          children: <Widget>[
-            buildHeader(
+      backgroundColor: Colors.blueGrey,
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              children: <Widget>[
+                buildHeader(
+                  name: name,
+                  role: role,
+                  onClicked: () => print('Header'),
+                ),
+                Container(
+                  padding: padding,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      // buildSearchField(),
+                      const SizedBox(height: 24),
+                      buildMenuItem(
+                        text: 'Dashboard'.tr,
+                        icon: Icons.dashboard_customize_outlined,
+                        onClicked: () => selectedItem(context, 0),
+                      ),
+                      const SizedBox(height: 16),
+                      buildMenuItem(
+                        text: 'Patients'.tr,
+                        icon: Icons.people,
+                        onClicked: () => selectedItem(context, 1),
+                      ),
+                      const SizedBox(height: 16),
+                      buildMenuItem(
+                        text: 'Medical Records'.tr,
+                        icon: Icons.medical_services,
+                        onClicked: () => selectedItem(context, 2),
+                      ),
+                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
+                      const Divider(color: Colors.grey),
+                      const SizedBox(height: 24),
+                      buildMenuItem(
+                        text: 'Sign Out'.tr,
+                        icon: Icons.logout,
+                        onClicked: () => selectedItem(context, 5),
+                      ),
 
-              name: name,
-              role: role,
-              onClicked: () => print('Header'),
+                      // language changer
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            DropdownButton(
+                              value: _controller.selectedLanguage.value,
+                              items: _controller.languages
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style:
+                                              const TextStyle(color: Colors.grey , fontSize: 16),
+                                        ),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) async {
+                                await GetStorage().write('language', value);
+                                Get.updateLocale(Locale(value.toString()));
+                                _controller.selectedLanguage.value =
+                                    value.toString();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Container(
-              padding: padding,
-              child: Column(
-                children: [
-                  const SizedBox(height: 12),
-                  // buildSearchField(),
-                  const SizedBox(height: 24),
-                  buildMenuItem(
-                    text: 'Dashboard',
-                    icon: Icons.dashboard_customize_outlined,
-                    onClicked: () => selectedItem(context, 0),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Patients',
-                    icon: Icons.people,
-                    onClicked: () => selectedItem(context, 1),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Medical Records',
-                    icon: Icons.medical_services,
-                    onClicked: () => selectedItem(context, 2),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Medicines',
-                    icon: Icons.medication_outlined,
-                    onClicked: () => selectedItem(context, 3),
-                  ),
-                  const SizedBox(height: 24),
-                  Divider(color: Colors.white70),
-                  const SizedBox(height: 24),
-                  // buildMenuItem(
-                  //   text: 'Plugins',
-                  //   icon: Icons.account_tree_outlined,
-                  //   onClicked: () => selectedItem(context, 4),
-                  // ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Settings',
-                    icon: Icons.settings,
-                    onClicked: () => selectedItem(context, 5),
-                  ),
-                  buildMenuItem(
-                    text: 'Sign Out',
-                    icon: Icons.logout,
-                    onClicked: () => selectedItem(context, 5),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -96,32 +118,42 @@ class NavigationDrawerWidget extends StatelessWidget {
       InkWell(
         onTap: onClicked,
         child: Container(
-          padding: padding.add(EdgeInsets.symmetric(vertical: 40)),
+          padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
           child: Row(
             children: [
-              CircleAvatar(radius: 23, child: Icon(Icons.health_and_safety_outlined , color: Colors.blue,size: 30,),backgroundColor: Colors.white,),
-              SizedBox(width: 10),
+              const CircleAvatar(
+                radius: 23,
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.health_and_safety_outlined,
+                  color: Colors.blue,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     role,
-                    style: TextStyle(fontSize: 14, color: Colors.white),
+                    style: const TextStyle(fontSize: 14, color: Colors.white),
                   ),
+
+                  // two icon buttons to change language English and French
                 ],
               ),
-              Spacer(),
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: Color.fromRGBO(30, 60, 168, 1),
-                child: Icon(Icons.add_comment_outlined, color: Colors.white),
-              )
+              // Spacer(),
+              // CircleAvatar(
+              //   radius: 24,
+              //   backgroundColor: Color.fromRGBO(30, 60, 168, 1),
+              //   child: Icon(Icons.add_comment_outlined, color: Colors.white),
+              // )
             ],
           ),
         ),
@@ -156,25 +188,31 @@ class NavigationDrawerWidget extends StatelessWidget {
     required IconData icon,
     VoidCallback? onClicked,
   }) {
-    final color = Colors.white;
-    final hoverColor = Colors.white70;
+    const color = Colors.white;
+    const hoverColor = Colors.white70;
 
     return ListTile(
       leading: Icon(icon, color: color),
-      title: Text(text, style: TextStyle(color: color)),
+      title: Text(text, style: const TextStyle(color: color)),
       hoverColor: hoverColor,
       onTap: onClicked,
     );
   }
 
   Future<void> selectedItem(BuildContext context, int index) async {
-
     switch (index) {
       case 0:
-        Get.offNamed('/dashboard');
+        if (authController.user.value['role'] == 'doctor'){
+          Get.offNamed('/doctor-dashboard');
+        } else {
+          Get.offNamed('/nurse-dashboard');
+        }
         break;
       case 1:
         Get.offNamed('/patients');
+        break;
+      case 2:
+        Get.offNamed('/medical-records');
         break;
       case 5:
         Api.logout();

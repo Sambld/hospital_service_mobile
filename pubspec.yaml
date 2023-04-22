@@ -46,6 +46,12 @@ dependencies:
   intl: ^0.17.0
   form_builder_validators: ^8.5.0
   dropdown_search: ^5.0.6
+  image_picker: ^0.8.7+1
+  cached_network_image: ^3.2.3
+  sqflite: ^2.2.6
+  photo_view: ^0.14.0
+  flutter_speed_dial: ^6.2.0
+  permission_handler: ^10.2.0
 
 
 
@@ -90,12 +96,20 @@ flutter:
   fonts:
     - family: Rubik
       fonts:
-        - asset: fonts/Rubik-Light.ttf
-        - asset: fonts/Rubik-Regular.ttf
-        - asset: fonts/Rubik-Medium.ttf
-        - asset: fonts/Rubik-Black.ttf
-        - asset: fonts/Rubik-SemiBold.ttf
-        - asset: fonts/Rubik-Bold.ttf
+        - asset: fonts/Rubik/Rubik-Light.ttf
+        - asset: fonts/Rubik/Rubik-Regular.ttf
+        - asset: fonts/Rubik/Rubik-Medium.ttf
+        - asset: fonts/Rubik/Rubik-Black.ttf
+        - asset: fonts/Rubik/Rubik-SemiBold.ttf
+        - asset: fonts/Rubik/Rubik-Bold.ttf
+
+    - family: Euclid
+      fonts:
+        - asset: fonts/EuclidCircularA/Euclid Circular A Bold.ttf
+        - asset: fonts/EuclidCircularA/Euclid Circular A Regular.ttf
+        - asset: fonts/EuclidCircularA/Euclid Circular A Light.ttf
+        - asset: fonts/EuclidCircularA/Euclid Circular A SemiBold.ttf
+        - asset: fonts/EuclidCircularA/Euclid Circular A Italic.ttf
 
 
 

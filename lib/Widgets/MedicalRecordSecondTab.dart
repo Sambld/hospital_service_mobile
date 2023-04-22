@@ -23,18 +23,24 @@ class SecondTab extends StatelessWidget {
                     crossAxisSpacing: 16.0,
                     mainAxisSpacing: 16.0,
                     children: [
-                      _buildButton('Monitoring Sheets', Icons.monitor,
+                      _buildButton('Monitoring Sheet'.tr, Icons.monitor,
                           Colors.blue.shade400, () {
-                        Get.toNamed('/monitoring_sheet' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
+                        Get.toNamed('/monitoring-sheet' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
                           }),
-                      _buildButton('Observations', Icons.remove_red_eye,
-                          Colors.purple.shade400, () {}),
-                      _buildButton('Complementary Examinations',
-                          Icons.assignment, Colors.green.shade400, () {}),
-                      _buildButton('Medicine Requests', Icons.medication,
-                          Colors.red.shade400, () {}),
-                      _buildButton('Medicine Requests', Icons.medication,
-                          Colors.red.shade400, () {}),
+                      _buildButton('Observations'.tr, Icons.remove_red_eye,
+                          Colors.purple.shade400, () {
+                        Get.toNamed('/observations' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
+                          }),
+                      _buildButton('Complementary Examinations'.tr,
+                          Icons.assignment, Colors.green.shade400, () {
+                        Get.toNamed('/complementary-examinations' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
+                          }),
+                      _buildButton('Medicine Requests'.tr, Icons.medication,
+                          Colors.red.shade400, () {
+                        Get.toNamed('/medicine-requests' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
+                          }),
+
+
                     ],
                   ),
                 ),

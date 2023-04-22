@@ -8,7 +8,7 @@ class MonitoringSheet {
   final int? urine;
   final String? bloodPressure;
   final int? weight;
-  final int? temperature;
+  final String? temperature;
   final String? progressReport;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -44,7 +44,7 @@ class MonitoringSheet {
       urine: json['urine'],
       bloodPressure: json['blood_pressure'],
       weight: json['weight'],
-      temperature: json['temperature'],
+      temperature: json['temperature'], // to double
       progressReport: json['progress_report'],
       filledBy: json['filled_by'],
       // filledBy: "${json['filled_by']['first_name']} ${json['filled_by']['last_name']}",

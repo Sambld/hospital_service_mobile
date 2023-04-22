@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:infectious_diseases_service/Controllers/Patient/PatientsController.dart';
-import 'package:infectious_diseases_service/Screens/Medical%20record/MedicalRecord.dart';
-import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
+
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../Constants/Constants.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/Patient/PatientController.dart';
@@ -36,29 +35,30 @@ class _PatientScreenState extends State<PatientScreen> {
           backgroundColor: Colors.grey[100],
           appBar: AppBar(
             elevation: 3,
-            bottom: const TabBar(
+            bottom:  TabBar(
               tabs: [
                 Tab(
-                  child: Text("informations"),
+                  child: Text('informations'),
                 ),
-                Tab(icon: Text("Medical records")),
+                Tab(child: Text('Medical Records'.tr)),
               ],
             ),
             actions: [
               //edit button
-              _authController.isDoctor() ? IconButton(
-                onPressed: () {
-                  Get.toNamed('/edit-patient',
-                          arguments: _patientController.patient.value)
-                      ?.then((value) => _patientController.getPatient());
-                  print('edit button pressed');
-                },
-                icon: const Icon(Icons.edit),
-              ) : Container(),
+              _authController.isDoctor()
+                  ? IconButton(
+                      onPressed: () {
+                        Get.toNamed('/edit-patient',
+                                arguments: _patientController.patient.value)
+                            ?.then((value) => _patientController.getPatient());
+                      },
+                      icon: const Icon(Icons.edit),
+                    )
+                  : Container(),
             ],
             // backgroundColor: Colors.transparent,
             title: Text(
-              'Patient Details  (#${_patientController.patient.value.id})',
+              'Patient Details'.tr+  '(#${_patientController.patient.value.id})',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -99,48 +99,52 @@ class _PatientScreenState extends State<PatientScreen> {
                                 value:
                                     '${_patientController.patient.value.firstName} ${_patientController.patient.value.lastName}'),
                             _patientInfoRow(
-                              title: 'Gender',
+                              title: 'Gender'.tr,
                               value: _patientController.patient.value.gender!,
                             ),
                             _patientInfoRow(
-                              title: 'Birth Date',
+                              title: 'Birth Date'.tr,
                               value: _patientController.patient.value.birthDate!
                                   .toString()
                                   .substring(0, 10),
                             ),
                             _patientInfoRow(
-                                title: 'Place of Birth',
+                                title: 'Place of Birth'.tr,
                                 value: _patientController
                                     .patient.value.placeOfBirth!),
                             _patientInfoRow(
-                                title: 'Address',
+                                title: 'Address'.tr,
                                 value:
                                     _patientController.patient.value.address!),
                             _patientInfoRow(
-                                title: 'Phone Number',
+                                title: 'Phone Number'.tr,
                                 value: _patientController
-                                    .patient.value.phoneNumber!),
+                                    .patient.value.phoneNumber!,
+                                isPhoneNumber: true),
                             _patientInfoRow(
-                                title: "Nationality",
+                                title: "Nationality".tr,
                                 value: _patientController
                                     .patient.value.nationality!),
                             _patientInfoRow(
-                                title: 'Family Situation',
+                                title: 'Family Situation'.tr,
                                 value: _patientController
                                         .patient.value.familySituation ??
-                                    'No Family Situation'),
+                                    'No Family Situation'.tr),
                             _patientInfoRow(
-                                title: 'Emergency Contact Phone Number',
+                                title: 'Emergency Contact Phone Number'.tr,
                                 value: _patientController
                                         .patient.value.emergencyContactName ??
-                                    'No Emergency Contact',
+                                    'No Emergency Contact'.tr,
                                 titleColor: Colors.redAccent),
                             _patientInfoRow(
-                                title: 'Emergency Contact Phone Number',
+                                title: 'Emergency Contact Name'.tr,
                                 value: _patientController
                                         .patient.value.emergencyContactNumber ??
-                                    'No Emergency Contact',
-                                titleColor: Colors.redAccent),
+                                    'No Emergency Contact'.tr,
+                                titleColor: Colors.redAccent,
+                                isPhoneNumber: _patientController.patient.value
+                                        .emergencyContactNumber?.isNotEmpty ??
+                                    false),
                           ],
                         ),
                       ),
@@ -163,8 +167,8 @@ class _PatientScreenState extends State<PatientScreen> {
                                   ),
                                 ),
                               ),
-                              child: const Text(
-                                'Add Medical Record',
+                              child:  Text(
+                                'Add Medical Record'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -178,18 +182,14 @@ class _PatientScreenState extends State<PatientScreen> {
                               children: [
                                 // a switch toggle for active medical records and closed ones
                                 SwitchListTile(
-                                    title: const Text("Show only active records"),
-                                    value: _patientController.recordsFilter.value,
-                                    onChanged: (value) {
-                                      _patientController.recordsFilter.value =
-                                          value;
-                                      _patientController.filterRecords();
-
-
-                                    },
-                                  ),
-
-
+                                  title:  Text("Show only active records".tr),
+                                  value: _patientController.recordsFilter.value,
+                                  onChanged: (value) {
+                                    _patientController.recordsFilter.value =
+                                        value;
+                                    _patientController.filterRecords();
+                                  },
+                                ),
 
                                 Expanded(
                                   child: ListView.builder(
@@ -210,13 +210,13 @@ class _PatientScreenState extends State<PatientScreen> {
                                               medicalRecord
                                                           .patientLeavingDate ==
                                                       null
-                                                  ? const Text(
-                                                      "Active",
+                                                  ?  Text(
+                                                      "Active".tr,
                                                       style: TextStyle(
                                                           color: Colors.green),
                                                     )
                                                   : Text(
-                                                      " =>   ${medicalRecord.patientLeavingDate!.toString().substring(0, 10)}",
+                                                      " =>   ${medicalRecord.patientLeavingDate!.toString().substring(0, 10)} ( ${"Closed".tr} )",
                                                       style: const TextStyle(
                                                           color: Colors.red),
                                                     ),
@@ -224,7 +224,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                           ),
                                           subtitle: Row(
                                             children: [
-                                              const Text("Doctor: "),
+                                               Text("${"Doctor".tr}: ".tr),
                                               Text(
                                                 medicalRecord.doctorName!,
                                                 style: TextStyle(
@@ -252,9 +252,9 @@ class _PatientScreenState extends State<PatientScreen> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const Text(
-                                                    "State upon enter: ",
-                                                    style: TextStyle(
+                                                   Text(
+                                                    "${"State Upon Enter".tr}: ",
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600),
                                                   ),
@@ -284,8 +284,8 @@ class _PatientScreenState extends State<PatientScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        const Text(
-                                                          "State upon Exit: ",
+                                                         Text(
+                                                          "${"State Upon Exit".tr}: ",
                                                           style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
@@ -321,8 +321,6 @@ class _PatientScreenState extends State<PatientScreen> {
 
                                             ElevatedButton(
                                               onPressed: () {
-                                                // print(
-                                                //     "going to medical record page");
                                                 Get.toNamed(
                                                     "/medical-record-details",
                                                     arguments: {
@@ -333,7 +331,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                           medicalRecord.id
                                                     });
                                               },
-                                              child: const Text("View Details"),
+                                              child:  Text("View Details".tr),
                                             ),
                                           ],
                                         ),
@@ -345,10 +343,12 @@ class _PatientScreenState extends State<PatientScreen> {
                                 )
                               ],
                             ),
-                            floatingActionButton: _authController.isDoctor() ? FloatingActionButton(
-                              onPressed: addMedicalRecord,
-                              child: const Icon(Icons.add),
-                            ) : null,
+                            floatingActionButton: _authController.isDoctor()
+                                ? FloatingActionButton(
+                                    onPressed: addMedicalRecord,
+                                    child: const Icon(Icons.add),
+                                  )
+                                : null,
                           ),
                   ],
                 ),
@@ -361,24 +361,53 @@ class _PatientScreenState extends State<PatientScreen> {
     Get.toNamed('/add-medical-record',
             arguments: _patientController.patient.value)
         ?.then((value) {
-      print('returned from add medical record page');
       _patientController.refresh();
     });
   }
 
-  Column _patientInfoRow(
-      {required String title,
-      required String value,
-      Color? titleColor = Colors.grey}) {
+  Column _patientInfoRow({
+    required String title,
+    required String value,
+    Color? titleColor = Colors.grey,
+    bool isPhoneNumber = false,
+  }) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: titleColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  if (isPhoneNumber)
+                    Positioned(
+                      right: 0,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.call,
+                          color: Colors.green,
+                        ),
+                        onPressed: () {
+                          // handle call action here
+                          launchUrlString("tel:$value");
+                        },
+                      ),
+                    ),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: titleColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         Text(
