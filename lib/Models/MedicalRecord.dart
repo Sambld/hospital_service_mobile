@@ -16,22 +16,21 @@ class MedicalRecord {
   Patient? patient;
   bool? canEdit;
 
-  MedicalRecord({
-    this.id,
-    this.patientId,
-    this.userId,
-    this.medicalSpecialty,
-    this.conditionDescription,
-    this.stateUponEnter,
-    this.standardTreatment,
-    this.stateUponExit,
-    this.bedNumber,
-    this.patientEntryDate,
-    this.patientLeavingDate,
-    this.doctorName,
-    this.canEdit,
-    this.patient
-  });
+  MedicalRecord(
+      {this.id,
+      this.patientId,
+      this.userId,
+      this.medicalSpecialty,
+      this.conditionDescription,
+      this.stateUponEnter,
+      this.standardTreatment,
+      this.stateUponExit,
+      this.bedNumber,
+      this.patientEntryDate,
+      this.patientLeavingDate,
+      this.doctorName,
+      this.canEdit,
+      this.patient});
 
   factory MedicalRecord.fromJson(Map<String, dynamic> json) {
     return MedicalRecord(
@@ -44,15 +43,16 @@ class MedicalRecord {
         standardTreatment: json['standard_treatment'],
         stateUponExit: json['state_upon_exit'],
         bedNumber: json['bed_number'],
-        patientEntryDate: DateTime.parse(json['patient_entry_date']),
+        patientEntryDate: json['patient_entry_date'] == null ? null : DateTime.parse(json['patient_entry_date']),
         patientLeavingDate: json['patient_leaving_date'] != null
             ? DateTime.parse(json['patient_leaving_date'])
             : null,
-        doctorName:
-            "${json['assigned_doctor']['first_name']} ${json['assigned_doctor']['last_name']}",
+        doctorName: json['assigned_doctor'] == null
+            ? null
+            : "${json['assigned_doctor']['first_name']} ${json['assigned_doctor']['last_name']}",
         canEdit: json['can_update'],
-        patient: json['patient'] != null ? Patient.fromJson(json['patient']) : null
-    );
+        patient:
+            json['patient'] != null ? Patient.fromJson(json['patient']) : null);
   }
 
   Map<String, dynamic> toJson() {
@@ -75,6 +75,7 @@ class MedicalRecord {
   bool isClosed() {
     return patientLeavingDate != null;
   }
+
   bool isActive() {
     return patientLeavingDate == null;
   }

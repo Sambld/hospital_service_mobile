@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -67,12 +68,16 @@ class _ObservationScreenState extends State<ObservationScreen> {
                   children: [
                     infoCard([
                       Row(
-                        mainAxisSize: MainAxisSize.values[0],
+                        // mainAxisSize: MainAxisSize.values[0],
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children:  [
-                          Text(
-                            _controller.observation.value.name ?? '',
-                            style: const TextStyle(fontSize: 18),
+                          Expanded(
+                            child: Text(
+                              _controller.observation.value.name ?? '',
+                              style:  TextStyle(fontSize: ResponsiveFontSize.large()),
+
+
+                            ),
                           ),
                           // edit icon button
                           !_controller.OC.medicalRecord.value.isClosed() && _controller.OC.medicalRecord.value.userId ==  _authController.user['id'] ? IconButton(
@@ -114,9 +119,20 @@ class _ObservationScreenState extends State<ObservationScreen> {
                     const SizedBox(height: 16),
                      Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        '${"Photos".tr}:',
-                        style: TextStyle(fontSize: 18),
+                      child: Container(
+                        // rounded corners
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.green,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        height: 40,
+                        child: Text(
+                          '${"Photos".tr}:',
+                          style: TextStyle(fontSize: ResponsiveFontSize.xLarge() , color: Colors.white),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -259,7 +275,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
           decoration: BoxDecoration(
             border: Border(
-              left: BorderSide(
+              top: BorderSide(
                 color: color,
                 width: 4.0,
               ),

@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Controllers/AuthController.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 import 'package:intl/intl.dart';
 
 import '../../Constants/Constants.dart';
@@ -45,21 +46,39 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
               itemCount: _controller.observations.length,
               itemBuilder: (context, index) {
                 final observation = _controller.observations[index];
-                return ListTile(
-                  title: Text(observation.name),
-                  subtitle: Text(
-                      '${"Date".tr} : ${DateFormat('dd/MM/yyyy').format(observation.createdAt)}'),
-                  trailing: const Icon(Icons.open_in_new),
-                  onTap: () {
-                    Get.toNamed('/observation', arguments: {
-                      'patientId': _controller.patientId.value,
-                      'medicalRecordId':
-                      _controller.medicalRecordId.value,
-                      'observationId': observation.id
-                    });
+                return Card(
+                  elevation: 1,
+                  child: ListTile(
+                    title: Padding(
+                      padding: const EdgeInsets.only(top: 12.0 , left: 8.0 , right: 8.0),
+                      child: Text(observation.name , style: TextStyle(fontSize: ResponsiveFontSize.medium()),),
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '${"Date".tr} : ${DateFormat('dd/MM/yyyy').format(observation.createdAt)}'),
+                          // images count
+                          if (observation.images.isNotEmpty)
+                            Text(
+                                '${"Images".tr} : ${observation.images.length}'),
+                        ],
+                      ),
+                    ),
+                    trailing: const Icon(Icons.open_in_new),
+                    onTap: () {
+                      Get.toNamed('/observation', arguments: {
+                        'patientId': _controller.patientId.value,
+                        'medicalRecordId':
+                        _controller.medicalRecordId.value,
+                        'observationId': observation.id
+                      })?.then((value) => _controller.fetchObservations());
 
-                    // TODO: Navigate to observation details screen
-                  },
+                      // TODO: Navigate to observation details screen
+                    },
+                  ),
                 );
               },
             );
@@ -107,7 +126,7 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
                               final name = _nameController.text.trim();
                               if (name.isNotEmpty) {
                                 _controller
-                                    .addObservation({"Name".tr: name});
+                                    .addObservation({'name': name});
                                 Get.back();
                               } else {
                                 Get.snackbar('Error',

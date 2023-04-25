@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Constants/Constants.dart';
 import 'package:infectious_diseases_service/Utils/Functions.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 import '../../Controllers/MedicalRecord/MedicalRecordController.dart';
 import '../../Widgets/MedicalRecordSecondTab.dart';
 
@@ -77,15 +78,15 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       children: [
                                          Text(
                                           "${"Patient".tr} : ",
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
+                                          style:  TextStyle(
+                                            fontSize: ResponsiveFontSize.medium(),
                                           ),
                                         ),
                                         Text(
                                           // "a sdfas df ",
                                           "${_controller.patient.value.firstName!} ${_controller.patient.value.lastName!}",
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
+                                          style:  TextStyle(
+                                            fontSize:  ResponsiveFontSize.medium(),
                                             fontWeight: FontWeight.w600,
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -96,8 +97,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                         Text(
                                           // "Age",
                                           "( ${"Age".tr} ${Functions.calculateAge(_controller.patient.value.birthDate!)})",
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
+                                          style:  TextStyle(
+                                            fontSize:  ResponsiveFontSize.small(),
                                           ),
                                         ),
                                       ],
@@ -109,16 +110,16 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       children: [
                                          Text(
                                           "${"Doctor".tr}: ",
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
+                                          style:  TextStyle(
+                                            fontSize:  ResponsiveFontSize.medium(),
                                           ),
                                         ),
                                         Text(
                                           // "doctor name",
                                           _controller
                                               .medicalRecord.value.doctorName!,
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
+                                          style:  TextStyle(
+                                            fontSize:  ResponsiveFontSize.medium(),
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -131,8 +132,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       children: [
                                          Text(
                                           "${"Status".tr}: ",
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
+                                          style:  TextStyle(
+                                            fontSize: ResponsiveFontSize.medium(),
                                           ),
                                         ),
                                         _controller.medicalRecord
@@ -141,8 +142,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                             ?  Text(
                                                 // "doctor name",
                                                 "Active".tr,
-                                                style: const TextStyle(
-                                                  fontSize: 15.0,
+                                                style:  TextStyle(
+                                                  fontSize: ResponsiveFontSize.medium(),
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.green,
                                                 ),
@@ -151,7 +152,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                                 // "doctor name",
                                                 "Closed".tr,
                                                 style: TextStyle(
-                                                    fontSize: 15.0,
+                                                    fontSize: ResponsiveFontSize.medium(),
                                                     fontWeight: FontWeight.w600,
                                                     color: Colors.red),
                                               ),
@@ -264,8 +265,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
             children: [
               Text(
                 title!,
-                style: const TextStyle(
-                  fontSize: 15.0,
+                style:  TextStyle(
+                  fontSize: ResponsiveFontSize.medium(),
                   fontWeight: FontWeight.w600,
                 ),
                 // textAlign: TextAlign.center,
@@ -273,8 +274,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
               const SizedBox(height: 8.0),
               Text(
                 value!,
-                style: const TextStyle(
-                  fontSize: 13.0,
+                style:  TextStyle(
+                  fontSize: ResponsiveFontSize.small(),
                 ),
                 // textAlign: TextAlign.center,
               ),

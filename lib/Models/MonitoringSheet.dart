@@ -1,3 +1,5 @@
+import 'package:infectious_diseases_service/Models/MedicalRecord.dart';
+
 import 'Treatment.dart';
 
 class MonitoringSheet {
@@ -14,6 +16,7 @@ class MonitoringSheet {
   final DateTime? updatedAt;
   final Map<String, dynamic>? filledBy;
   final List<Treatment>? treatments;
+  final MedicalRecord? medicalRecord;
 
   MonitoringSheet({
     this.id,
@@ -29,41 +32,42 @@ class MonitoringSheet {
     this.createdAt,
     this.updatedAt,
     this.treatments,
+    this.medicalRecord,
   });
 
   factory MonitoringSheet.fromJson(Map<String, dynamic> json) {
-    var treatmentList = json['treatments'] as List;
-    List<Treatment> treatments =
-    treatmentList.map((i) => Treatment.fromJson(i)).toList();
+
 
     return MonitoringSheet(
       id: json['id'],
       recordId: json['record_id'],
       filledById: json['filled_by_id'],
-      fillingDate: DateTime.parse(json['filling_date']),
+      fillingDate: json['filling_date'] == null ? null : DateTime.parse(json['filling_date']),
       urine: json['urine'],
       bloodPressure: json['blood_pressure'],
       weight: json['weight'],
-      temperature: json['temperature'], // to double
+      temperature: json['temperature'],
+      // to double
       progressReport: json['progress_report'],
       filledBy: json['filled_by'],
       // filledBy: "${json['filled_by']['first_name']} ${json['filled_by']['last_name']}",
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      treatments: treatments,
+      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at']),
+      updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at']),
+      treatments: json['treatments'] == null ? [] : json['treatments'].map<Treatment>((t) => Treatment.fromJson(t)).toList(),
+      medicalRecord: json['medical_record'] == null ? null : MedicalRecord.fromJson(json['medical_record']),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'record_id': recordId,
-    'filled_by_id': filledById,
-    'filling_date': fillingDate!.toIso8601String(),
-    'urine': urine,
-    'blood_pressure': bloodPressure,
-    'weight': weight,
-    'temperature': temperature,
-    'progress_report': progressReport,
-    'filled_by': filledBy,
-    'treatments': treatments!.map((t) => t.toJson()).toList(),
-  };
+        'record_id': recordId,
+        'filled_by_id': filledById,
+        'filling_date': fillingDate!.toIso8601String(),
+        'urine': urine,
+        'blood_pressure': bloodPressure,
+        'weight': weight,
+        'temperature': temperature,
+        'progress_report': progressReport,
+        'filled_by': filledBy,
+        'treatments': treatments!.map((t) => t.toJson()).toList(),
+      };
 }

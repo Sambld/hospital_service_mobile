@@ -153,6 +153,7 @@ class _ComplementaryExaminationsScreenState
                           fontWeight: FontWeight.normal,
                           fontSize: 14.0,
                         ),
+                        maxLines: 5,
                       ),
                       SizedBox(height: 4.0),
                       Text(
@@ -160,6 +161,7 @@ class _ComplementaryExaminationsScreenState
                         style: const TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 14.0,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -296,10 +298,13 @@ class _ComplementaryExaminationsScreenState
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: children ?? [],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: children ?? [],
+                ),
               ),
               // edit and delete button
               !_controller.medicalRecord.value.isClosed() &&  _controller.medicalRecord.value.userId == _authController.user['id']? Row(

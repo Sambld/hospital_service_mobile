@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Controllers/MedicalRecord/MedicalRecordsController.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 
 import '../Models/MedicalRecord.dart';
 
@@ -14,6 +15,7 @@ class MedicalRecordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ResponsiveFontSize.initialize(context);
     Color borderColor = medicalRecord.isActive() ? Colors.green : Colors.redAccent;
 
     return GestureDetector(
@@ -44,14 +46,14 @@ class MedicalRecordCard extends StatelessWidget {
               children: [
                 Text(
                   '${"Patient".tr}: ',
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style:  TextStyle(
+                    fontSize: ResponsiveFontSize.medium(),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   '${medicalRecord.patient?.firstName ?? ''} ${medicalRecord.patient?.lastName ?? ''}',
-                  style: const TextStyle(fontSize: 16),
+                  style:  TextStyle(fontSize: ResponsiveFontSize.small(),),
                 ),
               ],
             ),
@@ -60,32 +62,34 @@ class MedicalRecordCard extends StatelessWidget {
               children: [
                 Text(
                   '${"Doctor".tr}: ',
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style:  TextStyle(
+                    fontSize: ResponsiveFontSize.medium(),
                     fontWeight: FontWeight.bold,
                   ),
+
                 ),
                 Text(
                   '${medicalRecord.doctorName}',
-                  style: const TextStyle(fontSize: 16),
+                  style:  TextStyle(fontSize: ResponsiveFontSize.small(),),
                 ),
               ],
             ),
             const SizedBox(height: 8),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '${"Condition".tr}: ',
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style:  TextStyle(
+                    fontSize: ResponsiveFontSize.medium(),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     '${medicalRecord.conditionDescription}',
-                    style: const TextStyle(fontSize: 16),
-                    maxLines: 1,
+                    style:  TextStyle(fontSize: ResponsiveFontSize.small(),),
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -96,15 +100,15 @@ class MedicalRecordCard extends StatelessWidget {
               children: [
                 Text(
                   '${"Status".tr}: ',
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style:  TextStyle(
+                    fontSize: ResponsiveFontSize.medium(),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   '${medicalRecord.isActive() ? "Active".tr : "Closed".tr}',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: ResponsiveFontSize.small(),
                     color: medicalRecord.isActive() ? Colors.green : Colors.redAccent,
                   ),
                 ),
@@ -112,7 +116,7 @@ class MedicalRecordCard extends StatelessWidget {
                 Text(
                   ' ( #${medicalRecord.id} )',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: ResponsiveFontSize.small(),
                     color: medicalRecord.isActive() ? Colors.green : Colors.redAccent,
                   ),
                 ),

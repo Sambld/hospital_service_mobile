@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Models/MedicineRequest.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 
 import '../../Constants/Constants.dart';
 import '../../Controllers/AuthController.dart';
@@ -76,9 +77,9 @@ class MedicineRequestsScreen extends StatelessWidget {
                                 child: Text('Rejected'.tr),
                               )),
                         ],
-                        style: const TextStyle(
+                        style:  TextStyle(
                             color: Colors.black,
-                            fontSize: 16.0,
+                            fontSize: ResponsiveFontSize.medium(),
                             fontWeight: FontWeight.w400),
                         dropdownColor: Colors.white,
                         iconEnabledColor: controller.selectedStatus.value ==
@@ -125,7 +126,7 @@ class MedicineRequestsScreen extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 12.0),
+                                    vertical: 2.0, horizontal: 12.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -135,9 +136,9 @@ class MedicineRequestsScreen extends StatelessWidget {
                                       children: [
                                         Text(
                                           medicineRequest.medicine!.name!,
-                                          style: const TextStyle(
+                                          style:  TextStyle(
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 18,
+                                            fontSize: ResponsiveFontSize.medium(),
                                           ),
                                         ),
                                         Chip(
@@ -152,6 +153,7 @@ class MedicineRequestsScreen extends StatelessWidget {
                                                           'Rejected'
                                                       ? Colors.red
                                                       : Colors.orangeAccent,
+                                              fontSize: ResponsiveFontSize.small(),
                                             ),
                                           ),
                                           backgroundColor: medicineRequest
@@ -168,12 +170,11 @@ class MedicineRequestsScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       '${"Quantity".tr}: ${medicineRequest.quantity.toString()}',
-                                      style: const TextStyle(
+                                      style:  TextStyle(
                                         fontWeight: FontWeight.normal,
-                                        fontSize: 16,
+                                        fontSize: ResponsiveFontSize.small(),
                                       ),
                                     ),
-                                    const SizedBox(height: 2.0),
                                     Row(
                                       children: [
                                         Text(
@@ -181,8 +182,7 @@ class MedicineRequestsScreen extends StatelessWidget {
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             fontSize:
-                                                MediaQuery.of(context).size.width *
-                                                    0.04,
+                                            ResponsiveFontSize.small(),
                                           ),
                                         ),
                                         Spacer(),
@@ -267,7 +267,6 @@ class MedicineRequestsScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 5.0),
                                     (medicineRequest.review?.isEmpty == false
                                             ? true
                                             : false)
@@ -275,14 +274,13 @@ class MedicineRequestsScreen extends StatelessWidget {
                                           padding: const EdgeInsets.only(top: 4.0 , bottom: 8.0),
                                           child: Text(
                                               '${"Review".tr}: ${medicineRequest.review ?? ''}',
-                                              style: const TextStyle(
+                                              style:  TextStyle(
                                                 fontWeight: FontWeight.normal,
-                                                fontSize: 16,
+                                                fontSize: ResponsiveFontSize.small(),
                                               ),
                                             ),
                                         )
                                         : Container(),
-                                    const SizedBox(height: 2.0),
                                   ],
                                 ),
                               ),
@@ -365,7 +363,7 @@ class _AddMedicineRequestDialogState extends State<AddMedicineRequestDialog> {
                 'Add Medicine Request'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: ResponsiveFontSize.medium(),
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -478,11 +476,11 @@ class _EditMedicineRequestDialogState extends State<EditMedicineRequestDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+               Text(
                 'Edit Medicine Request',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: ResponsiveFontSize.medium(),
                 ),
               ),
               const SizedBox(height: 16.0),

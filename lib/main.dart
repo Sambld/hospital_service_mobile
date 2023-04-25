@@ -4,11 +4,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Screens/ComplementaryExamination/ComplementaryExaminations.dart';
 import 'package:infectious_diseases_service/Screens/Dashboard.dart';
 import 'package:infectious_diseases_service/Screens/Dashboard/DoctorDashboard.dart';
+import 'package:infectious_diseases_service/Screens/Dashboard/NurseDashboard.dart';
 import 'package:infectious_diseases_service/Screens/LoginPage.dart';
 import 'package:infectious_diseases_service/Screens/MonitoringSheet/MonitoringSheet.dart';
 import 'package:infectious_diseases_service/Screens/Observation/Observations.dart';
 import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
 import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 import 'Controllers/NavigationDrawerController.dart';
 import 'Screens/MedicalRecord/AddMedicalRecord.dart';
 import 'Screens/MedicalRecord/EditMedicalRecord.dart';
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       translations: Languages(),
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/dashboard', page: () => const DashboardScreen()),
         GetPage(name: '/patients', page: () => const PatientsScreen()),
         GetPage(name: '/login', page: () => const LoginPage()),
-        GetPage(name: '/patient-details', page: () => const PatientScreen()),
+        GetPage(name: '/patient-details', page: () =>  PatientScreen()),
         GetPage(name: '/add-patient', page: () => AddPatientScreen()),
         GetPage(name: '/edit-patient', page: () => EditPatientScreen()),
         GetPage(
@@ -86,6 +89,10 @@ class MyApp extends StatelessWidget {
        GetPage(
             name: '/doctor-dashboard',
             page: () =>  DoctorDashboardScreen(),
+            transition: Transition.fade),
+       GetPage(
+            name: '/nurse-dashboard',
+            page: () =>  NurseDashboardScreen(),
             transition: Transition.fade),
       ],
     );

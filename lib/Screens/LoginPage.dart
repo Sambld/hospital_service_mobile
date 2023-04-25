@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
           _btnController.reset();
           _authController.user(res.data['user']);
           GetStorage().write('token', res.data['access_token'].toString()) ;
-          Get.offNamed('/patients');
+          _authController.redirect();
 
         }
       } catch (e) {

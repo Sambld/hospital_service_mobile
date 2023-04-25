@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 
 class PatientCard extends StatelessWidget {
   final int id;
@@ -24,6 +25,7 @@ class PatientCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ResponsiveFontSize.initialize(context);
     return GestureDetector(
       onTap: () => onTap(),
       child: Container(
@@ -61,17 +63,17 @@ class PatientCard extends StatelessWidget {
                 children: [
                   Text(
                     '$firstName $lastName  #${id.toString()}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: ResponsiveFontSize.medium(), fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     '${"Birth Date".tr}: ${birthDate.day}/${birthDate.month}/${birthDate.year}',
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: ResponsiveFontSize.small(), color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     '${"Phone Number".tr}: $phoneNumber',
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: ResponsiveFontSize.small(), color: Colors.grey[600]),
                   ),
                 ],
               ),

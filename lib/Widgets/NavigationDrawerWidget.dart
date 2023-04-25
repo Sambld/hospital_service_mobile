@@ -23,86 +23,89 @@ class NavigationDrawerWidget extends StatelessWidget {
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Column(
-              children: <Widget>[
-                buildHeader(
-                  name: name,
-                  role: role,
-                  onClicked: () => print('Header'),
-                ),
-                Container(
-                  padding: padding,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 12),
-                      // buildSearchField(),
-                      const SizedBox(height: 24),
-                      buildMenuItem(
-                        text: 'Dashboard'.tr,
-                        icon: Icons.dashboard_customize_outlined,
-                        onClicked: () => selectedItem(context, 0),
-                      ),
-                      const SizedBox(height: 16),
-                      buildMenuItem(
-                        text: 'Patients'.tr,
-                        icon: Icons.people,
-                        onClicked: () => selectedItem(context, 1),
-                      ),
-                      const SizedBox(height: 16),
-                      buildMenuItem(
-                        text: 'Medical Records'.tr,
-                        icon: Icons.medical_services,
-                        onClicked: () => selectedItem(context, 2),
-                      ),
-                      const SizedBox(height: 16),
-                      const SizedBox(height: 24),
-                      const Divider(color: Colors.grey),
-                      const SizedBox(height: 24),
-                      buildMenuItem(
-                        text: 'Sign Out'.tr,
-                        icon: Icons.logout,
-                        onClicked: () => selectedItem(context, 5),
-                      ),
-
-                      // language changer
-                    ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              child: Column(
+                children: <Widget>[
+                  buildHeader(
+                    name: name,
+                    role: role,
+                    onClicked: () => print('Header'),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32),
+                  Container(
+                    padding: padding,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            DropdownButton(
-                              value: _controller.selectedLanguage.value,
-                              items: _controller.languages
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(
-                                          e,
-                                          style:
-                                              const TextStyle(color: Colors.grey , fontSize: 16),
-                                        ),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) async {
-                                await GetStorage().write('language', value);
-                                Get.updateLocale(Locale(value.toString()));
-                                _controller.selectedLanguage.value =
-                                    value.toString();
-                              },
-                            ),
-                          ],
+                        const SizedBox(height: 12),
+                        // buildSearchField(),
+                        const SizedBox(height: 24),
+                        buildMenuItem(
+                          text: 'Dashboard'.tr,
+                          icon: Icons.dashboard_customize_outlined,
+                          onClicked: () => selectedItem(context, 0),
                         ),
+                        const SizedBox(height: 16),
+                        buildMenuItem(
+                          text: 'Patients'.tr,
+                          icon: Icons.people,
+                          onClicked: () => selectedItem(context, 1),
+                        ),
+                        const SizedBox(height: 16),
+                        buildMenuItem(
+                          text: 'Medical Records'.tr,
+                          icon: Icons.medical_services,
+                          onClicked: () => selectedItem(context, 2),
+                        ),
+                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
+                        const Divider(color: Colors.grey),
+                        const SizedBox(height: 24),
+                        buildMenuItem(
+                          text: 'Sign Out'.tr,
+                          icon: Icons.logout,
+                          onClicked: () => selectedItem(context, 5),
+                        ),
+
+                        // language changer
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              DropdownButton(
+                                value: _controller.selectedLanguage.value,
+                                items: _controller.languages
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(
+                                            e,
+                                            style:
+                                                const TextStyle(color: Colors.grey , fontSize: 16),
+                                          ),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) async {
+                                  await GetStorage().write('language', value);
+                                  Get.updateLocale(Locale(value.toString()));
+                                  _controller.selectedLanguage.value =
+                                      value.toString();
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           )
         ],

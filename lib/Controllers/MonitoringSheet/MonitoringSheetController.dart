@@ -26,12 +26,21 @@ class MonitoringSheetController extends GetxController {
 
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     // TODO: implement onInit
 
     patientId(Get.arguments['patientId']);
     medicalRecordId(Get.arguments['medicalRecordId']);
-    getMonitoringSheets();
+
+    final id = Get.arguments['id'];
+    await getMonitoringSheets();
+    if (id != null){
+      // make currentMonitoringSheet the one with the selected date
+      final selectedDateMonitoringSheet = monitoringSheetList.firstWhere((sheet) => sheet.id == id);
+      currentMonitoringSheet(selectedDateMonitoringSheet);
+
+    }
+
     // getMedicines();
 
     super.onInit();

@@ -6,8 +6,8 @@ import 'package:number_paginator/number_paginator.dart';
 import '../../Constants/Constants.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/MedicalRecord/MedicalRecordsController.dart';
+import '../../Utils/ResponsiveFontSizes.dart';
 import '../../Widgets/NavigationDrawerWidget.dart';
-
 
 class MedicalRecordsScreen extends StatefulWidget {
   const MedicalRecordsScreen({Key? key}) : super(key: key);
@@ -30,13 +30,18 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
     return Scaffold(
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
-        title:  Text('Medical Records'.tr),
+        title: Text(
+          'Medical Records'.tr,
+          style: TextStyle(
+            fontSize: ResponsiveFontSize.large(),
+          ),
+        ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Obx(
-              ()=> TextField(
+              () => TextField(
                 controller: controller.searchController.value,
                 onSubmitted: controller.searchMedicalRecords,
                 decoration: InputDecoration(
@@ -51,13 +56,13 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   suffixIcon: controller.searchQuery.value.isNotEmpty
                       ? IconButton(
-                    onPressed: () {
-                      controller.searchController.value.clear();
-                      controller.searchQuery('');
-                      controller.getMedicalRecords();
-                    },
-                    icon: const Icon(Icons.clear),
-                  )
+                          onPressed: () {
+                            controller.searchController.value.clear();
+                            controller.searchQuery('');
+                            controller.getMedicalRecords();
+                          },
+                          icon: const Icon(Icons.clear),
+                        )
                       : null,
                 ),
                 onChanged: (value) {
@@ -72,70 +77,79 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
       body: Column(
         children: [
           Obx(
-            ()=> Row(children: [
-              Expanded(
-                child: SwitchListTile(
-                  title:  Text('Active only'.tr),
-                  value: controller.onlyActive.value,
-                  onChanged: (value) async {
-                    controller.onlyActive(value);
-                    controller.currentPage(1);
-                    await controller.getMedicalRecords();
-                  },
+            () => Row(
+              children: [
+                Expanded(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Active only'.tr,
+                      style: TextStyle(
+                        fontSize: ResponsiveFontSize.small(),
+                      ),
+                    ),
+                    value: controller.onlyActive.value,
+                    onChanged: (value) async {
+                      controller.onlyActive(value);
+                      controller.currentPage(1);
+                      await controller.getMedicalRecords();
+                    },
+                  ),
                 ),
-              ),
-              const VerticalDivider(
-                color: Colors.grey,
-                thickness: 1,),
-              Expanded(
-                child: SwitchListTile(
-                  title:  Text('Mine only'.tr),
-                  value: controller.onlyMine.value,
-                  onChanged: (value) async {
-                    controller.onlyMine(value);
-                    controller.currentPage(1);
-                    await controller.getMedicalRecords();
-                  },
+                Expanded(
+                  child: SwitchListTile(
+                    title: Text(
+                      'Mine only'.tr,
+                      style: TextStyle(
+                        fontSize: ResponsiveFontSize.small(),
+                      ),
+                    ),
+                    value: controller.onlyMine.value,
+                    onChanged: (value) async {
+                      controller.onlyMine(value);
+                      controller.currentPage(1);
+                      await controller.getMedicalRecords();
+                    },
+                  ),
                 ),
-              ),
-            ],),
+              ],
+            ),
           ),
           Expanded(
             child: Obx(() {
               final medicalRecords = controller.medicalRecords;
 
-              if (medicalRecords.isEmpty) {
-                return  Center(
-                  child: Text('No medical records found'.tr),
-                );
-              }
               if (controller.isLoading.value) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Center(child: const CircularProgressIndicator());
+              } else {
+                if (medicalRecords.isEmpty) {
+                  return Center(
+                    child: Text('No medical records found'.tr),
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: medicalRecords.length,
+                          itemBuilder: (context, index) {
+                            final medicalRecord = medicalRecords[index];
+                            return MedicalRecordCard(
+                                medicalRecord: medicalRecord);
+                          },
+                        ),
+                      ),
+                      NumberPaginator(
+                        numberPages: controller.totalPages.value,
+                        initialPage: controller.currentPage.value - 1,
+                        onPageChange: (int index) {
+                          controller.currentPage(index + 1);
+                          controller.getMedicalRecords();
+                        },
+                      ),
+                    ],
+                  );
+                }
               }
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: medicalRecords.length,
-                      itemBuilder: (context, index) {
-                        final medicalRecord = medicalRecords[index];
-                        return
-                          MedicalRecordCard(medicalRecord: medicalRecord);
-                      },
-                    ),
-                  ),
-                  NumberPaginator(
-                    numberPages: controller.totalPages.value,
-                    initialPage: controller.currentPage.value - 1,
-                    onPageChange: (int index) {
-                      controller.currentPage(index + 1);
-                      controller.getMedicalRecords();
-                    },
-                  ),
-                ],
-              );
             }),
           ),
         ],

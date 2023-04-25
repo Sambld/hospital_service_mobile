@@ -1,30 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../Constants/Constants.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/Patient/PatientController.dart';
 
-class PatientScreen extends StatefulWidget {
-  const PatientScreen({Key? key}) : super(key: key);
+class PatientScreen extends StatelessWidget {
+  PatientScreen({Key? key}) : super(key: key);
 
-  @override
-  _PatientScreenState createState() => _PatientScreenState();
-}
-
-class _PatientScreenState extends State<PatientScreen> {
   final _patientController = Get.put(PatientController());
+
   final _authController = Get.find<AuthController>();
-
-  @override
-  void dispose() {
-    // _patientsController.getPatients();
-    _patientController.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +21,9 @@ class _PatientScreenState extends State<PatientScreen> {
           backgroundColor: Colors.grey[100],
           appBar: AppBar(
             elevation: 3,
-            bottom:  TabBar(
+            bottom: TabBar(
               tabs: [
-                Tab(
+                const Tab(
                   child: Text('informations'),
                 ),
                 Tab(child: Text('Medical Records'.tr)),
@@ -58,7 +44,8 @@ class _PatientScreenState extends State<PatientScreen> {
             ],
             // backgroundColor: Colors.transparent,
             title: Text(
-              'Patient Details'.tr+  '(#${_patientController.patient.value.id})',
+              'Patient Details'.tr +
+                  '(#${_patientController.patient.value.id})',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -167,9 +154,9 @@ class _PatientScreenState extends State<PatientScreen> {
                                   ),
                                 ),
                               ),
-                              child:  Text(
+                              child: Text(
                                 'Add Medical Record'.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -182,7 +169,7 @@ class _PatientScreenState extends State<PatientScreen> {
                               children: [
                                 // a switch toggle for active medical records and closed ones
                                 SwitchListTile(
-                                  title:  Text("Show only active records".tr),
+                                  title: Text("Show only active records".tr),
                                   value: _patientController.recordsFilter.value,
                                   onChanged: (value) {
                                     _patientController.recordsFilter.value =
@@ -210,9 +197,9 @@ class _PatientScreenState extends State<PatientScreen> {
                                               medicalRecord
                                                           .patientLeavingDate ==
                                                       null
-                                                  ?  Text(
+                                                  ? Text(
                                                       "Active".tr,
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           color: Colors.green),
                                                     )
                                                   : Text(
@@ -224,7 +211,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                           ),
                                           subtitle: Row(
                                             children: [
-                                               Text("${"Doctor".tr}: ".tr),
+                                              Text("${"Doctor".tr}: ".tr),
                                               Text(
                                                 medicalRecord.doctorName!,
                                                 style: TextStyle(
@@ -252,7 +239,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                   Text(
+                                                  Text(
                                                     "${"State Upon Enter".tr}: ",
                                                     style: const TextStyle(
                                                         fontWeight:
@@ -284,9 +271,9 @@ class _PatientScreenState extends State<PatientScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                         Text(
+                                                        Text(
                                                           "${"State Upon Exit".tr}: ",
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600),
@@ -331,7 +318,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                           medicalRecord.id
                                                     });
                                               },
-                                              child:  Text("View Details".tr),
+                                              child: Text("View Details".tr),
                                             ),
                                           ],
                                         ),

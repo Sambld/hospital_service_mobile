@@ -36,7 +36,7 @@ class Patient {
       id: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
-      birthDate: DateTime.tryParse(json['birth_date']),
+      birthDate: json['birth_date'] == null ? null : DateTime.tryParse(json['birth_date']),
       placeOfBirth: json['place_of_birth'],
       gender: json['gender'],
       address: json['address'],
@@ -45,8 +45,8 @@ class Patient {
       familySituation: json['family_situation'],
       emergencyContactName: json['emergency_contact_name'],
       emergencyContactNumber: json['emergency_contact_number'],
-      createdAt: DateTime.tryParse(json['created_at']),
-      updatedAt: DateTime.tryParse(json['updated_at']),
+      createdAt:json['created_at'] == null ? null :  DateTime.tryParse(json['created_at']),
+      updatedAt: json['updated_at'] == null ? null : DateTime.tryParse(json['updated_at']),
     );
   }
 

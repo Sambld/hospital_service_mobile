@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 import '../Controllers/MedicalRecord/MedicalRecordController.dart';
 
 class SecondTab extends StatelessWidget {
@@ -72,13 +73,16 @@ class SecondTab extends StatelessWidget {
               color: Colors.white,
             ),
             const SizedBox(height: 16.0),
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style:  TextStyle(
+                  color: Colors.white,
+                  fontSize: ResponsiveFontSize.large(),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           ],
         ),

@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:get_storage/get_storage.dart';
-import 'package:infectious_diseases_service/Screens/Dashboard.dart';
-import 'package:infectious_diseases_service/Screens/Home.dart';
-import 'package:infectious_diseases_service/Screens/LoginPage.dart';
-import 'package:infectious_diseases_service/Screens/Patients/Patients.dart';
-import 'package:infectious_diseases_service/main.dart';
 import 'package:dio/dio.dart';
 
 import '../Services/Api.dart';
 
 class AuthController extends GetxController {
-
   var isLoggedIn = true.obs;
   var user = {}.obs;
-
-
 
   @override
   void onInit() {
@@ -35,39 +28,40 @@ class AuthController extends GetxController {
     } else {
       Get.updateLocale(Locale(lang));
     }
-
   }
 
   Future<void> redirect() async {
-
     try {
       var res = await Api.getUser();
       if (res.statusCode == 200) {
         user(res.data);
         isLoggedIn = true.obs;
-        Get.offNamed('/medical-records');
+        if (user['role'] == 'doctor') {
+          Get.offAllNamed('/doctor-dashboard');
+        } else if (user['role'] == 'nurse') {
+          Get.offAllNamed('/nurse-dashboard');
+        } else {
+          Get.snackbar(
+            'Error',
+            'Invalid user role for mobile app',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+          Get.offAllNamed('/login');
+        }
       } else {
         isLoggedIn = false.obs;
         Get.offNamed('/login');
       }
-
-
-    } on DioError catch (e) {
-
-    }
-
-
-
-
+    } on DioError catch (e) {}
   }
 
   bool isDoctor() {
     return user.value['role'] == 'doctor';
   }
+
   bool isNurse() {
     return user.value['role'] == 'nurse';
   }
-
-
-
 }

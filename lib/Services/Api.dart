@@ -252,7 +252,7 @@ class Api {
   }
 
   static Future<Response> getDoctorMedicalRecords({required int doctorId}) {
-    return dio.get('medical-records?isActive&doctorId=$doctorId');
+    return dio.get('medical-records?doctorId=$doctorId');
   }
 
 

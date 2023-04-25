@@ -41,13 +41,13 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Temperature field
                 FormBuilderTextField(
                   name: 'temperature',
-                  initialValue: "${_controller.currentMonitoringSheet.value.temperature ?? ''}",
+                  initialValue: _controller.currentMonitoringSheet.value.temperature ?? '',
                   decoration: GlobalWidgets.inputDecoration(
                     'Temperature',
                     Icons.thermostat,
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  valueTransformer: (value) => double.tryParse(value ?? ''),// enable decimal point
+                    keyboardType:  TextInputType.datetime,
+                  // valueTransformer: (value) => double.tryParse(value ?? ''),// enable decimal point
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
 
@@ -60,7 +60,7 @@ class _UpdateMonitoringSheetBottomSheetState
                   name: 'blood_pressure',
                   initialValue: _controller.currentMonitoringSheet.value.bloodPressure ?? '',
                   decoration: GlobalWidgets.inputDecoration('Blood Pressure'.tr, Icons.bloodtype),
-                  keyboardType: TextInputType.number,
+                  keyboardType:  TextInputType.datetime,
 
                 ),
                 const SizedBox(height: 10),
@@ -71,7 +71,7 @@ class _UpdateMonitoringSheetBottomSheetState
                       'urine',
                   initialValue: "${_controller.currentMonitoringSheet.value.urine ?? ''}",
                   decoration: GlobalWidgets.inputDecoration('Urine'.tr, Icons.water),
-                  keyboardType: TextInputType.number,
+                  keyboardType:  TextInputType.datetime,
 
                 ),
                 const SizedBox(height: 10),
@@ -81,7 +81,7 @@ class _UpdateMonitoringSheetBottomSheetState
                   name: 'weight',
                   initialValue: "${_controller.currentMonitoringSheet.value.weight ?? ''}",
                   decoration: GlobalWidgets.inputDecoration('Weight'.tr, Icons.line_weight),
-                  keyboardType: TextInputType.number,
+                  keyboardType:  TextInputType.datetime,
 
                 ),
                 const SizedBox(height: 10),
@@ -98,7 +98,7 @@ class _UpdateMonitoringSheetBottomSheetState
                 ElevatedButton(
                   onPressed: _isLoading ? null : _saveMonitoringSheet,
                   child: _isLoading
-                      ? SizedBox(child: const CircularProgressIndicator(strokeWidth: 2,) , height: 18, width: 18,)
+                      ? const SizedBox(height: 18, width: 18,child: CircularProgressIndicator(strokeWidth: 2,) ,)
                       :  Text('Save'.tr),
                 ),
               ],
@@ -114,16 +114,22 @@ class _UpdateMonitoringSheetBottomSheetState
       setState(() {
         _isLoading = true;
       });
-      final formData = _formKey.currentState!.value;
-      final res = await Api.editMonitoringSheetDay(_controller.patientId.value, _controller.medicalRecordId.value, _controller.currentMonitoringSheet.value.id!,
-          formData);
-      setState(() {
-        _isLoading = false;
-      });
-      if (res.statusCode == 200) {
-        _controller.getMonitoringSheets();
-        Get.back();
+
+      try {
+        final formData = _formKey.currentState!.value;
+        final res = await Api.editMonitoringSheetDay(_controller.patientId.value, _controller.medicalRecordId.value, _controller.currentMonitoringSheet.value.id!,
+                  formData);
+        if (res.statusCode == 200) {
+          _controller.getMonitoringSheets();
+          Get.back();
+        }
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
+
+
     }
   }
 }
