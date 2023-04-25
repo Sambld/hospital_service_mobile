@@ -119,6 +119,7 @@ class MyActiveMedicalRecords extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: controller.activeMedicalRecords.length,
                 itemBuilder: (context, index) {
+                  final medicalRecord = controller.activeMedicalRecords[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0 , horizontal: 8.0),
                     child: Card(
@@ -129,15 +130,15 @@ class MyActiveMedicalRecords extends StatelessWidget {
                       child: ListTile(
                         onTap: () {
                           Get.toNamed('/medical-record-details', arguments: {
-                            'medicalRecordId': controller.medicalRecords[index].id,
+                            'medicalRecordId': medicalRecord.id,
                             'patientId':
-                            controller.medicalRecords[index].patient!.id,
+                            medicalRecord.patient!.id,
                           });
                         },
                         title: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
-                            '${controller.medicalRecords[index].patient!.firstName!}  ${controller.medicalRecords[index].patient!.lastName!}',
+                            '${medicalRecord.patient!.firstName!}  ${medicalRecord.patient!.lastName!}',
                             style:  TextStyle(
                               fontFamily: 'Euclid',
                               fontSize: ResponsiveFontSize.large(),
@@ -154,7 +155,7 @@ class MyActiveMedicalRecords extends StatelessWidget {
                               // condition
 
                               Text(
-                                '${'Bed Number'.tr} : ${controller.medicalRecords[index].bedNumber}',
+                                '${'Bed Number'.tr} : ${medicalRecord.bedNumber}',
                                 style:  TextStyle(
                                   fontFamily: 'Euclid',
                                   fontSize: ResponsiveFontSize.small(),
@@ -165,7 +166,7 @@ class MyActiveMedicalRecords extends StatelessWidget {
                                 height: 5,
                               ),
                               Text(
-                                '${'Condition'.tr} : ${controller.medicalRecords[index].conditionDescription}',
+                                '${'Condition'.tr} : ${medicalRecord.conditionDescription}',
                                 style:  TextStyle(
                                   fontFamily: 'Euclid',
                                   fontSize: ResponsiveFontSize.small(),
@@ -181,7 +182,7 @@ class MyActiveMedicalRecords extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '#${controller.medicalRecords[index].id}',
+                              '#${medicalRecord.id}',
                               style: const TextStyle(
                                 fontFamily: 'Euclid',
                                 fontSize: 14,
