@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Controllers/NavigationDrawerController.dart';
 import '../Controllers/AuthController.dart';
 import '../Services/Api.dart';
+import '../Utils/ResponsiveFontSizes.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final NavigationDrawerController _controller = Get.find();
@@ -14,11 +15,11 @@ class NavigationDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name =
-        '${authController.user.value['first_name']} ${authController.user.value['last_name']}';
-    final role = authController.user.value['role'];
+        '${authController.user['first_name']} ${authController.user['last_name']}';
+    final role = authController.user['role'];
 
     return Drawer(
-      backgroundColor: Colors.blueGrey,
+      // backgroundColor: Colors.blueGrey,
       child: CustomScrollView(
         slivers: [
           SliverFillRemaining(
@@ -87,7 +88,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                                           child: Text(
                                             e,
                                             style:
-                                                const TextStyle(color: Colors.grey , fontSize: 16),
+                                                const TextStyle(color: Colors.black , fontSize: 16),
                                           ),
                                         ))
                                     .toList(),
@@ -124,28 +125,23 @@ class NavigationDrawerWidget extends StatelessWidget {
           padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
           child: Row(
             children: [
-              const CircleAvatar(
-                radius: 23,
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.health_and_safety_outlined,
-                  color: Colors.blue,
-                  size: 30,
-                ),
-              ),
-              const SizedBox(width: 10),
+              ImageIcon(
+                authController.user['role'] == 'doctor' ? const AssetImage('assets/images/doctor.png') : const AssetImage('assets/images/nurse.png'),
+                size: 50,
+                color: Colors.blueAccent,),
+              const SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    style:  TextStyle(fontSize: ResponsiveFontSize.xLarge()),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
                     role,
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
+                    style: const TextStyle(fontSize: 14),
                   ),
 
                   // two icon buttons to change language English and French
@@ -191,12 +187,11 @@ class NavigationDrawerWidget extends StatelessWidget {
     required IconData icon,
     VoidCallback? onClicked,
   }) {
-    const color = Colors.white;
     const hoverColor = Colors.white70;
 
     return ListTile(
-      leading: Icon(icon, color: color),
-      title: Text(text, style: const TextStyle(color: color)),
+      leading: Icon(icon , color: Colors.black87),
+      title: Text(text, style: const TextStyle(fontSize: 16 ,fontWeight: FontWeight.w400 , color: Colors.black87)),
       hoverColor: hoverColor,
       onTap: onClicked,
     );

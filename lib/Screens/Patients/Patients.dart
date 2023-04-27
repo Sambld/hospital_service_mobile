@@ -157,7 +157,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
           ),
         ],
       ),
-      floatingActionButton: Padding(
+      floatingActionButton: _authController.user['role'] == 'doctor'? Padding(
         padding: const EdgeInsets.only(bottom: 35.0),
         child: FloatingActionButton(
           clipBehavior: Clip.antiAlias,
@@ -166,7 +166,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
           },
           child: const Icon(Icons.add),
         ),
-      ),
+      ): null,
     );
   }
 }

@@ -9,6 +9,8 @@ class NurseDashboardController extends GetxController {
   var todayAvailableMonitoringSheets = <MonitoringSheet>[].obs;
   var latestFilledMonitoringSheets = <MonitoringSheet>[].obs;
   var nurseTotalFilledMonitoringSheets = 0.obs;
+  var search = ''.obs;
+  var searchController = TextEditingController().obs;
 
   @override
   Future<void> onInit() async {
@@ -57,4 +59,21 @@ class NurseDashboardController extends GetxController {
       rethrow;
     }
   }
+  // getter for todayAvailableMonitoringSheetsSearch
+  List<MonitoringSheet> get todayAvailableMonitoringSheetsSearch {
+    if (search.value.isEmpty) {
+      return todayAvailableMonitoringSheets;
+    } else {
+      return todayAvailableMonitoringSheets.where((element) {
+        print("${element.medicalRecord?.bedNumber.toString()} ${element.toString()}");
+        return (element.medicalRecord?.patient?.firstName?.toLowerCase().contains(search.value.toLowerCase()) ?? false) ||
+            (element.medicalRecord?.patient?.lastName?.toLowerCase().contains(search.value.toLowerCase()) ?? false) ||
+            (element.medicalRecord?.bedNumber.toString() == search.value);
+      }).toList();
+    }
+  }
+
+
+
+
 }

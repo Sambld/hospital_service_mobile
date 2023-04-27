@@ -7,6 +7,8 @@ import 'package:get/get.dart' as GET;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Constants/Constants.dart';
+import 'package:infectious_diseases_service/Controllers/AuthController.dart';
+import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
 
 import '../Screens/LoginPage.dart';
 
@@ -47,7 +49,7 @@ class Api {
             colorText: Colors.white,
           );
           Future.delayed(Duration(seconds: 2))
-              .then((value) => Get.offNamed('dashboard'));
+              .then((value) => Get.find<AuthController>().redirect());
           return handler.next(error);
           // continue
         }
@@ -85,8 +87,8 @@ class Api {
       // baseUrl: 'http://10.0.2.2:8000/api/',
       baseUrl: '${apiUrl}/api/',
       receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 5),
 
     ),
   );

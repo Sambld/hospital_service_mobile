@@ -54,7 +54,9 @@ class AuthController extends GetxController {
         isLoggedIn = false.obs;
         Get.offNamed('/login');
       }
-    } on DioError catch (e) {}
+    } on DioError catch (e) {
+
+    }
   }
 
   bool isDoctor() {

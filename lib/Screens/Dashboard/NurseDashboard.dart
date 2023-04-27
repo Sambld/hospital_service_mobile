@@ -46,7 +46,6 @@ class NurseDashboardScreen extends StatelessWidget {
     return Scaffold(
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
-
         flexibleSpace: kAppBarColor,
         title: Text(
           'Dashboard'.tr,
@@ -63,8 +62,6 @@ class NurseDashboardScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-
-
                   '${'Welcome'.tr} ${authController.user['first_name'] ?? ''} ${authController.user['last_name'] ?? ''}',
                   style: const TextStyle(
                       fontFamily: 'Euclid',
@@ -73,41 +70,86 @@ class NurseDashboardScreen extends StatelessWidget {
                   // textAlign: TextAlign.left,
                 ),
               ),
-
               Row(
-               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Obx(
-                    ()=> InfoCard(
+                    () => InfoCard(
                       title: 'Today Available Monitoring Sheets'.tr,
-                      value: controller.todayAvailableMonitoringSheets.length.toString(),
+                      value: controller.todayAvailableMonitoringSheets.length
+                          .toString(),
                       color: Colors.blueAccent,
                     ),
                   ),
                   Obx(
-                    ()=> InfoCard(
+                    () => InfoCard(
                       title: 'My Total Filled Monitoring Sheets'.tr,
-                      value: controller.nurseTotalFilledMonitoringSheets.value.toString(),
+                      value: controller.nurseTotalFilledMonitoringSheets.value
+                          .toString(),
                       color: Colors.greenAccent,
                       corner: 'effect2.svg',
                     ),
                   ),
-
                 ],
-
               ),
-              const SizedBox(height: 6,),
+              const SizedBox(
+                height: 6,
+              ),
               TabBar(
                 tabs: tabs,
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.grey,
               ),
               Obx(
-                ()=> Expanded(
+                () => Expanded(
                   child: TabBarView(
                     children: [
                       // Content of the first tab
-                      controller.isLoading.value ?  const Center(child: CircularProgressIndicator())  :AvailableMonitoringSheets(),
+                      if (controller.isLoading.value)
+                        const Center(child: CircularProgressIndicator())
+                      else
+                        Column(
+                          children: [
+                            Container(
+                              height: 40,
+                              margin: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey[200],
+                              ),
+                              child: Obx(
+                                ()=> TextFormField(
+                                  controller: controller.searchController.value,
+
+
+                                  onChanged: (value) {
+                                    controller.search(value);
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: '${'Search'.tr} ${'patient'.tr} , ${'Bed Number'.tr}',
+                                    prefixIcon: const Icon(Icons.search),
+                                    suffixIcon: controller.search.isNotEmpty? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('(${controller.todayAvailableMonitoringSheetsSearch.length})'),
+                                        IconButton(
+                                          icon: Icon(Icons.clear),
+                                          onPressed: () {
+
+                                            controller.search('');
+                                            controller.searchController.value.clear();
+                                          } ,
+                                        ),
+                                      ],
+                                    ):null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: AvailableMonitoringSheets()),
+                          ],
+                        ),
                       // Content of the second tab
                       LatestFilledMonitoringSheets(),
                     ],
@@ -123,7 +165,7 @@ class NurseDashboardScreen extends StatelessWidget {
 }
 
 class AvailableMonitoringSheets extends StatelessWidget {
-   AvailableMonitoringSheets({Key? key}) : super(key: key);
+  AvailableMonitoringSheets({Key? key}) : super(key: key);
   final controller = Get.find<NurseDashboardController>();
 
   @override
@@ -131,114 +173,117 @@ class AvailableMonitoringSheets extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
-      }
-      else{
+      } else {
         if (controller.todayAvailableMonitoringSheets.isEmpty) {
           return const Center(child: Text('No Available Monitoring Sheets'));
-        }else{
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.todayAvailableMonitoringSheets.length,
-            itemBuilder: (context , index){
-              final monitoringSheet = controller.todayAvailableMonitoringSheets[index];
-              return Padding(padding: const EdgeInsets.all(8.0),
-              child :
-              Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ListTile(
-                  onTap: () {
-                    // navigate to the monitoring sheet
-                    Get.toNamed('/monitoring-sheet', arguments: {'medicalRecordId': monitoringSheet.recordId , 'patientId': monitoringSheet.medicalRecord?.patient?.id ,'id' : monitoringSheet.id});
-                  },
-                  title: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      '${monitoringSheet.medicalRecord?.patient?.firstName} ${monitoringSheet.medicalRecord?.patient?.lastName}',
-                      style:  TextStyle(
-                        fontFamily: 'Euclid',
-                        fontSize: ResponsiveFontSize.large(),
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xff252631),
+        } else {
+          return SingleChildScrollView(
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: controller.todayAvailableMonitoringSheetsSearch.length,
+              itemBuilder: (context, index) {
+                final monitoringSheet =
+                    controller.todayAvailableMonitoringSheetsSearch[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      onTap: () {
+                        // navigate to the monitoring sheet
+                        Get.toNamed('/monitoring-sheet', arguments: {
+                          'medicalRecordId': monitoringSheet.recordId,
+                          'patientId': monitoringSheet.medicalRecord?.patient?.id,
+                          'id': monitoringSheet.id
+                        });
+                      },
+                      title: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          '${monitoringSheet.medicalRecord?.patient?.firstName} ${monitoringSheet.medicalRecord?.patient?.lastName}',
+                          style: TextStyle(
+                            fontFamily: 'Euclid',
+                            fontSize: ResponsiveFontSize.large(),
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff252631),
+                          ),
+                        ),
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Filling date
+                            Text(
+                              '${'Doctor'.tr}: ${monitoringSheet.medicalRecord?.doctorName}',
+                              style: TextStyle(
+                                fontFamily: 'Euclid',
+                                fontSize: ResponsiveFontSize.small(),
+                                color: const Color(0xff252631),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            // Bed number
+                            Text(
+                              '${'Bed Number'.tr}: ${monitoringSheet.medicalRecord?.bedNumber}',
+                              style: TextStyle(
+                                fontFamily: 'Euclid',
+                                fontSize: ResponsiveFontSize.small(),
+                                color: const Color(0xff252631),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            // Condition
+                            Text(
+                              '${'Condition'.tr}: ${monitoringSheet.medicalRecord?.conditionDescription}',
+                              style: TextStyle(
+                                fontFamily: 'Euclid',
+                                fontSize: ResponsiveFontSize.small(),
+                                color: const Color(0xff252631),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            // Filled by nurse name
+                          ],
+                        ),
+                      ),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Monitoring sheet ID
+                          Text(
+                            '#${monitoringSheet.id}',
+                            style: const TextStyle(
+                              fontFamily: 'Euclid',
+                              fontSize: 14,
+                              color: Color(0xff252631),
+                            ),
+                          ),
+                          const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Color(0xff252631),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        // Filling date
-                        Text(
-                          '${'Doctor'.tr}: ${monitoringSheet.medicalRecord?.doctorName}',
-                          style:  TextStyle(
-                            fontFamily: 'Euclid',
-                            fontSize: ResponsiveFontSize.small(),
-                            color: const Color(0xff252631),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        // Bed number
-                        Text(
-                          '${'Bed Number'.tr}: ${monitoringSheet.medicalRecord?.bedNumber}',
-                          style:  TextStyle(
-                            fontFamily: 'Euclid',
-                            fontSize: ResponsiveFontSize.small(),
-                            color: const Color(0xff252631),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        // Condition
-                        Text(
-                          '${'Condition'.tr}: ${monitoringSheet.medicalRecord?.conditionDescription}',
-                          style:  TextStyle(
-                            fontFamily: 'Euclid',
-                            fontSize: ResponsiveFontSize.small(),
-                            color: const Color(0xff252631),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        // Filled by nurse name
-
-                      ],
-                    ),
-                  ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Monitoring sheet ID
-                      Text(
-                        '#${monitoringSheet.id}',
-                        style: const TextStyle(
-                          fontFamily: 'Euclid',
-                          fontSize: 14,
-                          color: Color(0xff252631),
-                        ),
-                      ),
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Color(0xff252631),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-                ,
-              );
-            },
-
+                );
+              },
+            ),
           );
         }
       }
@@ -249,26 +294,26 @@ class AvailableMonitoringSheets extends StatelessWidget {
 class LatestFilledMonitoringSheets extends StatelessWidget {
   final controller = Get.find<NurseDashboardController>();
 
-   LatestFilledMonitoringSheets({super.key});
+  LatestFilledMonitoringSheets({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
-      }
-      else{
+      } else {
         if (controller.latestFilledMonitoringSheets.isEmpty) {
           return const Center(child: Text('No Available Monitoring Sheets'));
-        }else{
+        } else {
           return ListView.builder(
             shrinkWrap: true,
             itemCount: controller.latestFilledMonitoringSheets.length,
-            itemBuilder: (context , index){
-              final monitoringSheet = controller.latestFilledMonitoringSheets[index];
-              return Padding(padding: const EdgeInsets.all(8.0),
-                child :
-                Card(
+            itemBuilder: (context, index) {
+              final monitoringSheet =
+                  controller.latestFilledMonitoringSheets[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
                   elevation: 3,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -276,13 +321,17 @@ class LatestFilledMonitoringSheets extends StatelessWidget {
                   child: ListTile(
                     onTap: () {
                       // navigate to the monitoring sheet
-                      Get.toNamed('/monitoring-sheet', arguments: {'medicalRecordId': monitoringSheet.recordId , 'patientId': monitoringSheet.medicalRecord?.patient?.id ,'id' : monitoringSheet.id});
+                      Get.toNamed('/monitoring-sheet', arguments: {
+                        'medicalRecordId': monitoringSheet.recordId,
+                        'patientId': monitoringSheet.medicalRecord?.patient?.id,
+                        'id': monitoringSheet.id
+                      });
                     },
                     title: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
                         '${monitoringSheet.medicalRecord?.patient?.firstName} ${monitoringSheet.medicalRecord?.patient?.lastName}',
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Euclid',
                           fontSize: ResponsiveFontSize.large(),
                           fontWeight: FontWeight.w500,
@@ -295,11 +344,10 @@ class LatestFilledMonitoringSheets extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           // Filling date
                           Text(
                             '${'Doctor'.tr}: ${monitoringSheet.medicalRecord?.doctorName}',
-                            style:  TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Euclid',
                               fontSize: ResponsiveFontSize.small(),
                               color: const Color(0xff252631),
@@ -311,7 +359,7 @@ class LatestFilledMonitoringSheets extends StatelessWidget {
                           // Bed number
                           Text(
                             '${'Bed Number'.tr}: ${monitoringSheet.medicalRecord?.bedNumber}',
-                            style:  TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Euclid',
                               fontSize: ResponsiveFontSize.small(),
                               color: const Color(0xff252631),
@@ -322,8 +370,8 @@ class LatestFilledMonitoringSheets extends StatelessWidget {
                           ),
                           // Condition
                           Text(
-                            '${'Filling Date'.tr}: ${monitoringSheet.updatedAt.toString().substring(0,16)}',
-                            style:  TextStyle(
+                            '${'Filling Date'.tr}: ${monitoringSheet.updatedAt.toString().substring(0, 16)}',
+                            style: TextStyle(
                               fontFamily: 'Euclid',
                               fontSize: ResponsiveFontSize.small(),
                               color: const Color(0xff252631),
@@ -336,7 +384,6 @@ class LatestFilledMonitoringSheets extends StatelessWidget {
                             height: 5,
                           ),
                           // Filled by nurse name
-
                         ],
                       ),
                     ),
@@ -359,11 +406,9 @@ class LatestFilledMonitoringSheets extends StatelessWidget {
                       ],
                     ),
                   ),
-                )
-                ,
+                ),
               );
             },
-
           );
         }
       }
