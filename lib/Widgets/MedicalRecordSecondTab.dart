@@ -36,9 +36,9 @@ class SecondTab extends StatelessWidget {
                           Icons.assignment, Colors.green.shade400, () {
                         Get.toNamed('/complementary-examinations' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
                           }),
-                      _buildButton('Medicine Requests'.tr, Icons.medication,
+                      _buildButton('Prescriptions'.tr, Icons.medical_services,
                           Colors.red.shade400, () {
-                        Get.toNamed('/medicine-requests' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
+                        Get.toNamed('/prescriptions' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
                           }),
 
 

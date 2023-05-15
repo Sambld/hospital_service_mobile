@@ -133,6 +133,19 @@ class ObservationController extends GetxController{
     }
   }
 
+  void deleteObservation() {
+    try {
+      isLoading(true);
+      Api.deleteObservation(patientId: patientId.value, medicalRecordId: medicalRecordId.value, observationId: observationId.value);
+      OC.fetchObservations();
+      Get.back();
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading(false);
+    }
+  }
+
 
 }
 

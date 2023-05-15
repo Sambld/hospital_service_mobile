@@ -21,7 +21,7 @@ class ObservationScreen extends StatefulWidget {
 class _ObservationScreenState extends State<ObservationScreen> {
   final _controller = Get.put(ObservationController());
   final _authController = Get.find<AuthController>();
-  final String _storageUrl = '${apiUrl}/storage/images/';
+  final String _storageUrl = '$apiUrl/storage/images/';
   // final String _storageUrl = 'http://10.0.2.2:8000/storage/images/';
   //
   int _currentPhotoIndex = 0;
@@ -58,6 +58,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
         appBar: AppBar(
           flexibleSpace: kAppBarColor,
           title: Text("Observation #${_controller.observation.value.id.toString()}"),
+
         ),
         body: _controller.isLoading.value
             ? const Center(child: CircularProgressIndicator())
@@ -83,6 +84,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                           !_controller.OC.medicalRecord.value.isClosed() && _controller.OC.medicalRecord.value.userId ==  _authController.user['id'] ? IconButton(
                             icon: const Icon(Icons.edit , color: Colors.green,),
                             onPressed: () {
+                              _controller.editNameController.text = _controller.observation.value.name ?? '';
                               Get.defaultDialog(
 
                                 title: "Edit Observation Name".tr,
@@ -91,13 +93,17 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                 content: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: TextFormField(
+                                    maxLines: 4,
+                                    minLines: 1,
                                     controller: _controller.editNameController,
-                                    decoration: const InputDecoration(
-                                      hintText: "Enter new name",
+                                    decoration:  InputDecoration(
+                                      hintText: "Observation Name".tr,
                                     ),
                                   ),
                                 ),
-                                textConfirm: "Save",
+                                textConfirm: "Save".tr,
+                                textCancel: "Cancel".tr,
+                                cancelTextColor: Colors.green,
                                 buttonColor: Colors.green,
                                 confirmTextColor: Colors.white,
                                 onConfirm: () {
@@ -108,6 +114,27 @@ class _ObservationScreenState extends State<ObservationScreen> {
                               );
                             },
                           ): const SizedBox(),
+                          !_controller.OC.medicalRecord.value.isClosed() && _controller.OC.medicalRecord.value.userId ==  _authController.user['id'] ? IconButton(
+                            icon: const Icon(Icons.delete , color: Colors.redAccent,),
+                            onPressed: () {
+                              Get.defaultDialog(
+                                contentPadding: const EdgeInsets.all(18),
+
+                                title: "Delete Observation".tr,
+                                titleStyle: const TextStyle(fontSize: 16),
+                                content:  Text("Are you sure you want to delete this observation?".tr),
+                                textConfirm: "Delete".tr,
+                                textCancel: "Cancel".tr,
+                                cancelTextColor: Colors.redAccent,
+                                buttonColor: Colors.red,
+                                confirmTextColor: Colors.white,
+                                onConfirm: () {
+                                  _controller.deleteObservation();
+                                  Get.back();
+                                },
+                              );
+                            },
+                          ) : const SizedBox()
                         ],
                       ),
 
@@ -118,7 +145,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                     ], Colors.green),
                     const SizedBox(height: 16),
                      Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Container(
                         // rounded corners
                         decoration: BoxDecoration(

@@ -9,20 +9,20 @@ import 'package:infectious_diseases_service/Screens/LoginPage.dart';
 import 'package:infectious_diseases_service/Screens/MonitoringSheet/MonitoringSheet.dart';
 import 'package:infectious_diseases_service/Screens/Observation/Observations.dart';
 import 'package:infectious_diseases_service/Screens/Patients/EditPatient.dart';
+import 'package:infectious_diseases_service/Screens/Prescriptions/Prescriptions.dart';
 import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
-import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
 import 'Controllers/NavigationDrawerController.dart';
 import 'Screens/MedicalRecord/AddMedicalRecord.dart';
 import 'Screens/MedicalRecord/EditMedicalRecord.dart';
 import 'Screens/MedicalRecord/MedicalRecord.dart';
 import 'Screens/MedicalRecord/MedicalRecords.dart';
-import 'Screens/MedicineResquests/MedicineResquests.dart';
 import 'Screens/MonitoringSheet/AddMonitoringSheetDay.dart';
 import 'Screens/MonitoringSheet/UpdateMonitoringSheetTreatments.dart';
 import 'Screens/Observation/Observation.dart';
 import 'Screens/Patients/AddPatient.dart';
 import 'Screens/Patients/Patient.dart';
 import 'Screens/Patients/Patients.dart';
+import 'Screens/Prescriptions/Prescription.dart';
 import 'Services/Api.dart';
 import 'languages.dart';
 
@@ -82,9 +82,13 @@ class MyApp extends StatelessWidget {
             name: '/complementary-examinations',
             page: () => const ComplementaryExaminationsScreen(),
             transition: Transition.fade),
-        GetPage(
-            name: '/medicine-requests',
-            page: () => MedicineRequestsScreen(),
+      GetPage(
+            name: '/prescriptions',
+            page: () => PrescriptionsScreen(),
+            transition: Transition.fade),
+       GetPage(
+            name: '/prescription',
+            page: () => PrescriptionScreen(),
             transition: Transition.fade),
        GetPage(
             name: '/doctor-dashboard',

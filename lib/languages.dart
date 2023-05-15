@@ -10,7 +10,7 @@ class Languages extends Translations {
           'Welcome back': 'Bienvenue',
           "Welcome": "Bienvenue",
           'Dashboard': 'Tableau de bord',
-          'Patient' : 'Patient',
+          'Patient': 'Patient',
           'Patients': 'Patients',
           'My Patients': 'Mes patients',
           'My Medical Records': 'Mes dossiers médicaux',
@@ -63,6 +63,8 @@ class Languages extends Translations {
           ////////////////////////////
           'Observations': 'Observations',
           'Observation': 'Observation',
+          "Are you sure you want to delete this observation?":
+              "Voulez-vous vraiment supprimer cette observation?",
           'Add Observation': 'Ajouter une observation',
           'Edit Observation Name': "Modifier le nom de l'observation",
           "Add photo from camera": "Ajouter une photo de la caméra",
@@ -136,7 +138,7 @@ class Languages extends Translations {
           'Add Treatment': 'Ajouter un traitement',
           'Dose': 'Dose',
           'Injection': 'injection',
-          'Oral' : 'Oral',
+          'Oral': 'Oral',
           'Topical': 'Topique',
           'Tablet': 'comprimé',
           'Syrup': 'Sirop',
@@ -162,14 +164,17 @@ class Languages extends Translations {
 
           'Created At': 'Créé à',
           'Active only': 'Actif seulement',
-          'Mine only' : 'Le mien seulement',
+          'Mine only': 'Le mien seulement',
           'No Active Medical Records': 'Aucun dossier médical actif',
           "Active Records": "Dossiers actifs",
-          'Latest Updates' : 'Dernières mises à jour',
-          'No Updates In The Last 24h': 'Aucune mise à jour au cours des dernières 24 heures',
+          'Latest Updates': 'Dernières mises à jour',
+          'No Updates In The Last 24h':
+              'Aucune mise à jour au cours des dernières 24 heures',
           'Filling Date': 'Date de remplissage',
-          'Today Available Monitoring Sheets': 'Feuilles de surveillance disponibles aujourd\'hui',
-          'My Total Filled Monitoring Sheets': 'Mes feuilles de surveillance remplies au total',
+          'Today Available Monitoring Sheets':
+              'Feuilles de surveillance disponibles aujourd\'hui',
+          'My Total Filled Monitoring Sheets':
+              'Mes feuilles de surveillance remplies au total',
           "Available Monitoring Sheet": "Feuille de surveillance disponible",
           "Previously Filled": "Rempli précédemment",
           'Sun': 'Dim',
@@ -179,9 +184,18 @@ class Languages extends Translations {
           'Thu': 'Jeu',
           'Fri': 'Ven',
           'Sat': 'Sam',
+
+          'Prescriptions': 'Ordonnances',
+          'Add Prescription': 'Ajouter une ordonnance',
+          'Edit Prescription': 'Modifier l\'ordonnance',
+          'Delete Prescription': 'Supprimer l\'ordonnance',
+          'Are you sure you want to delete this prescription?':
+              'Êtes-vous sûr de vouloir supprimer cette ordonnance?',
+
+          'Downloaded': 'Téléchargé',
         },
         'EN': {
-          'Patient' : 'Patient',
+          'Patient': 'Patient',
 
           'Log in': 'Log in',
           'Login to your account': 'Login to your account',
@@ -238,6 +252,8 @@ class Languages extends Translations {
           //////////////////////////////////////////
           'Observations': 'Observations',
           'Observation': 'Observation',
+          "Are you sure you want to delete this observation?":
+              "Are you sure you want to delete this observation?",
           'Add Observation': 'Add Observation',
           'Edit Observation': 'Edit Observation',
           "Add photo from camera": "Add photo from camera",
@@ -340,13 +356,15 @@ class Languages extends Translations {
           'Main only': 'Mine only',
           'No Active Medical Records': 'No Active Medical Records',
           "Active Records": "Active Records",
-          'Latest Updates' : 'Latest Updates',
-          'No Updates In The Last 24h'  : 'No Updates In The Last 24h',
-          'Filling Date' : 'Filling Date',
-          'Today Available Monitoring Sheets' : 'Today Available Monitoring Sheets',
-          'My Total Filled Monitoring Sheets' : 'My Total Filled Monitoring Sheets',
-          "Previously Filled" : "Previously Filled",
-          "Available Monitoring Sheet" : "Available Monitoring Sheet",
+          'Latest Updates': 'Latest Updates',
+          'No Updates In The Last 24h': 'No Updates In The Last 24h',
+          'Filling Date': 'Filling Date',
+          'Today Available Monitoring Sheets':
+              'Today Available Monitoring Sheets',
+          'My Total Filled Monitoring Sheets':
+              'My Total Filled Monitoring Sheets',
+          "Previously Filled": "Previously Filled",
+          "Available Monitoring Sheet": "Available Monitoring Sheet",
           'Sun': 'Sun',
           'Mon': 'Mon',
           'Tue': 'Tue',
@@ -355,14 +373,22 @@ class Languages extends Translations {
           'Fri': 'Fri',
           'Sat': 'Sat',
 
+          'Prescriptions': 'Prescriptions',
+          'Add Prescription': 'Add Prescription',
+          'Edit Prescription': 'Edit Prescription',
+          'Delete Prescription': 'Delete Prescription',
+          'Are you sure you want to delete this prescription?':
+              'Are you sure you want to delete this prescription?',
+          'Downloaded': 'Downloaded',
         },
+
         'AR': {
-          'Patient' : 'المريض',
+          'Patient': 'المريض',
 
           'Log in': 'تسجيل الدخول',
           'Login to your account': 'تسجيل الدخول إلى حسابك',
           'Sign Out': 'تسجيل الخروج',
-          'Welcome back': 'مرحباً بعودتك',"Welcome": "مرحباً",
+          'Welcome back': 'مرحباً بعودتك', "Welcome": "مرحباً",
 
           'Dashboard': 'لوحة التحكم',
           'Patients': 'المرضى',
@@ -393,15 +419,13 @@ class Languages extends Translations {
           'Other': 'أخرى',
           "infectious diseases": "الأمراض المعدية",
           "Patient Entering Date": "تاريخ دخول المريض",
-          "Patient Entering Date is required":
-          "تاريخ دخول المريض مطلوب",
+          "Patient Entering Date is required": "تاريخ دخول المريض مطلوب",
           'Medicine': 'الدواء',
           "Patient Leaving Date": "تاريخ خروج المريض",
           "Medical Specialty": "التخصص الطبي",
           "Medical Specialty is required": "التخصص الطبي مطلوب",
           "Condition Description": "وصف الحالة الصحية",
-          "Condition Description is required":
-          "وصف الحالة الصحية مطلوب",
+          "Condition Description is required": "وصف الحالة الصحية مطلوب",
           "Bed Number": "رقم السرير",
           "Bed Number is required": "رقم السرير مطلوب",
           "Standard Treatment": "العلاج القياسي",
@@ -412,6 +436,8 @@ class Languages extends Translations {
           "Leaving Information": "معلومات الخروج",
           'Observations': 'ملاحظات',
           'Observation': 'ملاحظة',
+          "Are you sure you want to delete this observation?" :
+              "هل أنت متأكد من حذف هذه الملاحظة؟",
           'Add Observation': 'إضافة ملاحظة',
           'Edit Observation': 'تعديل الملاحظة',
           "Add photo from camera": "إضافة صورة من الكاميرا",
@@ -421,7 +447,7 @@ class Languages extends Translations {
           'Complementary Examinations': 'الفحوصات المكملة',
           'Complementary Examination': 'الفحص المكمل',
           "No Complementary Examinations Found":
-          "لم يتم العثور على فحوصات مكملة",
+              "لم يتم العثور على فحوصات مكملة",
           'Add Complementary Examination': 'إضافة فحص مكمل',
           'Edit Complementary Examination': 'تعديل الفحص المكمل',
           'Monitoring Sheet': 'ورقة المراقبة',
@@ -430,8 +456,7 @@ class Languages extends Translations {
           "No Monitoring Sheet found": "لم يتم العثور على ورقة مراقبة",
           'Update Monitoring Sheet Day': 'تحديث يوم في ورقة المراقبة',
           'Add Monitoring Sheet Day': 'إضافة يوم في ورقة المراقبة',
-          'Update Monitoring Sheet Treatments':
-          'تحديث علاجات في ورقة المراقبة',
+          'Update Monitoring Sheet Treatments': 'تحديث علاجات في ورقة المراقبة',
           'Medicine Requests': 'طلبات الأدوية',
           'Medicine Request': 'طلب الدواء',
           'Medicine Quantity': 'كمية الدواء',
@@ -489,16 +514,15 @@ class Languages extends Translations {
           'Update Treatments': 'تحديث العلاجات',
           'Delete Treatment': 'حذف العلاج',
           'Are you sure you want to delete this treatment?':
-          'هل أنت متأكد من رغبتك في حذف هذا العلاج؟',
+              'هل أنت متأكد من رغبتك في حذف هذا العلاج؟',
 
           'Are you sure you want to delete this complementary examination?':
-          'هل أنت متأكد من رغبتك في حذف هذا الفحص الإضافي؟',
-          'Delete Complementary Examination':
-          'حذف الفحص الإضافي',
+              'هل أنت متأكد من رغبتك في حذف هذا الفحص الإضافي؟',
+          'Delete Complementary Examination': 'حذف الفحص الإضافي',
           'Are you sure you want to delete this medicine request?':
-          'هل أنت متأكد من رغبتك في حذف طلب الدواء هذا؟',
+              'هل أنت متأكد من رغبتك في حذف طلب الدواء هذا؟',
           "Are you sure you want to delete this image?":
-          "هل أنت متأكد من رغبتك في حذف هذه الصورة؟",
+              "هل أنت متأكد من رغبتك في حذف هذه الصورة؟",
 
           'All': 'الكل',
           'Pending': 'معلق',
@@ -510,14 +534,15 @@ class Languages extends Translations {
           'Mine only': 'الخاصة بي فقط',
           'No Active Medical Records': 'لا يوجد سجلات طبية نشطة',
           "Active Records": "السجلات النشطة",
-          'No Updates In The Last 24h': 'لا توجد تحديثات في الـ 24 ساعة الماضية',
+          'No Updates In The Last 24h':
+              'لا توجد تحديثات في الـ 24 ساعة الماضية',
           'Filling Date': 'تاريخ الملء',
           "Available Monitoring Sheet": "ورقة مراقبة متاحة",
-          "Previously Filled" : "مملوءة سابقا",
+          "Previously Filled": "مملوءة سابقا",
           'My Total Filled Monitoring Sheets': 'إجمالي ورقات المراقبة المملوءة',
-          'Today Available Monitoring Sheets' : 'ورقات المراقبة المتاحة اليوم',
-          "Available Monitoring Sheet"  : "ورقة مراقبة متاحة",
-          "Previously Filled" : "مملوءة سابقا",
+          'Today Available Monitoring Sheets': 'ورقات المراقبة المتاحة اليوم',
+          "Available Monitoring Sheet": "ورقة مراقبة متاحة",
+          "Previously Filled": "مملوءة سابقا",
           // week days first 3 letters
           "Sun": "الأحد",
           "Mon": "الاثنين",
@@ -527,6 +552,12 @@ class Languages extends Translations {
           "Fri": "الجمعة",
           "Sat": "السبت",
 
+
+          'Prescriptions': 'الوصفات الطبية',
+          'Add Prescription': 'إضافة وصفة طبية',
+          'Edit Prescription': 'تعديل الوصفة الطبية',
+          'Delete Prescription': 'حذف الوصفة الطبية',
+          'Downloaded'   : 'تم التحميل',
         }
       };
 }
