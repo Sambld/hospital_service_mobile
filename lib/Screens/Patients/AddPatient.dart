@@ -3,28 +3,12 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
 import 'package:intl/intl.dart';
 
 import '../../Constants/Constants.dart';
 import '../../Controllers/Patient/AddPatientController.dart';
-import '../../Services/Api.dart';
 
-class AddPatientScreen extends StatefulWidget {
-  @override
-  _AddPatientScreenState createState() => _AddPatientScreenState();
-}
-
-class _AddPatientScreenState extends State<AddPatientScreen> {
+class AddPatientScreen extends StatelessWidget {
   final _addPatientController = Get.put(AddPatientController());
 
   final DateFormat _dateFormat = DateFormat('yyyy/mm/dd');
@@ -53,7 +37,6 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: FormBuilder(
-              // autovalidateMode: AutovalidateMode.always,
               key: _addPatientController.formKey.value,
 
               child: Column(
@@ -66,14 +49,14 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'First name is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     name: 'last_name',
                     decoration: GlobalWidgets.inputDecoration( '${"Last Name".tr} *' , Icons.person),
                     validator: FormBuilderValidators.required(
                         errorText: 'Last name is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderDateTimePicker(
                     name: 'birth_date',
@@ -83,7 +66,7 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Birth date is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderTextField(
                     name: 'phone_number',
@@ -92,7 +75,7 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Phone number is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderTextField(
                     name: 'place_of_birth',
@@ -101,7 +84,7 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Birth date is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderDropdown(
                     name: 'gender',
@@ -114,7 +97,7 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                             value: gender, child: Text(gender)))
                         .toList(),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderTextField(
                     name: 'address',
@@ -122,7 +105,7 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Address is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderTextField(
                     name: 'nationality',
@@ -132,20 +115,20 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Nationality is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderTextField(
                     name: 'family_situation',
                     decoration:
                         GlobalWidgets.inputDecoration( 'Family Situation'.tr , Icons.family_restroom),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderTextField(
                     name: 'emergency_contact_name',
                     decoration: GlobalWidgets.inputDecoration('Emergency Contact Name'.tr , Icons.person),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   FormBuilderTextField(
                     name: 'emergency_contact_number',

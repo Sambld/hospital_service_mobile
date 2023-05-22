@@ -46,11 +46,11 @@ class NavigationDrawerWidget extends StatelessWidget {
                           onClicked: () => selectedItem(context, 0),
                         ),
                         const SizedBox(height: 16),
-                        buildMenuItem(
+                        $(buildMenuItem(
                           text: 'Patients'.tr,
                           icon: Icons.people,
                           onClicked: () => selectedItem(context, 1),
-                        ),
+                        )),
                         const SizedBox(height: 16),
                         buildMenuItem(
                           text: 'Medical Records'.tr,
@@ -112,6 +112,15 @@ class NavigationDrawerWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+  Widget $(child) {
+
+    if (authController.isNurse()) {
+      return Container();
+    } else {
+      return child;
+    }
+
   }
 
   Widget buildHeader({

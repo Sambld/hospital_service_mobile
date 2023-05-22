@@ -8,13 +8,10 @@ import '../../Constants/Constants.dart';
 import '../../Controllers/MedicalRecord/AddMedicalRecordController.dart';
 import '../../Services/Api.dart';
 
-class AddMedicalRecordScreen extends StatefulWidget {
-  @override
-  _AddMedicalRecordScreenState createState() => _AddMedicalRecordScreenState();
-}
-
-class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
+class AddMedicalRecordScreen extends StatelessWidget {
   final _controller = Get.put(AddMedicalRecordController());
+
+   AddMedicalRecordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +43,7 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       initialValue: "${_controller.patient.value.firstName} ${_controller.patient.value.lastName }",
                       decoration: inputDecoration('Patient', Icons.person),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     FormBuilderDateTimePicker(
                       name: 'patient_entry_date',
                       inputType: InputType.date,
@@ -57,7 +54,7 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       validator: FormBuilderValidators.required(
                           errorText: 'date of visit is required'),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
 
                     FormBuilderTextField(
                       name: 'medical_specialty',
@@ -66,7 +63,7 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       decoration: inputDecoration(
                           '${"Medical Specialty".tr} *', Icons.local_hospital),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     FormBuilderTextField(
                       name: 'condition_description',
                       keyboardType: TextInputType.multiline,
@@ -77,7 +74,7 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       validator: FormBuilderValidators.required(
                           errorText: 'Condition Description is required'.tr),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     FormBuilderTextField(
                       name: 'standard_treatment',
                       keyboardType: TextInputType.multiline,
@@ -88,7 +85,7 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       validator: FormBuilderValidators.required(
                           errorText: 'Standard Treatment is required'.tr),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     FormBuilderTextField(
                       name: 'state_upon_enter',
                       decoration: inputDecoration('${"State Upon Enter".tr} *',
@@ -96,7 +93,7 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
                       validator: FormBuilderValidators.required(
                           errorText: 'State Upon Enter is required'.tr),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     FormBuilderTextField(
                       name: 'bed_number',
                       decoration: inputDecoration('Bed Number'.tr, Icons.king_bed),
@@ -129,21 +126,21 @@ class _AddMedicalRecordScreenState extends State<AddMedicalRecordScreen> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.red,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.blue,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
       disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.grey,
           width: 1.0,
         ),

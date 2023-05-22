@@ -76,7 +76,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
       ),
       body: Column(
         children: [
-          Obx(
+          _authController.user.value['role'] == 'doctor' ? Obx(
             () => Row(
               children: [
                 Expanded(
@@ -113,7 +113,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                 ),
               ],
             ),
-          ),
+          ): Container(),
           Expanded(
             child: Obx(() {
               final medicalRecords = controller.medicalRecords;

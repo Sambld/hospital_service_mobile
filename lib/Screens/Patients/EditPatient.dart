@@ -2,19 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
 import '../../Constants/Constants.dart';
 import '../../Controllers/Patient/EditPatientController.dart';
 
-class EditPatientScreen extends StatefulWidget {
-  @override
-  _EditPatientScreenState createState() => _EditPatientScreenState();
-}
-
-class _EditPatientScreenState extends State<EditPatientScreen> {
+class EditPatientScreen extends StatelessWidget {
   final _editPatientController = Get.put(EditPatientController());
-  final DateFormat _dateFormat = DateFormat('yyyy/MM/dd');
+
+   EditPatientScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +18,7 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
           flexibleSpace: kAppBarColor,
 
           title:
-              Text('Edit Patient'.tr+'#${_editPatientController.patient.value.id}'),
+              Text('${'Edit Patient'.tr}#${_editPatientController.patient.value.id}'),
           actions: [
             // save form
             IconButton(
@@ -53,7 +47,7 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'First name is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.lastName,
                     name: 'last_name',
@@ -61,7 +55,7 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Last name is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderDateTimePicker(
                     initialValue: _editPatientController.patient.value.birthDate,
                     name: 'birth_date',
@@ -71,7 +65,7 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Birth date is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.phoneNumber,
                     name: 'phone_number',
@@ -79,7 +73,7 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Phone number is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.placeOfBirth,
                     name: 'place_of_birth',
@@ -88,19 +82,19 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Birth date is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderDropdown(
                     name: 'gender',
                     decoration: inputDecoration('${"Gender".tr} *', Icons.wc),
                     validator: FormBuilderValidators.required(
                         errorText: 'Gender is required'.tr),
-                    initialValue: _editPatientController.patient.value.gender,
-                    items: ['Male', 'Female']
+                    initialValue: _editPatientController.patient.value.gender?.toLowerCase() ,
+                    items: ['male', 'female']
                         .map((gender) => DropdownMenuItem(
                             value: gender, child: Text(gender)))
                         .toList(),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.address,
                     name: 'address',
@@ -108,7 +102,7 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Address is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.nationality,
 
@@ -117,21 +111,21 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
                     validator: FormBuilderValidators.required(
                         errorText: 'Nationality is required'.tr),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.familySituation,
                     name: 'family_situation',
                     decoration: inputDecoration(
                         'Family Situation'.tr, Icons.family_restroom),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.emergencyContactName,
                     name: 'emergency_contact_name',
                     decoration:
                         inputDecoration('Emergency Contact Name'.tr, Icons.person),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.emergencyContactNumber,
                     name: 'emergency_contact_number',
@@ -165,14 +159,14 @@ class _EditPatientScreenState extends State<EditPatientScreen> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.red,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.blue,
           width: 1.0,
         ),

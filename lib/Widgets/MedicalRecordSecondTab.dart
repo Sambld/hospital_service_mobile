@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
+import '../Controllers/AuthController.dart';
 import '../Controllers/MedicalRecord/MedicalRecordController.dart';
 
 class SecondTab extends StatelessWidget {
+  final medicalRecordController = Get.find<MedicalRecordController>();
+  final authController = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
-    final _medicalRecordController = Get.find<MedicalRecordController>();
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints boxConstraints) {
         //
@@ -26,22 +29,36 @@ class SecondTab extends StatelessWidget {
                     children: [
                       _buildButton('Monitoring Sheet'.tr, Icons.monitor,
                           Colors.blue.shade400, () {
-                        Get.toNamed('/monitoring-sheet' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
-                          }),
-                      _buildButton('Observations'.tr, Icons.remove_red_eye,
+                        Get.toNamed('/monitoring-sheet', arguments: {
+                          "patientId": medicalRecordController.patient.value.id,
+                          "medicalRecordId":
+                              medicalRecordController.medicalRecord.value.id
+                        });
+                      }),
+                      $(_buildButton('Observations'.tr, Icons.remove_red_eye,
                           Colors.purple.shade400, () {
-                        Get.toNamed('/observations' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
-                          }),
-                      _buildButton('Complementary Examinations'.tr,
+                        Get.toNamed('/observations', arguments: {
+                          "patientId": medicalRecordController.patient.value.id,
+                          "medicalRecordId":
+                              medicalRecordController.medicalRecord.value.id
+                        });
+                      })),
+                      $(_buildButton('Complementary Examinations'.tr,
                           Icons.assignment, Colors.green.shade400, () {
-                        Get.toNamed('/complementary-examinations' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
-                          }),
-                      _buildButton('Prescriptions'.tr, Icons.medical_services,
+                        Get.toNamed('/complementary-examinations', arguments: {
+                          "patientId": medicalRecordController.patient.value.id,
+                          "medicalRecordId":
+                              medicalRecordController.medicalRecord.value.id
+                        });
+                      })),
+                      $(_buildButton('Prescriptions'.tr, Icons.medical_services,
                           Colors.red.shade400, () {
-                        Get.toNamed('/prescriptions' , arguments: {"patientId" : _medicalRecordController.patient.value.id , "medicalRecordId" : _medicalRecordController.medicalRecord.value.id} );
-                          }),
-
-
+                        Get.toNamed('/prescriptions', arguments: {
+                          "patientId": medicalRecordController.patient.value.id,
+                          "medicalRecordId":
+                              medicalRecordController.medicalRecord.value.id
+                        });
+                      })),
                     ],
                   ),
                 ),
@@ -77,7 +94,7 @@ class SecondTab extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 title,
-                style:  TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: ResponsiveFontSize.large(),
                 ),
@@ -88,5 +105,13 @@ class SecondTab extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget $(child) {
+    if (authController.isNurse()) {
+      return Container();
+    } else {
+      return child;
+    }
   }
 }

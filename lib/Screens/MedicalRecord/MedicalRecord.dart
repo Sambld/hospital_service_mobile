@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Constants/Constants.dart';
 import 'package:infectious_diseases_service/Utils/Functions.dart';
 import 'package:infectious_diseases_service/Utils/ResponsiveFontSizes.dart';
+import '../../Controllers/AuthController.dart';
 import '../../Controllers/MedicalRecord/MedicalRecordController.dart';
 import '../../Widgets/MedicalRecordSecondTab.dart';
 
@@ -12,7 +13,8 @@ class MedicalRecordScreen extends StatefulWidget {
 }
 
 class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
-  final _controller = Get.put(MedicalRecordController());
+  final controller = Get.put(MedicalRecordController());
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
           appBar: AppBar(
             flexibleSpace: kAppBarColor,
             title: Text(
-                '${"Medical Record".tr} (#${_controller.medicalRecord.value.id ?? "0"})'),
+                '${"Medical Record".tr} (#${controller.medicalRecord.value.id ?? "0"})'),
             bottom:  TabBar(
               tabs: [
                 Tab(child: Text("Informations")),
@@ -31,23 +33,23 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
               ],
             ),
             actions: [
-              !_controller.isLoading.value &&
-                      (_controller.medicalRecord.value.canEdit ??
-                          false) && !_controller.medicalRecord.value.isClosed()
+              !controller.isLoading.value &&
+                      (controller.medicalRecord.value.canEdit ??
+                          false) && !controller.medicalRecord.value.isClosed()
                   ? IconButton(
                       onPressed: () {
                         Get.toNamed('/edit-medical-record', arguments: {
-                          "patient": _controller.patient.value,
+                          "patient": controller.patient.value,
                           "medicalRecord":
-                              _controller.medicalRecord.value
-                        })?.then((value) => _controller.getMedicalRecord());
+                              controller.medicalRecord.value
+                        })?.then((value) => controller.getMedicalRecord());
                       },
                       icon: const Icon(Icons.edit),
                     )
                   : Container(),
             ],
           ),
-          body: _controller.isLoading.value
+          body: controller.isLoading.value
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
@@ -84,7 +86,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                         ),
                                         Text(
                                           // "a sdfas df ",
-                                          "${_controller.patient.value.firstName!} ${_controller.patient.value.lastName!}",
+                                          "${controller.patient.value.firstName!} ${controller.patient.value.lastName!}",
                                           style:  TextStyle(
                                             fontSize:  ResponsiveFontSize.medium(),
                                             fontWeight: FontWeight.w600,
@@ -94,13 +96,13 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                           softWrap: true,
                                         ),
                                         const SizedBox(width: 8.0),
-                                        Text(
+                                        $(Text(
                                           // "Age",
-                                          "( ${"Age".tr} ${Functions.calculateAge(_controller.patient.value.birthDate!)})",
+                                          "( ${"Age".tr} ${Functions.calculateAge(controller.patient.value.birthDate!)})",
                                           style:  TextStyle(
                                             fontSize:  ResponsiveFontSize.small(),
                                           ),
-                                        ),
+                                        )),
                                       ],
                                     ),
                                     const SizedBox(height: 8.0),
@@ -116,7 +118,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                         ),
                                         Text(
                                           // "doctor name",
-                                          _controller
+                                          controller
                                               .medicalRecord.value.doctorName!,
                                           style:  TextStyle(
                                             fontSize:  ResponsiveFontSize.medium(),
@@ -136,7 +138,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                             fontSize: ResponsiveFontSize.medium(),
                                           ),
                                         ),
-                                        _controller.medicalRecord
+                                        controller.medicalRecord
                                                     .value.patientLeavingDate ==
                                                 null
                                             ?  Text(
@@ -167,7 +169,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                             const Divider(),
                             _medicalRecordInfoRow(context,
                                 title: 'Patient Entering Date'.tr,
-                                value: _controller
+                                value: controller
                                     .medicalRecord.value.patientEntryDate!
                                     .toString()
                                     .substring(0, 10)),
@@ -176,28 +178,28 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                             _medicalRecordInfoRow(
                               context,
                               title: 'Medical Specialty'.tr,
-                              value: _controller
+                              value: controller
                                   .medicalRecord.value.medicalSpecialty!,
                               // value: "Cardiology"
                             ),
                             _medicalRecordInfoRow(
                               context,
                               title: 'Condition Description'.tr,
-                              value: _controller
+                              value: controller
                                   .medicalRecord.value.conditionDescription!,
                               // value:"Cardiac Arrest",
                             ),
                             _medicalRecordInfoRow(
                               context,
                               title: 'Standard Treatment'.tr,
-                              value: _controller
+                              value: controller
                                   .medicalRecord.value.standardTreatment!,
                               // value: "Cardiac Arrest",
                             ),
                             _medicalRecordInfoRow(
                               context,
                               title: 'State Upon Enter'.tr,
-                              value: _controller
+                              value: controller
                                   .medicalRecord.value.stateUponEnter!,
                               // value: "kljsdf",
                             ),
@@ -205,11 +207,11 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                             _medicalRecordInfoRow(
                               context,
                               title: 'Bed Number'.tr,
-                              value: _controller
+                              value: controller
                                   .medicalRecord.value.bedNumber!
                                   .toString(),
                             ),
-                            _controller
+                            controller
                                         .medicalRecord.value.stateUponExit !=
                                     null
                                 ? _medicalRecordInfoRow(context,
@@ -217,7 +219,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                     value: 'Recovered',
                                     borderColor: Colors.redAccent)
                                 : Container(),
-                            _controller.medicalRecord.value
+                            controller.medicalRecord.value
                                         .patientLeavingDate !=
                                     null
                                 ? _medicalRecordInfoRow(context,
@@ -235,6 +237,15 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
         ),
       ),
     );
+  }
+  Widget $(child) {
+
+      if (authController.isNurse()) {
+        return Container();
+      } else {
+        return child;
+      }
+
   }
 
   Widget _medicalRecordInfoRow(BuildContext context,

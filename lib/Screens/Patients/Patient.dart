@@ -89,34 +89,34 @@ class PatientScreen extends StatelessWidget {
                               title: 'Gender'.tr,
                               value: _patientController.patient.value.gender!,
                             ),
-                            _patientInfoRow(
+                            $(_patientInfoRow(
                               title: 'Birth Date'.tr,
                               value: _patientController.patient.value.birthDate!
                                   .toString()
                                   .substring(0, 10),
-                            ),
-                            _patientInfoRow(
+                            )),
+                            $(_patientInfoRow(
                                 title: 'Place of Birth'.tr,
                                 value: _patientController
-                                    .patient.value.placeOfBirth!),
-                            _patientInfoRow(
+                                    .patient.value.placeOfBirth!)),
+                            $(_patientInfoRow(
                                 title: 'Address'.tr,
                                 value:
-                                    _patientController.patient.value.address!),
-                            _patientInfoRow(
+                                    _patientController.patient.value.address!)),
+                            $(_patientInfoRow(
                                 title: 'Phone Number'.tr,
                                 value: _patientController
                                     .patient.value.phoneNumber!,
-                                isPhoneNumber: true),
-                            _patientInfoRow(
+                                isPhoneNumber: true)),
+                            $(_patientInfoRow(
                                 title: "Nationality".tr,
                                 value: _patientController
-                                    .patient.value.nationality!),
-                            _patientInfoRow(
+                                    .patient.value.nationality!)),
+                            $(_patientInfoRow(
                                 title: 'Family Situation'.tr,
                                 value: _patientController
                                         .patient.value.familySituation ??
-                                    'No Family Situation'.tr),
+                                    'No Family Situation'.tr)),
                             _patientInfoRow(
                                 title: 'Emergency Contact Phone Number'.tr,
                                 value: _patientController
@@ -349,6 +349,16 @@ class PatientScreen extends StatelessWidget {
             arguments: _patientController.patient.value)
         ?.then((value) {
       _patientController.refresh();
+    });
+  }
+
+  Widget $(child) {
+    return Obx(() {
+      if (_authController.isNurse()) {
+        return Container();
+      } else {
+        return child;
+      }
     });
   }
 
