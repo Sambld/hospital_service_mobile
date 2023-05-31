@@ -134,7 +134,7 @@ class NurseDashboardScreen extends StatelessWidget {
                                       children: [
                                         Text('(${controller.todayAvailableMonitoringSheetsSearch.length})'),
                                         IconButton(
-                                          icon: Icon(Icons.clear),
+                                          icon: const Icon(Icons.clear),
                                           onPressed: () {
 
                                             controller.search('');

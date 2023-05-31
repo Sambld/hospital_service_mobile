@@ -17,13 +17,17 @@ class DoctorDashboardScreen extends StatelessWidget {
     Tab(
       child: Text(
         "Active Records".tr,
-        style:  TextStyle(fontSize: ResponsiveFontSize.medium(), fontWeight: FontWeight.normal),
+        style: TextStyle(
+            fontSize: ResponsiveFontSize.medium(),
+            fontWeight: FontWeight.normal),
       ),
     ),
     Tab(
       child: Text(
         "Latest Updates".tr,
-        style:  TextStyle(fontSize: ResponsiveFontSize.medium(), fontWeight: FontWeight.normal),
+        style: TextStyle(
+            fontSize: ResponsiveFontSize.medium(),
+            fontWeight: FontWeight.normal),
       ),
     ),
   ];
@@ -36,10 +40,9 @@ class DoctorDashboardScreen extends StatelessWidget {
         drawer: NavigationDrawerWidget(),
         appBar: AppBar(
           flexibleSpace: kAppBarColor,
-          title:  Text('Dashboard'.tr),
+          title: Text('Dashboard'.tr),
         ),
         body: DefaultTabController(
-
           length: tabs.length,
           child: Column(
             children: [
@@ -76,14 +79,67 @@ class DoctorDashboardScreen extends StatelessWidget {
                 unselectedLabelColor: Colors.grey,
               ),
               // Add the TabBarView to display the content of each tab
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    // Content of the first tab
-                    MyActiveMedicalRecords(),
-                    // Content of the second tab
-                    LatestUpdates(),
-                  ],
+              Obx(
+                ()=> Expanded(
+                  child: TabBarView(
+                    children: [
+                      if (controller.medicalRecordsLoading.value)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      else
+                        Column(
+                          children: [
+                            Container(
+                              height: 40,
+                              margin: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey[200],
+                              ),
+                              child: Obx(
+                                () => TextFormField(
+                                  controller: controller.searchController.value,
+                                  onChanged: (value) {
+                                    controller.search(value);
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText:
+                                        '${'Search'.tr} ${'patient'.tr} , ${'Bed Number'.tr}',
+                                    prefixIcon: const Icon(Icons.search),
+                                    suffixIcon: controller.search.isNotEmpty
+                                        ? Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                  '(${controller.activeMedicalRecordsSearch.length})'),
+                                              IconButton(
+                                                icon: const Icon(Icons.clear),
+                                                onPressed: () {
+                                                  controller.search('');
+                                                  controller
+                                                      .searchController.value
+                                                      .clear();
+                                                },
+                                              ),
+                                            ],
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: MyActiveMedicalRecords()),
+                          ],
+                        ),
+
+                      // Content of the first tab
+
+                      // Content of the second tab
+                      LatestUpdates(),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -108,7 +164,7 @@ class MyActiveMedicalRecords extends StatelessWidget {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else{
+          } else {
             if (controller.medicalRecords.isEmpty) {
               return Center(
                 child: Text('No Active Medical Records'.tr),
@@ -117,11 +173,12 @@ class MyActiveMedicalRecords extends StatelessWidget {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.activeMedicalRecords.length,
+                itemCount: controller.activeMedicalRecordsSearch.length,
                 itemBuilder: (context, index) {
-                  final medicalRecord = controller.activeMedicalRecords[index];
+                  final medicalRecord = controller.activeMedicalRecordsSearch[index];
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0 , horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4.0, horizontal: 8.0),
                     child: Card(
                       elevation: 3,
                       shape: RoundedRectangleBorder(
@@ -131,15 +188,14 @@ class MyActiveMedicalRecords extends StatelessWidget {
                         onTap: () {
                           Get.toNamed('/medical-record-details', arguments: {
                             'medicalRecordId': medicalRecord.id,
-                            'patientId':
-                            medicalRecord.patient!.id,
+                            'patientId': medicalRecord.patient!.id,
                           });
                         },
                         title: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
                             '${medicalRecord.patient!.firstName!}  ${medicalRecord.patient!.lastName!}',
-                            style:  TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Euclid',
                               fontSize: ResponsiveFontSize.large(),
                               fontWeight: FontWeight.w500,
@@ -156,7 +212,7 @@ class MyActiveMedicalRecords extends StatelessWidget {
 
                               Text(
                                 '${'Bed Number'.tr} : ${medicalRecord.bedNumber}',
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Euclid',
                                   fontSize: ResponsiveFontSize.small(),
                                   color: const Color(0xff252631),
@@ -167,7 +223,7 @@ class MyActiveMedicalRecords extends StatelessWidget {
                               ),
                               Text(
                                 '${'Condition'.tr} : ${medicalRecord.conditionDescription}',
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Euclid',
                                   fontSize: ResponsiveFontSize.small(),
                                   color: const Color(0xff252631),
@@ -202,7 +258,6 @@ class MyActiveMedicalRecords extends StatelessWidget {
               );
             }
           }
-
         }),
       ],
     );
@@ -216,11 +271,11 @@ class LatestUpdates extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(controller.updatesLoading.value ){
+    if (controller.updatesLoading.value) {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    }else{
+    } else {
       if (controller.latestMSUpdates.isEmpty) {
         return Center(
           child: Text('No Updates In The Last 24h'.tr),
@@ -240,7 +295,8 @@ class LatestUpdates extends StatelessWidget {
                 }).patient!;
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 2.0, horizontal: 8.0),
                   child: Card(
                     elevation: 3,
                     shape: RoundedRectangleBorder(
@@ -251,15 +307,14 @@ class LatestUpdates extends StatelessWidget {
                         Get.toNamed('/monitoring-sheet', arguments: {
                           'medicalRecordId': ms.recordId,
                           'patientId': patient.id,
-                          'id':
-                          controller.latestMSUpdates[index].id,
+                          'id': controller.latestMSUpdates[index].id,
                         });
                       },
                       title: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Text(
                           'Monitoring Sheet'.tr,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Euclid',
                             fontSize: ResponsiveFontSize.medium(),
                             fontWeight: FontWeight.w600,
@@ -276,7 +331,7 @@ class LatestUpdates extends StatelessWidget {
                             //patient name
                             Text(
                               '${'Patient'.tr} : ${patient.firstName!} ${patient.lastName!}',
-                              style:  TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Euclid',
                                 fontSize: ResponsiveFontSize.small(),
                                 color: const Color(0xff252631),
@@ -287,7 +342,7 @@ class LatestUpdates extends StatelessWidget {
                             ),
                             Text(
                               '${'Filling Date'.tr} : ${ms.fillingDate!.day == DateTime.now().day ? 'Today'.tr : '${ms.fillingDate.toString().substring(0, 10)} '}  ${ms.updatedAt!.toLocal().toString().substring(10, 16)}',
-                              style:  TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Euclid',
                                 fontSize: ResponsiveFontSize.small(),
                                 color: const Color(0xff252631),
@@ -298,7 +353,7 @@ class LatestUpdates extends StatelessWidget {
                             ),
                             Text(
                               '${'Filled by'.tr} : ${ms.filledBy!['first_name']} ${ms.filledBy!['last_name']}',
-                              style:  TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Euclid',
                                 fontSize: ResponsiveFontSize.small(),
                                 color: const Color(0xff252631),
@@ -325,7 +380,6 @@ class LatestUpdates extends StatelessWidget {
         ],
       );
     }
-
   }
 }
 
@@ -372,14 +426,14 @@ class InfoCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                        top: 4.0, left: 16 , right: 16),
+                    padding:
+                        const EdgeInsets.only(top: 4.0, left: 16, right: 16),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             title,
-                            style:  TextStyle(
+                            style: TextStyle(
                                 fontFamily: 'Euclid',
                                 fontSize: ResponsiveFontSize.xSmall(),
                                 color: const Color(0xcc252631)),
@@ -395,7 +449,7 @@ class InfoCard extends StatelessWidget {
                       children: [
                         Text(
                           value,
-                          style:  TextStyle(
+                          style: TextStyle(
                               fontFamily: 'Euclid',
                               fontSize: ResponsiveFontSize.xLarge(),
                               fontWeight: FontWeight.bold,
