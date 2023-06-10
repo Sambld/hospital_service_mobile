@@ -384,6 +384,11 @@ class Api {
     return dio.get('medical-records?doctorId=$doctorId');
   }
 
+  // getActiveMedicalRecords
+  static Future<Response> getActiveMedicalRecords() {
+    return dio.get('medical-records?isActive=true');
+  }
+
   static Future<Response> getPrescriptions(
       {required int patientId, required int medicalRecordId}) {
     return dio.get(
@@ -401,10 +406,9 @@ class Api {
   static Future<Response> addPrescription(
       {required int patientId,
       required int medicalRecordId,
-      required Map<String, String> map}) {
+      }) {
     return dio.post(
-        'patients/$patientId/medical-records/$medicalRecordId/prescriptions',
-        data: map);
+        'patients/$patientId/medical-records/$medicalRecordId/prescriptions');
   }
 
   static Future<Response> updatePrescriptionName(

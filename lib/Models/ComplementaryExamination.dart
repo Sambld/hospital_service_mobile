@@ -1,3 +1,5 @@
+import 'Doctor.dart';
+
 class ComplementaryExamination {
   int id;
   String type;
@@ -5,6 +7,7 @@ class ComplementaryExamination {
   String result;
   DateTime createdAt;
   DateTime updatedAt;
+  Doctor? doctor;
 
   ComplementaryExamination({
     required this.id,
@@ -13,6 +16,7 @@ class ComplementaryExamination {
     required this.result,
     required this.createdAt,
     required this.updatedAt,
+    this.doctor,
   });
 
   factory ComplementaryExamination.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,7 @@ class ComplementaryExamination {
       result: json['result'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      doctor: json['doctor'] != null ? Doctor.fromJson(json['doctor']) : null,
     );
   }
 

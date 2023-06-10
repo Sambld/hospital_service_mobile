@@ -114,7 +114,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                            "${_controller.medicalRecord.value.doctorName}"),
+                                            "${_controller.currentMonitoringSheet.value.doctor?.fullName()} #${_controller.currentMonitoringSheet.value.doctor?.id} ${authController.user['id'] == _controller.currentMonitoringSheet.value.doctor?.id ? "( ${"You".tr} )" : ""}"),
                                       ],
                                     ),
                                   ], Colors.green),
@@ -139,13 +139,25 @@ class MonitoringSheetScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(width: 16),
-                                  Text(
-                                    "${_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10)} ( ${DateFormat('yyyy-MM-dd').format(DateTime.now()) == _controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10) ? "Today".tr :
-                                        // show only three character of the day name
-                                        DateFormat('EEE').format(DateTime.parse(_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10))).substring(0, 3).tr} )",
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "${_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10)} ( ${DateFormat('yyyy-MM-dd').format(DateTime.now()) == _controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10) ? "Today".tr :
+                                            // show only three character of the day name
+                                            DateFormat('EEE').format(DateTime.parse(_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10))).substring(0, 3).tr} )",
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(width: 3),
+                                      // time of the monitoring sheet
+                                      Text(
+                                        "${_controller.currentMonitoringSheet.value.fillingDate.toString().substring(11, 16)}",
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(width: 16),
                                   IconButton(
@@ -166,8 +178,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       false
                                   ? (_controller.currentMonitoringSheet.value.filledById ==
                                                   authController.user['id'] ||
-                                              _controller.medicalRecord.value.userId ==
-                                                  authController.user['id']) &&
+                                  authController.user['id'] == _controller.currentMonitoringSheet.value.doctor?.id) &&
                                           !_controller.medicalRecord.value
                                               .isClosed() &&
                                           DateFormat('yyyy-MM-dd').format(DateTime.now()).toString() ==
@@ -586,7 +597,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                         )
                                       ],
                                     ),
-                              _controller.medicalRecord.value.userId ==
+                              _controller.currentMonitoringSheet.value.doctor?.id ==
                                           authController.user['id'] &&
                                       !_controller.medicalRecord.value
                                           .isClosed()
@@ -631,8 +642,8 @@ class MonitoringSheetScreen extends StatelessWidget {
                       // monitoring sheet treatments list
                     ),
                     floatingActionButton:
-                        _controller.medicalRecord.value.userId ==
-                                    authController.user['id'] &&
+
+                                    authController.isDoctor() &&
                                 !_controller.medicalRecord.value.isClosed()
                             ? FloatingActionButton(
                                 onPressed: () {

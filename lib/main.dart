@@ -45,7 +45,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       translations: Languages(),
       // locale: Locale('FR'),
-      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.light,
+
+      // darkTheme: ThemeData.dark(),
       theme: ThemeData(fontFamily: 'Rubik'),
       home: const MyHomePage(),
       getPages: [

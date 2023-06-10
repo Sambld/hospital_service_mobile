@@ -1,3 +1,4 @@
+import 'Doctor.dart';
 import 'Image.dart';
 
 class Observation {
@@ -7,6 +8,7 @@ class Observation {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final List<Image>? images;
+  final Doctor? doctor;
 
 
   Observation({
@@ -16,6 +18,7 @@ class Observation {
      this.createdAt,
      this.updatedAt,
     this.images,
+    this.doctor,
   });
 
   factory Observation.fromJson(Map<String, dynamic> json) {
@@ -26,6 +29,7 @@ class Observation {
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       images: json['images'] != null ? (json['images'] as List).map((i) => Image.fromJson(i)).toList() : null,
+      doctor: json['doctor'] != null ? Doctor.fromJson(json['doctor']) : null,
     );
   }
 

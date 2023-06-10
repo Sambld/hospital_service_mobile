@@ -1,5 +1,6 @@
 
 
+import 'Doctor.dart';
 import 'MedicineRequest.dart';
 
 class Prescription {
@@ -8,6 +9,7 @@ class Prescription {
   final List<MedicineRequest>? medicineRequests;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final Doctor? doctor;
 
 
   Prescription({
@@ -16,6 +18,7 @@ class Prescription {
     this.medicineRequests,
     this.createdAt,
     this.updatedAt,
+    this.doctor,
   });
 
   factory Prescription.fromJson(Map<String, dynamic> json) {
@@ -25,6 +28,7 @@ class Prescription {
       medicineRequests: json['medicine_requests'] != null ? (json['medicine_requests'] as List).map((i) => MedicineRequest.fromJson(i)).toList() : null,
       createdAt:json['created_at'] == null ? null :  DateTime.tryParse(json['created_at']),
       updatedAt: json['updated_at'] == null ? null : DateTime.tryParse(json['updated_at']),
+      doctor: json['doctor'] != null ? Doctor.fromJson(json['doctor']) : null,
     );
   }
 

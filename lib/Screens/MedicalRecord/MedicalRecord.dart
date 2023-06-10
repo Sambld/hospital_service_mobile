@@ -111,7 +111,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                          Text(
-                                          "${"Doctor".tr}: ",
+                                          "${"Created By".tr}: ",
                                           style:  TextStyle(
                                             fontSize:  ResponsiveFontSize.medium(),
                                           ),

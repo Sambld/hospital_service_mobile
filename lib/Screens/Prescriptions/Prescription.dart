@@ -36,57 +36,30 @@ class PrescriptionScreen extends StatelessWidget {
               infoCard([
                 Row(
                   // mainAxisSize: MainAxisSize.values[0],
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Text(
-                        controller.prescription.value.name ?? '',
-                        style:
-                            TextStyle(fontSize: ResponsiveFontSize.large()),
+                      child: Row(
+                        children: [
+                          Text(
+                            // doctor
+                            '${"Doctor".tr} :',
+                            style: TextStyle(fontSize: ResponsiveFontSize.medium() , fontWeight: FontWeight.w400),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            // doctor name
+                            '${controller.prescription.value.doctor!.fullName()}',
+                            style: TextStyle(fontSize: ResponsiveFontSize.medium() , fontWeight: FontWeight.w400),
+                          ),
+                        ],
                       ),
                     ),
                     // edit icon button
+
+
                     !controller.PC.medicalRecord.value.isClosed() &&
-                            controller.PC.medicalRecord.value.userId ==
-                                authController.user['id']
-                        ? IconButton(
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.green,
-                            ),
-                            onPressed: () {
-                              controller.editNameController.text =
-                                  controller.prescription.value.name ?? '';
-                              Get.defaultDialog(
-                                title: "Edit Prescription Name".tr,
-                                titleStyle: const TextStyle(fontSize: 16),
-                                content: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: TextFormField(
-                                    maxLines: 4,
-                                    minLines: 1,
-                                    controller: controller.editNameController,
-                                    decoration: InputDecoration(
-                                      hintText: "Prescription Name".tr,
-                                    ),
-                                  ),
-                                ),
-                                textConfirm: "Save".tr,
-                                textCancel: "Cancel".tr,
-                                cancelTextColor: Colors.green,
-                                buttonColor: Colors.green,
-                                confirmTextColor: Colors.white,
-                                onConfirm: () {
-                                  controller.updatePrescriptionName();
-                                  controller.editNameController.clear();
-                                  Get.back();
-                                },
-                              );
-                            },
-                          )
-                        : const SizedBox(),
-                    !controller.PC.medicalRecord.value.isClosed() &&
-                            controller.PC.medicalRecord.value.userId ==
+                            controller.prescription.value.doctor?.id ==
                                 authController.user['id']
                         ? IconButton(
                             icon: const Icon(
@@ -116,9 +89,9 @@ class PrescriptionScreen extends StatelessWidget {
                         : const SizedBox()
                   ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Text(
-                    '${"Date".tr} : ${DateFormat('dd/MM/yyyy').format(controller.prescription.value.createdAt!)}')
+                    '${"Date".tr} : ${DateFormat('dd/MM/yyyy HH:mm').format(controller.prescription.value.createdAt!)}')
               ], Colors.green),
               Row(
                 children: [
@@ -170,7 +143,7 @@ class PrescriptionScreen extends StatelessWidget {
                     var medicineRequest = controller.prescription.value.medicineRequests![index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 4.0, horizontal: 16.0),
+                          vertical: 8.0, horizontal: 16.0),
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -365,12 +338,12 @@ class PrescriptionScreen extends StatelessWidget {
           );
         }
       }),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:  Obx(()  =>       controller.prescription.value.doctor?.id == authController.user['id'] ?    FloatingActionButton(
         onPressed: () {
           Get.dialog(const AddMedicineRequestDialog());
         },
         child: const Icon(Icons.add),
-      )
+      ) : Container()),
     );
   }
 
@@ -387,7 +360,12 @@ class PrescriptionScreen extends StatelessWidget {
           ),
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+          padding: const EdgeInsets.only(
+            left: 24.0,
+            right: 24.0,
+            top: 16.0,
+            bottom: 12.0,
+          ),
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
@@ -492,12 +470,13 @@ class _AddMedicineRequestDialogState extends State<AddMedicineRequestDialog> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
+                      Get.back();
                       if (_formKey.currentState!.saveAndValidate()) {
                         await controller.addMedicineRequest({
                           'medicine_id': _selectedMedicine.id,
                           'quantity': _formKey.currentState!.value['quantity'],
                         });
-                        Get.back();
+
                       }
                     },
                     child:  Text('Add'.tr),

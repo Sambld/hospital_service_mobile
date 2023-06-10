@@ -48,12 +48,16 @@ class PrescriptionsController extends GetxController{
 
   }
 
-  Future<void> addPrescription(Map<String, String> map) async {
+  Future<void> addPrescription() async {
     try {
       isLoading(true);
-      await Api.addPrescription(patientId: patientId.value, medicalRecordId: medicalRecordId.value, map: map);
-
+      final res = await Api.addPrescription(patientId: patientId.value, medicalRecordId: medicalRecordId.value);
       await fetchPrescriptions();
+      // new prescription id
+      final prescriptionId = res.data['data']['id'] as int;
+      Get.toNamed('/prescription',
+          arguments: {'prescriptionId': prescriptionId})
+          ?.then((value) => fetchPrescriptions());
     } finally {
       isLoading(false);
     }

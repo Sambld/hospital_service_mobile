@@ -45,7 +45,7 @@ class _UpdateMonitoringSheetTreatmentsState
                 initialValue:
                     _controller.day.value,
                 inputType: InputType.date,
-                format: DateFormat('yyyy-MM-dd'),
+                format: DateFormat('yyyy-MM-dd HH:mm'),
                 decoration:
                     GlobalWidgets.inputDecoration("Day", Icons.calendar_today),
                 onChanged: (value) => _controller

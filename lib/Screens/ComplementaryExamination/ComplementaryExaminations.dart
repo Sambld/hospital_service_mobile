@@ -36,8 +36,8 @@ class _ComplementaryExaminationsScreenState
       () => Scaffold(
         floatingActionButton: !_controller.isLoading.value &&
                 !_controller.medicalRecord.value.isClosed() &&
-                _controller.medicalRecord.value.userId ==
-                    _authController.user.value['id']
+
+                    _authController.isDoctor()
             ? FloatingActionButton(
                 onPressed: () {
                   // add new complementary examination flutter dialog and flutter_form_builder
@@ -144,6 +144,15 @@ class _ComplementaryExaminationsScreenState
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
+                        ),
+                      ),
+                      SizedBox(height: 4.0),
+                      // doctor name
+                      Text(
+                        "${'Doctor'.tr} : ${examination.doctor!.fullName()}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14.0,
                         ),
                       ),
                       SizedBox(height: 4.0),

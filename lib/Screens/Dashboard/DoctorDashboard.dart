@@ -290,9 +290,7 @@ class LatestUpdates extends StatelessWidget {
               itemBuilder: (context, index) {
                 final ms = controller.latestMSUpdates[index];
                 // get patient name by looping through all medical records and check if the medical record id is equal to the ms record id then get the patient name
-                final patient = controller.medicalRecords.firstWhere((element) {
-                  return element.id == ms.recordId;
-                }).patient!;
+                final patient = ms.medicalRecord?.patient;
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -306,7 +304,7 @@ class LatestUpdates extends StatelessWidget {
                       onTap: () {
                         Get.toNamed('/monitoring-sheet', arguments: {
                           'medicalRecordId': ms.recordId,
-                          'patientId': patient.id,
+                          'patientId': patient?.id,
                           'id': controller.latestMSUpdates[index].id,
                         });
                       },
@@ -330,7 +328,7 @@ class LatestUpdates extends StatelessWidget {
                             // condition
                             //patient name
                             Text(
-                              '${'Patient'.tr} : ${patient.firstName!} ${patient.lastName!}',
+                              '${'Patient'.tr} : ${patient?.firstName!} ${patient?.lastName!}',
                               style: TextStyle(
                                 fontFamily: 'Euclid',
                                 fontSize: ResponsiveFontSize.small(),
@@ -341,7 +339,7 @@ class LatestUpdates extends StatelessWidget {
                               height: 5,
                             ),
                             Text(
-                              '${'Filling Date'.tr} : ${ms.fillingDate!.day == DateTime.now().day ? 'Today'.tr : '${ms.fillingDate.toString().substring(0, 10)} '}  ${ms.updatedAt!.toLocal().toString().substring(10, 16)}',
+                              '${'Filling Date'.tr} : ${ms.fillingDate!.day == DateTime.now().day ? 'Today'.tr : '${ms.fillingDate.toString().substring(0, 10)} '}  ${ms.createdAt!.toLocal().toString().substring(10, 16)}',
                               style: TextStyle(
                                 fontFamily: 'Euclid',
                                 fontSize: ResponsiveFontSize.small(),
@@ -398,6 +396,10 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // get card width based on screen size ( dont use Responsive )
+    final cardWidth = MediaQuery.of(context).size.width / 2 - 20;
+
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -412,7 +414,7 @@ class InfoCard extends StatelessWidget {
               ),
             ),
             child: Container(
-              width: 180,
+              width: cardWidth,
               height: 100,
               decoration: const BoxDecoration(
                 border: Border(

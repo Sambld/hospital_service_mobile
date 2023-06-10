@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -9,6 +10,7 @@ class AddMonitoringSheetDayController extends GetxController{
 
 
   var day = DateTime.now().obs;
+  var time = DateTime.now().obs;
 
   var latestDay = DateTime.now().obs;
   var treatmentList = <TreatmentData>[].obs;
@@ -39,7 +41,19 @@ class AddMonitoringSheetDayController extends GetxController{
     final _monitoringSheetController = Get.find<MonitoringSheetController>();
     final patientId = _monitoringSheetController.patientId.value;
     final medicalRecordId = _monitoringSheetController.medicalRecordId.value;
-    final res = await Api.addMonitoringSheet(patientId,medicalRecordId , {'filling_date' : DateFormat('yyyy/MM/dd').format(day.value).toString()});
+    final dateFormat = DateFormat('yyyy/MM/dd HH:mm'); // Create a DateFormat instance
+
+    final combinedDateTime = DateTime(
+      day.value.year,
+      day.value.month,
+      day.value.day,
+      time.value.hour,
+      time.value.minute,
+    );
+
+    final formattedDateTime = dateFormat.format(combinedDateTime); // Format the combined date and time
+    print(formattedDateTime); // Prints 2021/04/20 18:00 (for example
+    final res = await Api.addMonitoringSheet(patientId,medicalRecordId , {'filling_date' : formattedDateTime});
     if (res.statusCode == 200) {
       int newMonitoringSheetId = res.data['data']['id'];
       for (var treatment in treatmentList) {

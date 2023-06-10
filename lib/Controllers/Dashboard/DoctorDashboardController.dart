@@ -27,8 +27,9 @@ class DoctorDashboardController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     doctor(Get.find<AuthController>().user);
-    getDoctorMedicalRecords();
+    // getDoctorMedicalRecords();
     getMyPatientsCount();
+    getActiveMedicalRecords();
     getLatestUpdates();
 
     super.onInit();
@@ -43,20 +44,34 @@ class DoctorDashboardController extends GetxController {
   }
 
 
-  Future<void> getDoctorMedicalRecords() async {
+  // Future<void> getDoctorMedicalRecords() async {
+  //   medicalRecordsLoading(true);
+  //   try {
+  //     var res = await Api.getDoctorMedicalRecords(doctorId: doctor['id']);
+  //     if (res.statusCode == 200) {
+  //       medicalRecords(res.data.map<MedicalRecord>((e) => MedicalRecord.fromJson(e)).toList());
+  //
+  //
+  //     }
+  //   } on DioError {
+  //     throw 'Error';
+  //   }
+  //   medicalRecordsLoading(false);
+  // }
+
+  // getActiveMedicalRecords
+  Future<void> getActiveMedicalRecords() async{
     medicalRecordsLoading(true);
-    try {
-      var res = await Api.getDoctorMedicalRecords(doctorId: doctor['id']);
-      if (res.statusCode == 200) {
-        medicalRecords(res.data.map<MedicalRecord>((e) => MedicalRecord.fromJson(e)).toList());
-
-
-      }
-    } on DioError {
+    try{
+      final res = await Api.getActiveMedicalRecords();
+      medicalRecords(res.data.map<MedicalRecord>((e) => MedicalRecord.fromJson(e)).toList());
+    }catch(e){
       throw 'Error';
     }
     medicalRecordsLoading(false);
   }
+
+
 
   Future<void> getMyPatientsCount() async{
     try{

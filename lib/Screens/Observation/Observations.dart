@@ -64,6 +64,9 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
                           if (observation.images.isNotEmpty)
                             Text(
                                 '${"Images".tr} : ${observation.images.length}'),
+                          // doctor name
+                          Text(
+                              '${"Doctor".tr} : ${observation.doctor.fullName()}'),
                         ],
                       ),
                     ),
@@ -87,8 +90,7 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
         }
       }),
       floatingActionButton: Obx(
-        () => _authController.user['id'] ==
-                _controller.medicalRecord.value.userId && !_controller.medicalRecord.value.isClosed()
+        () => _authController.isDoctor() && !_controller.medicalRecord.value.isClosed()
             ? FloatingActionButton(
                 onPressed: () {
                   Get.dialog(

@@ -193,6 +193,8 @@ class Languages extends Translations {
               'Êtes-vous sûr de vouloir supprimer cette ordonnance?',
 
           'Downloaded': 'Téléchargé',
+          'Created By': 'Créé par',
+          "Create New Prescription": "Créer une nouvelle ordonnance",
         },
         'EN': {
           'Patient': 'Patient',
@@ -380,6 +382,9 @@ class Languages extends Translations {
           'Are you sure you want to delete this prescription?':
               'Are you sure you want to delete this prescription?',
           'Downloaded': 'Downloaded',
+          'Created By': 'Created By',
+
+          "Create New Prescription": "Create New Prescription",
         },
 
         'AR': {
@@ -558,6 +563,10 @@ class Languages extends Translations {
           'Edit Prescription': 'تعديل الوصفة الطبية',
           'Delete Prescription': 'حذف الوصفة الطبية',
           'Downloaded'   : 'تم التحميل',
+
+          'Created By': 'تم الإنشاء بواسطة',
+
+          "Create New Prescription": "إنشاء وصفة طبية جديدة",
         }
       };
 }

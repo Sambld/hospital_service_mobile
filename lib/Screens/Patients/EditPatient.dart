@@ -88,8 +88,8 @@ class EditPatientScreen extends StatelessWidget {
                     decoration: inputDecoration('${"Gender".tr} *', Icons.wc),
                     validator: FormBuilderValidators.required(
                         errorText: 'Gender is required'.tr),
-                    initialValue: _editPatientController.patient.value.gender?.toLowerCase() ,
-                    items: ['male', 'female']
+                    initialValue: _editPatientController.patient.value.gender ,
+                    items: ['Male', 'Female']
                         .map((gender) => DropdownMenuItem(
                             value: gender, child: Text(gender)))
                         .toList(),

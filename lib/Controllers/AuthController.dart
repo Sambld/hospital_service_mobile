@@ -21,7 +21,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> setLanguage() async {
-    String lang = await GetStorage().read('language');
+    final lang = await GetStorage().read('language');
     if (lang == null) {
       await GetStorage().write('language', 'en');
       Get.updateLocale(Locale('en'));
@@ -50,6 +50,10 @@ class AuthController extends GetxController {
           );
           Get.offAllNamed('/login');
         }
+      }else if (res.statusCode == 401) {
+        isLoggedIn = false.obs;
+        Get.offNamed('/login');
+
       } else {
         isLoggedIn = false.obs;
         Get.offNamed('/login');

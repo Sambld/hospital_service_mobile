@@ -32,7 +32,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
       () => Scaffold(
         // add images floating action button
         floatingActionButton:
-        !_controller.OC.medicalRecord.value.isClosed() && _controller.OC.medicalRecord.value.userId ==  _authController.user['id'] ? SpeedDial(
+        !_controller.OC.medicalRecord.value.isClosed() && _controller.observation.value.doctor?.id ==  _authController.user['id'] ? SpeedDial(
           overlayOpacity: 0.2,
           animatedIcon: AnimatedIcons.list_view,
           children: [
@@ -114,7 +114,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                               );
                             },
                           ): const SizedBox(),
-                          !_controller.OC.medicalRecord.value.isClosed() && _controller.OC.medicalRecord.value.userId ==  _authController.user['id'] ? IconButton(
+                          !_controller.OC.medicalRecord.value.isClosed() && _controller.observation.value.doctor?.id ==  _authController.user['id'] ? IconButton(
                             icon: const Icon(Icons.delete , color: Colors.redAccent,),
                             onPressed: () {
                               Get.defaultDialog(
@@ -191,7 +191,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                         backgroundColor: Colors.black,
 
                                         actions:  [
-                                          !_controller.OC.medicalRecord.value.isClosed() && _controller.OC.medicalRecord.value.userId ==  _authController.user['id'] ? Padding(
+                                          !_controller.OC.medicalRecord.value.isClosed() && _controller.observation.value.doctor?.id ==  _authController.user['id'] ? Padding(
                                             padding: const EdgeInsets.all(12.0),
                                             child: IconButton(
                                               icon: const Icon(

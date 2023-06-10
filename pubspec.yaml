@@ -54,6 +54,12 @@ dependencies:
   permission_handler: ^10.2.0
   auto_size_text: ^3.0.0
   path_provider: ^2.0.15
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/images/record.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 
 dev_dependencies:

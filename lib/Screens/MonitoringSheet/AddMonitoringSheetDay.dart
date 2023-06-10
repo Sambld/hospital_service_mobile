@@ -38,6 +38,18 @@ class AddMonitoringSheetDayScreen extends StatelessWidget {
                     _controller.day.value = value!,
               ),
               const SizedBox(height: 16.0),
+              // time of day picker
+              FormBuilderDateTimePicker(
+                name: 'time',
+                initialValue: _controller.time.value,
+                inputType: InputType.time,
+                format: DateFormat('HH:mm'),
+                decoration: GlobalWidgets.inputDecoration('Time'.tr, Icons.access_time),
+                onChanged: (value) =>
+                    _controller.time.value = value!,
+              ),
+
+              const SizedBox(height: 16.0),
                Row(
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: [

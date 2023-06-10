@@ -1,5 +1,6 @@
 import 'package:infectious_diseases_service/Models/MedicalRecord.dart';
 
+import 'Doctor.dart';
 import 'Treatment.dart';
 
 class MonitoringSheet {
@@ -17,6 +18,7 @@ class MonitoringSheet {
   final Map<String, dynamic>? filledBy;
   final List<Treatment>? treatments;
   final MedicalRecord? medicalRecord;
+  final Doctor? doctor;
 
   MonitoringSheet({
     this.id,
@@ -33,6 +35,7 @@ class MonitoringSheet {
     this.updatedAt,
     this.treatments,
     this.medicalRecord,
+    this.doctor,
   });
 
   factory MonitoringSheet.fromJson(Map<String, dynamic> json) {
@@ -55,6 +58,7 @@ class MonitoringSheet {
       updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at']),
       treatments: json['treatments'] == null ? [] : json['treatments'].map<Treatment>((t) => Treatment.fromJson(t)).toList(),
       medicalRecord: json['medical_record'] == null ? null : MedicalRecord.fromJson(json['medical_record']),
+      doctor: json['doctor'] == null ? null : Doctor.fromJson(json['doctor']),
     );
   }
 
