@@ -1,6 +1,3 @@
-import 'dart:collection';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as GET;
@@ -8,9 +5,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Constants/Constants.dart';
 import 'package:infectious_diseases_service/Controllers/AuthController.dart';
-import 'package:infectious_diseases_service/Screens/SplashScreen.dart';
-
-import '../Screens/LoginPage.dart';
 
 class Api {
   static void initializeInterceptors() {
@@ -21,24 +15,24 @@ class Api {
         var headers = {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${token}',
+          'Authorization': 'Bearer $token',
         };
 
         request.headers.addAll(headers);
-        print('${request.method} ${request.path}');
-        print('${request.headers}');
+        // print('${request.method} ${request.path}');
+        // print('${request.headers}');
         return handler.next(request); //continue
       },
       onResponse: (response, handler) {
         if (response.statusCode == 404) {
           throw response.data['message'];
         }
-        ;
+
 
         return handler.next(response); // continue
       },
       onError: (error, handler) {
-        print('${error.response?.data['message']}');
+        // print('${error.response?.data['message']}');
         if (error.type == DioErrorType.connectionTimeout ||
             error.type == DioErrorType.receiveTimeout) {
           GET.Get.snackbar(
@@ -48,7 +42,7 @@ class Api {
             backgroundColor: Colors.red,
             colorText: Colors.white,
           );
-          Future.delayed(Duration(seconds: 2))
+          Future.delayed(const Duration(seconds: 2))
               .then((value) => Get.find<AuthController>().redirect());
           return handler.next(error);
           // continue
@@ -85,10 +79,11 @@ class Api {
     BaseOptions(
       // baseUrl: 'http://134.122.75.238:8000/api/',
       // baseUrl: 'http://10.0.2.2:8000/api/',
-      baseUrl: '${apiUrl}/api/',
+      baseUrl: '$apiUrl/api/',
       receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+      sendTimeout: const Duration(seconds: 60),
     ),
   );
 

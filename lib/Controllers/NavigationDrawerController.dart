@@ -6,15 +6,15 @@ import 'package:get_storage/get_storage.dart';
 class NavigationDrawerController extends GetxController {
 
   var selectedIndex = 0.obs;
-  var selectedLanguage = 'EN'.obs;
-  final  languages = ['EN','FR', 'AR'];
+  var selectedLanguage = 'en'.obs;
+  final  languages = ['en','fr', 'ar'];
 
   @override
   Future<void> onInit() async {
     if (await GetStorage().read('language') != null) {
-      selectedLanguage.value = GetStorage().read('language');
+      selectedLanguage.value = await GetStorage().read('language');
     }else{
-      selectedLanguage.value = 'EN';
+      selectedLanguage.value = 'en';
     }
     // TODO: implement onInit
     super.onInit();

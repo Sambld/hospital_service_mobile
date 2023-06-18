@@ -9,33 +9,20 @@ import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
 import '../../Constants/Constants.dart';
 import '../../Controllers/ComplementaryExamination/ComplementaryExaminationController.dart';
 
-class ComplementaryExaminationsScreen extends StatefulWidget {
-  const ComplementaryExaminationsScreen({Key? key}) : super(key: key);
+class ComplementaryExaminationsScreen extends StatelessWidget {
+   ComplementaryExaminationsScreen({Key? key}) : super(key: key);
 
-  @override
-  _ComplementaryExaminationsScreenState createState() =>
-      _ComplementaryExaminationsScreenState();
-}
-
-class _ComplementaryExaminationsScreenState
-    extends State<ComplementaryExaminationsScreen> {
-  final ComplementaryExaminationController _controller =
+  final ComplementaryExaminationController controller =
       Get.put(ComplementaryExaminationController());
-  late final AuthController _authController;
 
-  @override
-  void initState() {
-    _authController = Get.find<AuthController>();
-    // TODO: implement initState
-    super.initState();
-  }
+  final  _authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        floatingActionButton: !_controller.isLoading.value &&
-                !_controller.medicalRecord.value.isClosed() &&
+        floatingActionButton: !controller.isLoading.value &&
+                !controller.medicalRecord.value.isClosed() &&
 
                     _authController.isDoctor()
             ? FloatingActionButton(
@@ -47,10 +34,10 @@ class _ComplementaryExaminationsScreenState
                       return AlertDialog(
                         title:  Text(
                           'Add Complementary Examination'.tr,
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ),
                         content: FormBuilder(
-                          key: _controller.formKey.value,
+                          key: controller.formKey.value,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -86,18 +73,18 @@ class _ComplementaryExaminationsScreenState
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              if (_controller.formKey.value.currentState!
+                              if (controller.formKey.value.currentState!
                                   .saveAndValidate()) {
                                 final res =
                                     await Api.addComplementaryExamination(
-                                        patientId: _controller.patientId,
+                                        patientId: controller.patientId,
                                         medicalRecordId:
-                                            _controller.medicalRecordId,
-                                        formData: _controller
+                                            controller.medicalRecordId,
+                                        formData: controller
                                             .formKey.value.currentState!.value);
                                 if (res.statusCode == 200) {
-                                  _controller.fetchComplementaryExaminations();
-                                  Navigator.pop(context);
+                                  controller.fetchComplementaryExaminations();
+                                  Get.back();
                                 }
                               }
                             },
@@ -115,28 +102,28 @@ class _ComplementaryExaminationsScreenState
           flexibleSpace: kAppBarColor,
           title:  Text(
             'Complementary Examinations'.tr,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Container(
           padding: const EdgeInsets.all(16.0),
           child: Obx(() {
-            if (_controller.isLoading.value) {
+            if (controller.isLoading.value) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              if (_controller.complementaryExaminations.isEmpty) {
+              if (controller.complementaryExaminations.isEmpty) {
                 return  Center(
                   child:   Text(
                     'No Complementary Examinations Found'.tr,
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   )
                 );
               }
               return ListView.builder(
-                itemCount: _controller.complementaryExaminations.length,
+                itemCount: controller.complementaryExaminations.length,
                 itemBuilder: (context, index) {
                   final examination =
-                      _controller.complementaryExaminations[index];
+                      controller.complementaryExaminations[index];
                   return infoCard(
                     children: [
                       Text(
@@ -146,7 +133,7 @@ class _ComplementaryExaminationsScreenState
                           fontSize: 16.0,
                         ),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                       // doctor name
                       Text(
                         "${'Doctor'.tr} : ${examination.doctor!.fullName()}",
@@ -155,7 +142,7 @@ class _ComplementaryExaminationsScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                       Text(
                         examination.result,
                         style: const TextStyle(
@@ -164,7 +151,7 @@ class _ComplementaryExaminationsScreenState
                         ),
                         maxLines: 5,
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                       Text(
                         examination.createdAt.toString().substring(0, 16),
                         style: const TextStyle(
@@ -183,10 +170,10 @@ class _ComplementaryExaminationsScreenState
                           return AlertDialog(
                             title:  Text(
                               'Edit Complementary Examination'.tr,
-                              style: TextStyle(fontSize: 18),
+                              style: const TextStyle(fontSize: 18),
                             ),
                             content: FormBuilder(
-                              key: _controller.editFormKey.value,
+                              key: controller.editFormKey.value,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -222,21 +209,21 @@ class _ComplementaryExaminationsScreenState
                                 },
                                 child:  Text('Cancel'.tr),
                               ),
-                              TextButton(
+                              ElevatedButton(
                                 onPressed: () async {
-                                  if (_controller.editFormKey.value.currentState!
+                                  if (controller.editFormKey.value.currentState!
                                       .saveAndValidate()) {
                                     final res =
                                         await Api.editComplementaryExamination(
-                                            patientId: _controller.patientId,
+                                            patientId: controller.patientId,
                                             medicalRecordId:
-                                                _controller.medicalRecordId,
+                                                controller.medicalRecordId,
                                             examinationId: examination.id,
-                                            formData: _controller
+                                            formData: controller
                                                 .editFormKey.value.currentState!.value);
                                     if (res.statusCode == 200) {
-                                      _controller.fetchComplementaryExaminations();
-                                      Navigator.pop(context);
+                                      controller.fetchComplementaryExaminations();
+                                      Get.back();
                                     }
                                   }
                                 },
@@ -249,7 +236,7 @@ class _ComplementaryExaminationsScreenState
                   },
                     onDelete: () async {
                       // show Get confirmation dialog
-                      final res = await Get.defaultDialog(
+                      await Get.defaultDialog(
                         title: 'Delete Complementary Examination'.tr,
                         titleStyle: const TextStyle(fontSize: 16),
                         middleText:
@@ -261,17 +248,18 @@ class _ComplementaryExaminationsScreenState
                         buttonColor: Colors.red,
                         onConfirm: () async {
                           final res = await Api.deleteComplementaryExamination(
-                              patientId: _controller.patientId,
-                              medicalRecordId: _controller.medicalRecordId,
+                              patientId: controller.patientId,
+                              medicalRecordId: controller.medicalRecordId,
                               examinationId: examination.id);
                           if (res.statusCode == 200) {
-                            _controller.fetchComplementaryExaminations();
+                            controller.fetchComplementaryExaminations();
                             Get.back();
                           }
                         },
                       );
 
                     },
+                    canEdit: examination.doctor!.id == _authController.user['id'],
                   );
                 },
               );
@@ -282,7 +270,8 @@ class _ComplementaryExaminationsScreenState
     );
   }
 
-  Card infoCard({children, color, vMargin = 5.0, onEdit, onDelete}) {
+  Card infoCard({children, color, vMargin = 5.0, onEdit, onDelete , canEdit}) {
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -316,7 +305,7 @@ class _ComplementaryExaminationsScreenState
                 ),
               ),
               // edit and delete button
-              !_controller.medicalRecord.value.isClosed() &&  _controller.medicalRecord.value.userId == _authController.user['id']? Row(
+              !controller.medicalRecord.value.isClosed() &&  canEdit ? Row(
                 children: [
                   IconButton(
                     // small size icon button

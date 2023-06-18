@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,27 +10,18 @@ import '../../Controllers/AuthController.dart';
 import '../../Controllers/Patient/PatientsController.dart';
 import '../../Widgets/NavigationDrawerWidget.dart';
 
-class PatientsScreen extends StatefulWidget {
-  const PatientsScreen({Key? key}) : super(key: key);
+class PatientsScreen extends StatelessWidget {
+   PatientsScreen({Key? key}) : super(key: key);
 
-  @override
-  State<PatientsScreen> createState() => _PatientsScreenState();
-}
-
-class _PatientsScreenState extends State<PatientsScreen> {
   final _authController = Get.find<AuthController>();
-  final controller = Get.put(PatientsController());
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  final controller = Get.put(PatientsController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Patients '.tr),
+        title: Text('Patients'.tr),
         actions: [
           Obx(
             () => Padding(

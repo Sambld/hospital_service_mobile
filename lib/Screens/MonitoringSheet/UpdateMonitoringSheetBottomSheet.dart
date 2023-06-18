@@ -11,15 +11,17 @@ class UpdateMonitoringSheetBottomSheet extends StatefulWidget {
   const UpdateMonitoringSheetBottomSheet({super.key});
 
   @override
-  _UpdateMonitoringSheetBottomSheetState createState() =>
+  State<UpdateMonitoringSheetBottomSheet> createState() =>
       _UpdateMonitoringSheetBottomSheetState();
 }
 
 class _UpdateMonitoringSheetBottomSheetState
     extends State<UpdateMonitoringSheetBottomSheet> {
+
+
   final _formKey = GlobalKey<FormBuilderState>();
   bool _isLoading = false;
-  final _controller = Get.find<MonitoringSheetController>();
+  final controller = Get.find<MonitoringSheetController>();
 
 
   @override
@@ -41,7 +43,7 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Temperature field
                 FormBuilderTextField(
                   name: 'temperature',
-                  initialValue: _controller.currentMonitoringSheet.value.temperature ?? '',
+                  initialValue:  "${controller.currentMonitoringSheet.value.temperature ?? ''}",
                   decoration: GlobalWidgets.inputDecoration(
                     'Temperature',
                     Icons.thermostat,
@@ -58,7 +60,7 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Blood pressure field
                 FormBuilderTextField(
                   name: 'blood_pressure',
-                  initialValue: _controller.currentMonitoringSheet.value.bloodPressure ?? '',
+                  initialValue: controller.currentMonitoringSheet.value.bloodPressure ?? '',
                   decoration: GlobalWidgets.inputDecoration('Blood Pressure'.tr, Icons.bloodtype),
                   keyboardType:  TextInputType.datetime,
 
@@ -69,7 +71,7 @@ class _UpdateMonitoringSheetBottomSheetState
                 FormBuilderTextField(
                   name:
                       'urine',
-                  initialValue: "${_controller.currentMonitoringSheet.value.urine ?? ''}",
+                  initialValue: "${controller.currentMonitoringSheet.value.urine ?? ''}",
                   decoration: GlobalWidgets.inputDecoration('Urine'.tr, Icons.water),
                   keyboardType:  TextInputType.datetime,
 
@@ -79,7 +81,7 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Weight field
                 FormBuilderTextField(
                   name: 'weight',
-                  initialValue: "${_controller.currentMonitoringSheet.value.weight ?? ''}",
+                  initialValue: "${controller.currentMonitoringSheet.value.weight ?? ''}",
                   decoration: GlobalWidgets.inputDecoration('Weight'.tr, Icons.line_weight),
                   keyboardType:  TextInputType.datetime,
 
@@ -88,7 +90,7 @@ class _UpdateMonitoringSheetBottomSheetState
                 // Progress status field
                 FormBuilderTextField(
                   name: 'progress_report',
-                  initialValue: _controller.currentMonitoringSheet.value.progressReport ?? '',
+                  initialValue: controller.currentMonitoringSheet.value.progressReport ?? '',
                   decoration: GlobalWidgets.inputDecoration('Report'.tr, Icons.text_fields),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
@@ -117,10 +119,10 @@ class _UpdateMonitoringSheetBottomSheetState
 
       try {
         final formData = _formKey.currentState!.value;
-        final res = await Api.editMonitoringSheetDay(_controller.patientId.value, _controller.medicalRecordId.value, _controller.currentMonitoringSheet.value.id!,
+        final res = await Api.editMonitoringSheetDay(controller.patientId.value, controller.medicalRecordId.value, controller.currentMonitoringSheet.value.id!,
                   formData);
         if (res.statusCode == 200) {
-          _controller.getMonitoringSheets();
+          controller.getMonitoringSheets();
           Get.back();
         }
       } finally {

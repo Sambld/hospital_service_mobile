@@ -24,7 +24,7 @@ class NurseDashboardController extends GetxController {
     isLoading(true);
 
     try {
-      final res = await Api.dio.get('monitoring-sheets/today-available');
+      final res = await Api.dio.get('/monitoring-sheets/today-available');
       todayAvailableMonitoringSheets(res.data
           .map<MonitoringSheet>((e) => MonitoringSheet.fromJson(e))
           .toList());
@@ -53,7 +53,7 @@ class NurseDashboardController extends GetxController {
 
     try {
       final res = await Api.dio.get('monitoring-sheets/total-filled');
-      print(res);
+
       nurseTotalFilledMonitoringSheets(res.data['count']);
     } catch (e) {
       rethrow;
@@ -65,7 +65,6 @@ class NurseDashboardController extends GetxController {
       return todayAvailableMonitoringSheets;
     } else {
       return todayAvailableMonitoringSheets.where((element) {
-        print("${element.medicalRecord?.bedNumber.toString()} ${element.toString()}");
         return (element.medicalRecord?.patient?.firstName?.toLowerCase().contains(search.value.toLowerCase()) ?? false) ||
             (element.medicalRecord?.patient?.lastName?.toLowerCase().contains(search.value.toLowerCase()) ?? false) ||
             (element.medicalRecord?.bedNumber.toString() == search.value);

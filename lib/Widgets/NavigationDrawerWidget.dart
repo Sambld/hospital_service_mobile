@@ -7,10 +7,12 @@ import '../Services/Api.dart';
 import '../Utils/ResponsiveFontSizes.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
-  final NavigationDrawerController _controller = Get.find();
+  final NavigationDrawerController controller = Get.find();
   final authController = Get.find<AuthController>();
   final padding = const EdgeInsets.symmetric(horizontal: 20);
   final selectedLanguage = 'en'.obs;
+
+   NavigationDrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,6 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildHeader(
                     name: name,
                     role: role,
-                    onClicked: () => print('Header'),
                   ),
                   Container(
                     padding: padding,
@@ -80,9 +81,17 @@ class NavigationDrawerWidget extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                               Text(
+                                'Language'.tr,
+                                style: TextStyle(
+                                  fontSize: ResponsiveFontSize.medium(),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
                               DropdownButton(
-                                value: _controller.selectedLanguage.value,
-                                items: _controller.languages
+                                value: controller.selectedLanguage.value,
+                                items: controller.languages
                                     .map((e) => DropdownMenuItem(
                                           value: e,
                                           child: Text(
@@ -95,7 +104,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                                 onChanged: (value) async {
                                   await GetStorage().write('language', value);
                                   Get.updateLocale(Locale(value.toString()));
-                                  _controller.selectedLanguage.value =
+                                  controller.selectedLanguage.value =
                                       value.toString();
                                 },
                               ),
@@ -126,44 +135,40 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget buildHeader({
     required String name,
     required String role,
-    required VoidCallback onClicked,
   }) =>
-      InkWell(
-        onTap: onClicked,
-        child: Container(
-          padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
-          child: Row(
-            children: [
-              ImageIcon(
-                authController.user['role'] == 'doctor' ? const AssetImage('assets/images/doctor.png') : const AssetImage('assets/images/nurse.png'),
-                size: 50,
-                color: Colors.blueAccent,),
-              const SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    overflow: TextOverflow.ellipsis,
-                    style:  TextStyle(fontSize: ResponsiveFontSize.xLarge()),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    role,
-                    style: const TextStyle(fontSize: 14),
-                  ),
+      Container(
+        padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
+        child: Row(
+          children: [
+            ImageIcon(
+              authController.user['role'] == 'doctor' ? const AssetImage('assets/images/doctor.png') : const AssetImage('assets/images/nurse.png'),
+              size: 50,
+              color: Colors.blueAccent,),
+            const SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  overflow: TextOverflow.ellipsis,
+                  style:  TextStyle(fontSize: ResponsiveFontSize.xLarge()),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  role,
+                  style: const TextStyle(fontSize: 14),
+                ),
 
-                  // two icon buttons to change language English and French
-                ],
-              ),
-              // Spacer(),
-              // CircleAvatar(
-              //   radius: 24,
-              //   backgroundColor: Color.fromRGBO(30, 60, 168, 1),
-              //   child: Icon(Icons.add_comment_outlined, color: Colors.white),
-              // )
-            ],
-          ),
+                // two icon buttons to change language English and French
+              ],
+            ),
+            // Spacer(),
+            // CircleAvatar(
+            //   radius: 24,
+            //   backgroundColor: Color.fromRGBO(30, 60, 168, 1),
+            //   child: Icon(Icons.add_comment_outlined, color: Colors.white),
+            // )
+          ],
         ),
       );
 
@@ -209,7 +214,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   Future<void> selectedItem(BuildContext context, int index) async {
     switch (index) {
       case 0:
-        if (authController.user.value['role'] == 'doctor'){
+        if (authController.user['role'] == 'doctor'){
           Get.offNamed('/doctor-dashboard');
         } else {
           Get.offNamed('/nurse-dashboard');

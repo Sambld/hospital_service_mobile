@@ -18,13 +18,13 @@ class ObservationsScreen extends StatefulWidget {
 
 class _ObservationsScreenState extends State<ObservationsScreen> {
   final AuthController _authController = Get.find<AuthController>();
-  final _controller = Get.put(ObservationsController());
-  final _formKey = GlobalKey<FormBuilderState>();
-  final _nameController = TextEditingController();
+  final controller = Get.put(ObservationsController());
+  final formKey = GlobalKey<FormBuilderState>();
+  final nameController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -36,16 +36,16 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
         title: Text('Observations'.tr),
       ),
       body: Obx(() {
-        if (_controller.isLoading.value) {
+        if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          if (_controller.observations.isEmpty) {
+          if (controller.observations.isEmpty) {
             return const Center(child: Text('No observations found'));
           }else{
             return ListView.builder(
-              itemCount: _controller.observations.length,
+              itemCount: controller.observations.length,
               itemBuilder: (context, index) {
-                final observation = _controller.observations[index];
+                final observation = controller.observations[index];
                 return Card(
                   elevation: 1,
                   child: ListTile(
@@ -73,11 +73,11 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
                     trailing: const Icon(Icons.open_in_new),
                     onTap: () {
                       Get.toNamed('/observation', arguments: {
-                        'patientId': _controller.patientId.value,
+                        'patientId': controller.patientId.value,
                         'medicalRecordId':
-                        _controller.medicalRecordId.value,
+                        controller.medicalRecordId.value,
                         'observationId': observation.id
-                      })?.then((value) => _controller.fetchObservations());
+                      })?.then((value) => controller.fetchObservations());
 
                       // TODO: Navigate to observation details screen
                     },
@@ -90,19 +90,19 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
         }
       }),
       floatingActionButton: Obx(
-        () => _authController.isDoctor() && !_controller.medicalRecord.value.isClosed()
+        () => _authController.isDoctor() && !controller.medicalRecord.value.isClosed()
             ? FloatingActionButton(
                 onPressed: () {
                   Get.dialog(
                     AlertDialog(
                       title: Text('Add Observation'.tr),
                       content: FormBuilder(
-                        key: _formKey,
+                        key: formKey,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             FormBuilderTextField(
-                              controller: _nameController,
+                              controller: nameController,
                               name: 'name',
                               decoration:  InputDecoration(
                                 labelText: 'Name'.tr,
@@ -124,10 +124,10 @@ class _ObservationsScreenState extends State<ObservationsScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.saveAndValidate()) {
-                              final name = _nameController.text.trim();
+                            if (formKey.currentState!.saveAndValidate()) {
+                              final name = nameController.text.trim();
                               if (name.isNotEmpty) {
-                                _controller
+                                controller
                                     .addObservation({'name': name});
                                 Get.back();
                               } else {

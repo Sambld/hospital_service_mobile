@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 
 class ResponsiveFontSize {
   static late double _screenWidth;
-  static late double _screenHeight;
 
-  static double _baseFont = 14.0;
+  static const double _baseFont = 14.0;
 
-  static double _xxSmall = 0.6;
-  static double _xSmall = 0.8;
-  static double _small = 0.9;
-  static double _medium = 1.0;
-  static double _large = 1.1;
-  static double _xLarge = 1.2;
-  static double _xxLarge = 1.4;
-  static double _xxxLarge = 1.8;
+  static const double _xxSmall = 0.6;
+  static const double _xSmall = 0.8;
+  static const double _small = 0.9;
+  static const double _medium = 1.0;
+  static const double _large = 1.1;
+  static const double _xLarge = 1.2;
+  static const double _xxLarge = 1.4;
+  static const double _xxxLarge = 1.8;
 
 
   static void initialize(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     _screenWidth = mediaQuery.size.width;
-    _screenHeight = mediaQuery.size.height;
   }
 
   static double xxSmall() {

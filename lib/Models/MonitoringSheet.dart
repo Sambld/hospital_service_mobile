@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:infectious_diseases_service/Models/MedicalRecord.dart';
 
 import 'Doctor.dart';
@@ -10,8 +12,8 @@ class MonitoringSheet {
   final DateTime? fillingDate;
   final int? urine;
   final String? bloodPressure;
-  final int? weight;
-  final String? temperature;
+  final double? weight;
+  final double? temperature;
   final String? progressReport;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -41,6 +43,8 @@ class MonitoringSheet {
   factory MonitoringSheet.fromJson(Map<String, dynamic> json) {
 
 
+    double? weight = double.tryParse(json['weight'].toString()) ?? null;
+    double? temperature = double.tryParse(json['temperature'].toString()) ?? null;
     return MonitoringSheet(
       id: json['id'],
       recordId: json['record_id'],
@@ -48,8 +52,8 @@ class MonitoringSheet {
       fillingDate: json['filling_date'] == null ? null : DateTime.parse(json['filling_date']),
       urine: json['urine'],
       bloodPressure: json['blood_pressure'],
-      weight: json['weight'],
-      temperature: json['temperature'],
+      weight: weight,
+      temperature: temperature,
       // to double
       progressReport: json['progress_report'],
       filledBy: json['filled_by'],
@@ -74,4 +78,10 @@ class MonitoringSheet {
         'filled_by': filledBy,
         'treatments': treatments!.map((t) => t.toJson()).toList(),
       };
+
+  bool isToday() {
+    return DateTime.now().day == fillingDate!.day &&
+        DateTime.now().month == fillingDate!.month &&
+        DateTime.now().year == fillingDate!.year;
+  }
 }

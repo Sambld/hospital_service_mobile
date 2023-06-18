@@ -23,7 +23,7 @@ class PrescriptionScreen extends StatelessWidget {
     return Scaffold(
 
       appBar: AppBar(
-        title: Obx(()=> Text('Prescription  #${controller.prescription.value.id} '.tr)),
+        title: Obx(()=> Text('${"Prescription".tr}  #${controller.prescription.value.id} '.tr)),
         flexibleSpace: kAppBarColor,
       ),
       body: Obx(() {
@@ -33,104 +33,115 @@ class PrescriptionScreen extends StatelessWidget {
         else {
           return Column(
             children: [
-              infoCard([
-                Row(
-                  // mainAxisSize: MainAxisSize.values[0],
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0 , horizontal: 16),
+                child: infoCard([
+                  Row(
+                    // mainAxisSize: MainAxisSize.values[0],
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(
+                              // doctor
+                              '${"Doctor".tr} :',
+                              style: TextStyle(fontSize: ResponsiveFontSize.medium() , fontWeight: FontWeight.w400),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              // doctor name
+                              controller.prescription.value.doctor!.fullName(),
+                              style: TextStyle(fontSize: ResponsiveFontSize.medium() , fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // edit icon button
+
+
+                      !controller.PC.medicalRecord.value.isClosed() &&
+                              controller.prescription.value.doctor?.id ==
+                                  authController.user['id']
+                          ? IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                              ),
+                              onPressed: () {
+                                Get.defaultDialog(
+                                  contentPadding: const EdgeInsets.all(18),
+                                  title: "Delete Prescription".tr,
+                                  titleStyle: const TextStyle(fontSize: 16),
+                                  content: Text(
+                                      "Are you sure you want to delete this prescription?"
+                                          .tr),
+                                  textConfirm: "Delete".tr,
+                                  textCancel: "Cancel".tr,
+                                  cancelTextColor: Colors.redAccent,
+                                  buttonColor: Colors.red,
+                                  confirmTextColor: Colors.white,
+                                  onConfirm: () {
+                                    controller.deletePrescription();
+                                    Get.back();
+                                  },
+                                );
+                              },
+                            )
+                          : const SizedBox()
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                      '${"Date".tr} : ${DateFormat('dd/MM/yyyy HH:mm').format(controller.prescription.value.createdAt!)}')
+                ], Colors.green),
+              ),
+              Obx(
+                ()=> Row(
                   children: [
                     Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            // doctor
-                            '${"Doctor".tr} :',
-                            style: TextStyle(fontSize: ResponsiveFontSize.medium() , fontWeight: FontWeight.w400),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            // doctor name
-                            '${controller.prescription.value.doctor!.fullName()}',
-                            style: TextStyle(fontSize: ResponsiveFontSize.medium() , fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // edit icon button
-
-
-                    !controller.PC.medicalRecord.value.isClosed() &&
-                            controller.prescription.value.doctor?.id ==
-                                authController.user['id']
-                        ? IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                            ),
-                            onPressed: () {
-                              Get.defaultDialog(
-                                contentPadding: const EdgeInsets.all(18),
-                                title: "Delete Prescription".tr,
-                                titleStyle: const TextStyle(fontSize: 16),
-                                content: Text(
-                                    "Are you sure you want to delete this prescription?"
-                                        .tr),
-                                textConfirm: "Delete".tr,
-                                textCancel: "Cancel".tr,
-                                cancelTextColor: Colors.redAccent,
-                                buttonColor: Colors.red,
-                                confirmTextColor: Colors.white,
-                                onConfirm: () {
-                                  controller.deletePrescription();
-                                  Get.back();
-                                },
-                              );
-                            },
-                          )
-                        : const SizedBox()
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                    '${"Date".tr} : ${DateFormat('dd/MM/yyyy HH:mm').format(controller.prescription.value.createdAt!)}')
-              ], Colors.green),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        // rounded corners
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.green,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        height: 40,
-                        child: Text(
-                          "Medicine Requests".tr,
-                          style: TextStyle(fontSize: ResponsiveFontSize.xLarge() , color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // print prescription button
-                  !controller.PC.medicalRecord.value.isClosed() &&
-                          controller.PC.medicalRecord.value.userId ==
-                              authController.user['id']
-                      ? IconButton(
-                          icon: const Icon(
-                            Icons.print,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          // rounded corners
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
                             color: Colors.green,
                           ),
-                          onPressed: () {
-                            controller.getPrescriptionPdf();
-                          },
-                        )
-                      : const SizedBox(),
+                          padding: const EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                          height: 40,
+                          child: Text(
+                            "Medicine Requests".tr,
+                            style: TextStyle(fontSize: ResponsiveFontSize.xLarge() , color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // print prescription button
+                    !controller.PC.medicalRecord.value.isClosed() &&
 
-                ],
+                                authController.isDoctor() && controller.prescription.value.medicineRequests?.isNotEmpty == true
+                        ? Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: controller.isPrescriptionLoading.value ? const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: SizedBox(height: 30 , width: 30,child: CircularProgressIndicator(color: Colors.green, strokeWidth: 3) ,),
+                      ) :  IconButton(
+                        icon: const Icon(
+                          Icons.print,
+                          color: Colors.green,
+                        ),
+                        onPressed: () {
+                          controller.getPrescriptionPdf();
+                        },
+                      ),
+                    )
+                        : const SizedBox(),
+
+                  ],
+                ),
               ),
               if (controller.medicineRequestsLoading.value) const Expanded(
                 child: Center(
@@ -185,7 +196,7 @@ class PrescriptionScreen extends StatelessWidget {
                                       ),
                                       Chip(
                                         label: Text(
-                                          '${medicineRequest.status!}'.tr,
+                                          medicineRequest.status!.tr,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: medicineRequest.status ==
@@ -232,19 +243,17 @@ class PrescriptionScreen extends StatelessWidget {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           // if the medicine request is pending then show the edit and delete buttons
-                                          if (medicineRequest.status ==
-                                              'Pending' &&
+                                          if (
                                               !controller.PC.medicalRecord.value
                                                   .isClosed() &&
-                                              controller.PC.medicalRecord.value
-                                                  .userId ==
+                                              controller.prescription.value.doctor!.id ==
                                                   authController.user['id'])
                                             Padding(
                                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                                               child: Row(
 
                                                 children: [
-                                                  SizedBox(
+                                                  medicineRequest.status == 'Pending'  ?SizedBox(
                                                     width: 30,
                                                     height: 30,
                                                     child: IconButton(
@@ -261,9 +270,9 @@ class PrescriptionScreen extends StatelessWidget {
 
                                                       ),
                                                     ),
-                                                  ),
+                                                  ) : const SizedBox(width: 8.0),
                                                   const SizedBox(width: 8.0),
-                                                  SizedBox(
+                                                  medicineRequest.status != 'Approved' ? SizedBox(
                                                     width: 30,
                                                     height: 30,
                                                     child: IconButton(
@@ -294,7 +303,7 @@ class PrescriptionScreen extends StatelessWidget {
                                                         color: Colors.red,
                                                       ),
                                                     ),
-                                                  ),
+                                                  ) : const SizedBox(width: 8.0),
                                                 ],
                                               ),
                                             )
@@ -531,7 +540,7 @@ class _EditMedicineRequestDialogState extends State<EditMedicineRequestDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Edit Medicine Request',
+                'Edit Medicine Request'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: ResponsiveFontSize.medium(),
@@ -599,7 +608,7 @@ class _EditMedicineRequestDialogState extends State<EditMedicineRequestDialog> {
                         Get.back();
                       }
                     },
-                    child: const Text('Edit'),
+                    child:  Text('Edit'.tr),
                   ),
                 ],
               ),

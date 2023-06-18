@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Controllers/MonitoringSheet/AddMonitoringSheetDayController.dart';
 import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +13,10 @@ import '../../Models/Medicine.dart';
 import '../../Services/Api.dart';
 
 class AddMonitoringSheetDayScreen extends StatelessWidget {
-  final  _controller =
+  final  controller =
       Get.put(AddMonitoringSheetDayController());
+
+   AddMonitoringSheetDayScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,23 +31,23 @@ class AddMonitoringSheetDayScreen extends StatelessWidget {
             children: [
               FormBuilderDateTimePicker(
                 name: 'day',
-                initialValue: _controller.day.value,
+                initialValue: controller.day.value,
                 inputType: InputType.date,
                 format: DateFormat('yyyy-MM-dd'),
                 decoration: GlobalWidgets.inputDecoration('Day'.tr, Icons.calendar_today),
                 onChanged: (value) =>
-                    _controller.day.value = value!,
+                    controller.day.value = value!,
               ),
               const SizedBox(height: 16.0),
               // time of day picker
               FormBuilderDateTimePicker(
                 name: 'time',
-                initialValue: _controller.time.value,
+                initialValue: controller.time.value,
                 inputType: InputType.time,
                 format: DateFormat('HH:mm'),
                 decoration: GlobalWidgets.inputDecoration('Time'.tr, Icons.access_time),
                 onChanged: (value) =>
-                    _controller.time.value = value!,
+                    controller.time.value = value!,
               ),
 
               const SizedBox(height: 16.0),
@@ -68,24 +69,24 @@ class AddMonitoringSheetDayScreen extends StatelessWidget {
                     // treatmetns list with remove and update button
                     ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _controller.treatmentList.length,
+                  itemCount: controller.treatmentList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
-                          '${_controller.treatmentList[index].name}'),
+                          controller.treatmentList[index].name),
                       subtitle: Text(
-                          '${_controller.treatmentList[index].dose}'),
+                          controller.treatmentList[index].dose),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
 
                           IconButton(
                             onPressed: () {
-                              _controller.removeTreatment(
-                                  _controller
+                              controller.removeTreatment(
+                                  controller
                                       .treatmentList[index]);
                             },
-                            icon: Icon(Icons.delete , color: Colors.redAccent,),
+                            icon: const Icon(Icons.delete , color: Colors.redAccent,),
                           ),
                         ],
                       ),
@@ -98,9 +99,9 @@ class AddMonitoringSheetDayScreen extends StatelessWidget {
               Center(
                 child: RoundedLoadingButton(
                   onPressed: () {
-                    _controller.addMonitoringSheetDay();
+                    controller.addMonitoringSheetDay();
                   },
-                  controller: _controller.loadingButtonController.value,
+                  controller: controller.loadingButtonController.value,
                   animateOnTap: false,
                   child:  Text('Save'.tr),
                 ),
@@ -117,12 +118,12 @@ class AddTreatmentDialog extends StatefulWidget {
   const AddTreatmentDialog({Key? key}) : super(key: key);
 
   @override
-  _AddTreatmentDialogState createState() => _AddTreatmentDialogState();
+  State<AddTreatmentDialog> createState() => _AddTreatmentDialogState();
 }
 
 class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final _controller =
+  final controller =
       Get.find<AddMonitoringSheetDayController>();
   Medicine? _selectedMedicine;
 
@@ -145,7 +146,6 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
 
                     itemAsString: (Medicine? m) => "${m?.name!} ",
                     asyncItems: (String filter) async {
-                      print(filter);
                       var response = await Api.getMedicines();
                       var models = Medicine.fromJsonList(response.data['data']);
                       return models;
@@ -174,7 +174,7 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
 
                   FormBuilderTextField(
                     name: 'name',
-                    initialValue: "${_selectedMedicine?.name ?? ''}",
+                    initialValue: _selectedMedicine?.name ?? '',
                     decoration:  InputDecoration(labelText: 'Name'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
@@ -222,7 +222,7 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
               onPressed: () {
                 if (_formKey.currentState!.saveAndValidate()) {
                   final values = _formKey.currentState!.value;
-                  _controller.treatmentList.add(TreatmentData(
+                  controller.treatmentList.add(TreatmentData(
                       name: values['name'],
                       dose: values['dose'],
                       type: values['type'],

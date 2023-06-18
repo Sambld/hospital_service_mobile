@@ -9,7 +9,7 @@ import '../../Controllers/MonitoringSheet/MonitoringSheetController.dart';
 import 'UpdateMonitoringSheetBottomSheet.dart';
 
 class MonitoringSheetScreen extends StatelessWidget {
-  final _controller = Get.put(MonitoringSheetController());
+  final controller = Get.put(MonitoringSheetController());
 
   final authController = Get.find<AuthController>();
 
@@ -22,14 +22,14 @@ class MonitoringSheetScreen extends StatelessWidget {
         appBar: AppBar(
             flexibleSpace: kAppBarColor,
             title: Text(
-              '${"Monitoring Sheet".tr}   ${_controller.monitoringSheetList.isNotEmpty ? "( ${_controller.monitoringSheetList.length} days )" : ""}',
+              '${"Monitoring Sheet".tr} ',
               style: const TextStyle(fontSize: 16),
             )),
-        body: _controller.isLoading.value
+        body: controller.isLoading.value
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : _controller.monitoringSheetList.isEmpty
+            : controller.monitoringSheetList.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -38,9 +38,9 @@ class MonitoringSheetScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        _controller.medicalRecord.value.userId ==
+                        controller.medicalRecord.value.userId ==
                                     authController.user['id'] &&
-                                !_controller.medicalRecord.value.isClosed()
+                                !controller.medicalRecord.value.isClosed()
                             ? ElevatedButton(
                                 onPressed: () {
                                   Get.toNamed(
@@ -80,7 +80,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                            "#${_controller.medicalRecord.value.id}"),
+                                            "#${controller.medicalRecord.value.id}"),
                                       ],
                                     ),
                                     const SizedBox(height: 4),
@@ -97,7 +97,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                            "${_controller.patient.value.firstName} ${_controller.patient.value.lastName} #${_controller.patient.value.id}"),
+                                            "${controller.patient.value.firstName} ${controller.patient.value.lastName} #${controller.patient.value.id}"),
                                       ],
                                     ),
                                     const SizedBox(height: 4),
@@ -114,7 +114,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                            "${_controller.currentMonitoringSheet.value.doctor?.fullName()} #${_controller.currentMonitoringSheet.value.doctor?.id} ${authController.user['id'] == _controller.currentMonitoringSheet.value.doctor?.id ? "( ${"You".tr} )" : ""}"),
+                                            "${controller.currentMonitoringSheet.value.doctor?.fullName()} #${controller.currentMonitoringSheet.value.doctor?.id} ${authController.user['id'] == controller.currentMonitoringSheet.value.doctor?.id ? "( ${"You".tr} )" : ""}"),
                                       ],
                                     ),
                                   ], Colors.green),
@@ -127,10 +127,10 @@ class MonitoringSheetScreen extends StatelessWidget {
                                 children: [
                                   IconButton(
                                     onPressed:
-                                        _controller.isFirstMonitoringSheet()
+                                        controller.isFirstMonitoringSheet()
                                             ? null
                                             : () {
-                                                _controller
+                                                controller
                                                     .previousMonitoringSheet();
                                               },
                                     icon: const Icon(
@@ -142,9 +142,9 @@ class MonitoringSheetScreen extends StatelessWidget {
                                   Column(
                                     children: [
                                       Text(
-                                        "${_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10)} ( ${DateFormat('yyyy-MM-dd').format(DateTime.now()) == _controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10) ? "Today".tr :
+                                        "${controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10)} ( ${DateFormat('yyyy-MM-dd').format(DateTime.now()) == controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10) ? "Today".tr :
                                             // show only three character of the day name
-                                            DateFormat('EEE').format(DateTime.parse(_controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10))).substring(0, 3).tr} )",
+                                            DateFormat('EEE').format(DateTime.parse(controller.currentMonitoringSheet.value.fillingDate.toString().substring(0, 10))).substring(0, 3).tr} )",
                                         style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500),
@@ -152,7 +152,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       const SizedBox(width: 3),
                                       // time of the monitoring sheet
                                       Text(
-                                        "${_controller.currentMonitoringSheet.value.fillingDate.toString().substring(11, 16)}",
+                                        controller.currentMonitoringSheet.value.fillingDate.toString().substring(11, 16),
                                         style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500),
@@ -161,11 +161,11 @@ class MonitoringSheetScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 16),
                                   IconButton(
-                                    onPressed: _controller
+                                    onPressed: controller
                                             .isLastMonitoringSheet()
                                         ? null
                                         : () {
-                                            _controller.nextMonitoringSheet();
+                                            controller.nextMonitoringSheet();
                                           },
                                     icon: const Icon(
                                       Icons.arrow_right,
@@ -174,18 +174,14 @@ class MonitoringSheetScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              _controller.currentMonitoringSheet.value.filledBy?.isNotEmpty ??
+                              controller.currentMonitoringSheet.value.filledBy?.isNotEmpty ??
                                       false
-                                  ? (_controller.currentMonitoringSheet.value.filledById ==
-                                                  authController.user['id'] ||
-                                  authController.user['id'] == _controller.currentMonitoringSheet.value.doctor?.id) &&
-                                          !_controller.medicalRecord.value
+                                  ? (
+                                                  authController.isDoctor() ||
+                                  authController.user['id'] == controller.currentMonitoringSheet.value.filledById) &&
+                                          !controller.medicalRecord.value
                                               .isClosed() &&
-                                          DateFormat('yyyy-MM-dd').format(DateTime.now()).toString() ==
-                                              _controller.currentMonitoringSheet
-                                                  .value.fillingDate
-                                                  .toString()
-                                                  .substring(0, 10)
+                                          controller.currentMonitoringSheet.value.isToday()
                                       ?
                                       // if the monitoring sheet is filled by the current user , a button to update it
                                       Column(
@@ -221,11 +217,11 @@ class MonitoringSheetScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 // a icon button to delete the monitoring sheet
-                                                _controller.medicalRecord.value
+                                                controller.medicalRecord.value
                                                                 .userId ==
                                                             authController
                                                                 .user['id'] &&
-                                                        !_controller
+                                                        !controller
                                                             .medicalRecord.value
                                                             .isClosed()
                                                     ? IconButton(
@@ -244,8 +240,8 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       :
                                       // if the monitoring sheet is filled by another user , text to show who filled it
                                       filledByCard()
-                                  : _controller.medicalRecord.value.userId == authController.user['id'] &&
-                                          (_controller.currentMonitoringSheet.value.filledBy?.isNotEmpty ??
+                                  : controller.medicalRecord.value.userId == authController.user['id'] &&
+                                          (controller.currentMonitoringSheet.value.filledBy?.isNotEmpty ??
                                               false)
                                       ? Row(
                                           children: [
@@ -254,9 +250,9 @@ class MonitoringSheetScreen extends StatelessWidget {
                                         )
                                       :
                                       // delete button
-                                      _controller.medicalRecord.value.userId ==
+                                      controller.currentMonitoringSheet.value.doctor!.id ==
                                                   authController.user['id'] &&
-                                              !_controller.medicalRecord.value.isClosed()
+                                              !controller.medicalRecord.value.isClosed()
                                           ? Row(
                                               children: [
                                                 Expanded(
@@ -279,15 +275,15 @@ class MonitoringSheetScreen extends StatelessWidget {
                                             )
                                           : Container(),
                               // if the monitoring sheet is not filled yet , a button to fill it
-                              _controller.currentMonitoringSheet.value.filledById ==
+                              controller.currentMonitoringSheet.value.filledById ==
                                           null &&
                                       authController.isNurse() &&
-                                      !_controller.medicalRecord.value
+                                      !controller.medicalRecord.value
                                           .isClosed() &&
                                       DateFormat('yyyy-MM-dd')
                                               .format(DateTime.now())
                                               .toString() ==
-                                          _controller.currentMonitoringSheet
+                                          controller.currentMonitoringSheet
                                               .value.fillingDate
                                               .toString()
                                               .substring(0, 10)
@@ -312,10 +308,10 @@ class MonitoringSheetScreen extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        _controller.medicalRecord.value
+                                        controller.medicalRecord.value
                                                         .userId ==
                                                     authController.user['id'] &&
-                                                !_controller.medicalRecord.value
+                                                !controller.medicalRecord.value
                                                     .isClosed()
                                             ? IconButton(
                                                 onPressed: deleteDay,
@@ -333,10 +329,10 @@ class MonitoringSheetScreen extends StatelessWidget {
                                 onHorizontalDragEnd: (DragEndDetails details) {
                                   if (details.primaryVelocity! > 0) {
                                     // User swiped Left
-                                    _controller.previousMonitoringSheet();
+                                    controller.previousMonitoringSheet();
                                   } else if (details.primaryVelocity! < 0) {
                                     // User swiped Right
-                                    _controller.nextMonitoringSheet();
+                                    controller.nextMonitoringSheet();
                                   }
                                 },
                                 child: Padding(
@@ -348,7 +344,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       DataColumn(
                                         label: Expanded(
                                           child: Text(
-                                            '${"Checkup".tr} #${_controller.currentMonitoringSheet.value.id}',
+                                            '${"Checkup".tr} #${controller.currentMonitoringSheet.value.id}',
                                             style: const TextStyle(
                                                 fontStyle: FontStyle.italic),
                                           ),
@@ -368,17 +364,17 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       DataRow(
                                         cells: <DataCell>[
                                           DataCell(
-                                            Text('Temperature'.tr,
+                                            Text('${'Temperature'.tr} (°C)',
                                                 style: Styles.type,
                                                 textAlign: TextAlign.center),
                                           ),
-                                          DataCell(_controller
+                                          DataCell(controller
                                                       .currentMonitoringSheet
                                                       .value
                                                       .temperature !=
                                                   null
                                               ? Text(
-                                                  "${_controller.currentMonitoringSheet.value.temperature}°C",
+                                                  "${controller.currentMonitoringSheet.value.temperature}",
                                                   style: Styles.result,
                                                 )
                                               : Chip(
@@ -396,15 +392,15 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       DataRow(
                                         cells: <DataCell>[
                                           DataCell(Text(
-                                            'Blood Pressure'.tr,
+                                            '${'Blood Pressure'.tr} (mmHg)',
                                             style: Styles.type,
                                           )),
                                           DataCell(
-                                            _controller.currentMonitoringSheet
+                                            controller.currentMonitoringSheet
                                                         .value.bloodPressure !=
                                                     null
                                                 ? Text(
-                                                    "${_controller.currentMonitoringSheet.value.bloodPressure}",
+                                                    "${controller.currentMonitoringSheet.value.bloodPressure}",
                                                     style: Styles.result,
                                                   )
                                                 : Chip(
@@ -423,15 +419,15 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       DataRow(
                                         cells: <DataCell>[
                                           DataCell(Text(
-                                            'Urine'.tr,
+                                            '${'Urine'.tr} (ml)',
                                             style: Styles.type,
                                           )),
                                           DataCell(
-                                            _controller.currentMonitoringSheet
+                                            controller.currentMonitoringSheet
                                                         .value.urine !=
                                                     null
                                                 ? Text(
-                                                    "${_controller.currentMonitoringSheet.value.urine}",
+                                                    "${controller.currentMonitoringSheet.value.urine}",
                                                     style: Styles.result,
                                                   )
                                                 : Chip(
@@ -450,15 +446,15 @@ class MonitoringSheetScreen extends StatelessWidget {
                                       DataRow(
                                         cells: <DataCell>[
                                           DataCell(Text(
-                                            'Weight'.tr,
+                                            '${'Weight'.tr} (Kg)',
                                             style: Styles.type,
                                           )),
                                           DataCell(
-                                            _controller.currentMonitoringSheet
+                                            controller.currentMonitoringSheet
                                                         .value.weight !=
                                                     null
                                                 ? Text(
-                                                    "${_controller.currentMonitoringSheet.value.weight} Kg",
+                                                    "${controller.currentMonitoringSheet.value.weight}",
                                                     style: Styles.result,
                                                   )
                                                 : Chip(
@@ -478,7 +474,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              _controller.currentMonitoringSheet.value
+                              controller.currentMonitoringSheet.value
                                           .progressReport?.isEmpty ??
                                       true
                                   ? Container()
@@ -496,7 +492,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 8.0),
                                         Text(
-                                          _controller.currentMonitoringSheet
+                                          controller.currentMonitoringSheet
                                                   .value.progressReport ??
                                               "-",
                                           style: const TextStyle(
@@ -514,7 +510,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                               // update treatment button
 
                               // table of monitoring sheet treatments
-                              _controller.currentMonitoringSheet.value
+                              controller.currentMonitoringSheet.value
                                           .treatments?.isEmpty ??
                                       true
                                   ? Container()
@@ -567,7 +563,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ],
-                                                rows: _controller
+                                                rows: controller
                                                     .currentMonitoringSheet
                                                     .value
                                                     .treatments!
@@ -597,10 +593,14 @@ class MonitoringSheetScreen extends StatelessWidget {
                                         )
                                       ],
                                     ),
-                              _controller.currentMonitoringSheet.value.doctor?.id ==
-                                          authController.user['id'] &&
-                                      !_controller.medicalRecord.value
-                                          .isClosed()
+
+                                          authController.isDoctor() &&
+                                      !controller.medicalRecord.value
+                                          .isClosed()&&
+                                              controller.currentMonitoringSheet.value.isToday()
+
+
+
                                   ? Row(
                                       children: [
                                         Expanded(
@@ -614,10 +614,10 @@ class MonitoringSheetScreen extends StatelessWidget {
                                               onPressed: () {
                                                 Get.toNamed(
                                                         '/update-monitoring-sheet-treatments')
-                                                    ?.then((value) => _controller
+                                                    ?.then((value) => controller
                                                         .getMonitoringSheets());
                                               },
-                                              child: _controller
+                                              child: controller
                                                           .currentMonitoringSheet
                                                           .value
                                                           .treatments
@@ -644,17 +644,17 @@ class MonitoringSheetScreen extends StatelessWidget {
                     floatingActionButton:
 
                                     authController.isDoctor() &&
-                                !_controller.medicalRecord.value.isClosed()
+                                !controller.medicalRecord.value.isClosed()
                             ? FloatingActionButton(
                                 onPressed: () {
                                   Get.toNamed(
                                     '/add-monitoring-sheet',
                                     // pass the last monitoring sheet day of the list to the next screen
-                                    arguments: _controller
+                                    arguments: controller
                                         .monitoringSheetList.last.fillingDate,
                                   )?.then((value) {
-                                    _controller.currentMonitoringSheetIndex(
-                                        _controller.monitoringSheetList.length);
+                                    controller.currentMonitoringSheetIndex(
+                                        controller.monitoringSheetList.length);
                                   });
                                 },
                                 child: const Icon(Icons.add),
@@ -677,11 +677,11 @@ class MonitoringSheetScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         onConfirm: () async {
           await Api.deleteMonitoringSheetDay(
-              _controller.patientId.value,
-              _controller.medicalRecordId.value,
-              _controller.currentMonitoringSheet.value.id!);
-          // _controller.currentMonitoringSheetIndex.value--;
-          _controller.getMonitoringSheets();
+              controller.patientId.value,
+              controller.medicalRecordId.value,
+              controller.currentMonitoringSheet.value.id!);
+          // controller.currentMonitoringSheetIndex.value--;
+          controller.getMonitoringSheets();
           Get.back();
         });
   }
@@ -699,7 +699,7 @@ class MonitoringSheetScreen extends StatelessWidget {
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               Text(
-                  "${_controller.currentMonitoringSheet.value.filledBy!['first_name']} ${_controller.currentMonitoringSheet.value.filledBy!['last_name']}"),
+                  "${controller.currentMonitoringSheet.value.filledBy!['first_name']} ${controller.currentMonitoringSheet.value.filledBy!['last_name']}"),
             ],
           )
         ],

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class Languages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
-        'FR': {
+        'fr': {
           'Login to your account': 'connecter a votre compte ',
           'Log in': 'Connexion',
           'Sign Out': 'Se déconnecter',
@@ -11,6 +11,7 @@ class Languages extends Translations {
           "Welcome": "Bienvenue",
           'Dashboard': 'Tableau de bord',
           'Patient': 'Patient',
+          'Information': 'Information',
           'Patients': 'Patients',
           'My Patients': 'Mes patients',
           'My Medical Records': 'Mes dossiers médicaux',
@@ -195,8 +196,33 @@ class Languages extends Translations {
           'Downloaded': 'Téléchargé',
           'Created By': 'Créé par',
           "Create New Prescription": "Créer une nouvelle ordonnance",
+
+          'Update Monitoring Sheet Treatments':
+              'Maj des traitements ',
+
+          'Total Patients': 'Total des patients',
+
+          "Latest Updates": "Dernières mises à jour",
+
+          "Username" : "Nom d'utilisateur",
+          "Password" : "Mot de passe",
+
+          "Medical Record" : "Dossier médical",
+          'Language': 'Langue',
+
+          'Inpatients': 'Patients hospitalisé',
+          'Treatment': 'Traitement',
+
+          'Type': 'Type',
+
+
+
+
+
+
+
         },
-        'EN': {
+        'en': {
           'Patient': 'Patient',
 
           'Log in': 'Log in',
@@ -204,6 +230,7 @@ class Languages extends Translations {
           'Sign Out': 'Sign Out',
           'Welcome back': 'Welcome back',
           "Welcome": "Welcome",
+          'Information': 'Information',
           'Dashboard': 'Dashboard',
           'Patients': 'Patients',
           'My Patients': 'My Patients',
@@ -385,16 +412,34 @@ class Languages extends Translations {
           'Created By': 'Created By',
 
           "Create New Prescription": "Create New Prescription",
+
+          'Update Monitoring Sheet Treatments':
+              'Update Monitoring Sheet Treatments',
+
+          'Total Patients': 'Total Patients',
+          "Username" : "Username" ,
+          "Password" : "Password" ,
+          "Medical Record" : "Medical Record" ,
+          'Language': 'Language',
+          'Inpatients': 'Inpatients',
+          'Treatment': 'Treatment',
+          'Type': 'Type',
+
+
+
+
+
+
         },
 
-        'AR': {
+        'ar': {
           'Patient': 'المريض',
 
           'Log in': 'تسجيل الدخول',
           'Login to your account': 'تسجيل الدخول إلى حسابك',
           'Sign Out': 'تسجيل الخروج',
           'Welcome back': 'مرحباً بعودتك', "Welcome": "مرحباً",
-
+          'Information': ' معلومات المريض',
           'Dashboard': 'لوحة التحكم',
           'Patients': 'المرضى',
           'My Patients': 'مرضاي',
@@ -556,7 +601,7 @@ class Languages extends Translations {
           "Thu": "الخميس",
           "Fri": "الجمعة",
           "Sat": "السبت",
-
+          'Active only': 'النشطة فقط',
 
           'Prescriptions': 'الوصفات الطبية',
           'Add Prescription': 'إضافة وصفة طبية',
@@ -567,6 +612,22 @@ class Languages extends Translations {
           'Created By': 'تم الإنشاء بواسطة',
 
           "Create New Prescription": "إنشاء وصفة طبية جديدة",
+
+
+          'Update Monitoring Sheet Treatments': 'تحديث علاجات ورقة المراقبة',
+
+          "Latest Updates":  'آخر التحديثات',
+
+          'Total Patients': 'إجمالي المرضى',
+          "Username" :  "اسم المستخدم",
+          "Password" :  "كلمة المرور" ,
+
+              "Medical Record": "السجل الطبي",
+
+          'Language': 'اللغة',
+          'Inpatients': 'المرضى داخل المستشفى',
+          'Treatment': 'العلاج',
+          'Type': 'النوع',
         }
       };
 }

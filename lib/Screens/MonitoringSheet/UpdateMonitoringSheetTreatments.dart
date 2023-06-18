@@ -22,14 +22,14 @@ class UpdateMonitoringSheetTreatments extends StatefulWidget {
 
 class _UpdateMonitoringSheetTreatmentsState
     extends State<UpdateMonitoringSheetTreatments> {
-  final _controller =
+  final controller =
       Get.put(UpdateMonitoringSheetTreatmentsController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(title:  Text('Update Monitoring Sheet Day'.tr),
+      appBar: AppBar(title:  Text('Update Monitoring Sheet Treatments'.tr , style: const TextStyle(fontSize: 16),),
         flexibleSpace: kAppBarColor,
 
       ),
@@ -43,12 +43,12 @@ class _UpdateMonitoringSheetTreatmentsState
                 name: 'day',
                 enabled: false,
                 initialValue:
-                    _controller.day.value,
+                    controller.day.value,
                 inputType: InputType.date,
                 format: DateFormat('yyyy-MM-dd HH:mm'),
                 decoration:
-                    GlobalWidgets.inputDecoration("Day", Icons.calendar_today),
-                onChanged: (value) => _controller
+                    GlobalWidgets.inputDecoration("Day".tr, Icons.calendar_today),
+                onChanged: (value) => controller
                     .day.value = value!,
               ),
               const SizedBox(height: 16.0),
@@ -70,21 +70,21 @@ class _UpdateMonitoringSheetTreatmentsState
                     // treatmetns list with remove and update button
                     ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _controller
+                  itemCount: controller
                       .treatmentList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
-                          '${_controller.treatmentList[index].name}'),
+                          '${controller.treatmentList[index].name}'),
                       subtitle: Text(
-                          '${_controller.treatmentList[index].dose}'),
+                          '${controller.treatmentList[index].dose}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
                             onPressed: () async {
-                              final medRequest = await Api.getMedicineById(
-                                      id: _controller
+                              await Api.getMedicineById(
+                                      id: controller
                                           .treatmentList[index].medicineId!)
                                   .then((res) {
                                 final Medicine medicine =
@@ -92,7 +92,7 @@ class _UpdateMonitoringSheetTreatmentsState
                                 Get.dialog(EditTreatmentDialog(
                                   medicine: medicine,
                                   treatment:
-                                      _controller
+                                      controller
                                           .treatmentList[index],
                                 ));
                               });
@@ -116,15 +116,15 @@ class _UpdateMonitoringSheetTreatmentsState
                                 cancelTextColor: Colors.redAccent,
                                 onConfirm: () {
                                   Api.deleteMonitoringSheetTreatment(
-                                      _controller
+                                      controller
                                           .MC.patientId.value,
-                                      _controller
+                                      controller
                                           .MC.medicalRecordId.value,
-                                      _controller
+                                      controller
                                           .MC.currentMonitoringSheet.value.id!,
-                                      _controller
+                                      controller
                                           .treatmentList[index].id!);
-                                  _controller
+                                  controller
                                       .getTreatments();
                                   Get.back();
                                 },
@@ -133,7 +133,7 @@ class _UpdateMonitoringSheetTreatmentsState
                                 },
                               );
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.delete,
                               color: Colors.redAccent,
                             ),
@@ -149,9 +149,9 @@ class _UpdateMonitoringSheetTreatmentsState
               // Center(
               //   child: RoundedLoadingButton(
               //     onPressed: () {
-              //       _controller.addMonitoringSheetDay();
+              //       controller.addMonitoringSheetDay();
               //     },
-              //     controller: _controller.loadingButtonController.value,
+              //     controller: controller.loadingButtonController.value,
               //     animateOnTap: false,
               //     child: const Text('Save'),
               //   ),
@@ -170,12 +170,12 @@ class AddTreatmentDialog extends StatefulWidget {
   const AddTreatmentDialog({Key? key}) : super(key: key);
 
   @override
-  _AddTreatmentDialogState createState() => _AddTreatmentDialogState();
+  State<AddTreatmentDialog> createState() => _AddTreatmentDialogState();
 }
 
 class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final _controller =
+  final controller =
       Get.find<UpdateMonitoringSheetTreatmentsController>();
   Medicine? _selectedMedicine;
 
@@ -278,15 +278,15 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
               child:  Text('Cancel'.tr),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.saveAndValidate()) {
                   final values = _formKey.currentState!.value;
-                  Api.addMonitoringSheetTretment(
-                      _controller
+                  await Api.addMonitoringSheetTretment(
+                      controller
                           .MC.patientId.value,
-                      _controller
+                      controller
                           .MC.medicalRecordId.value,
-                      _controller
+                      controller
                           .MC.currentMonitoringSheet.value.id!,
                       {
                         'medicine_id': _selectedMedicine!.id,
@@ -294,8 +294,8 @@ class _AddTreatmentDialogState extends State<AddTreatmentDialog> {
                         'dose': values['dose'],
                         'type': values['type'],
                       });
-                  _controller.getTreatments();
-                  Navigator.of(context).pop();
+                  controller.getTreatments();
+                  Get.back();
                 }
               },
               child:  Text('Add'.tr),
@@ -317,12 +317,12 @@ class EditTreatmentDialog extends StatefulWidget {
   final Treatment treatment;
 
   @override
-  _EditTreatmentDialogState createState() => _EditTreatmentDialogState();
+  State<EditTreatmentDialog> createState() => _EditTreatmentDialogState();
 }
 
 class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final _controller =
+  final controller =
       Get.find<UpdateMonitoringSheetTreatmentsController>();
   Medicine? _selectedMedicine;
 
@@ -393,7 +393,7 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                   FormBuilderTextField(
                     name: 'dose',
                     initialValue: "${widget.treatment.dose}",
-                    decoration: const InputDecoration(labelText: 'Dose'),
+                    decoration:  InputDecoration(labelText: 'Dose'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
@@ -403,7 +403,7 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                     name: 'type',
                     initialValue: "${widget.treatment.type}",
                     decoration:
-                        const InputDecoration(labelText: 'Treatment Type'),
+                         InputDecoration(labelText: 'Type'.tr),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
                     ]),
@@ -429,18 +429,18 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child:  Text('Cancel'.tr , style: TextStyle(color: Colors.green),),
+              child:  Text('Cancel'.tr , style: const TextStyle(color: Colors.green),),
             ),
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.saveAndValidate()) {
                   final values = _formKey.currentState!.value;
                   Api.editMonitoringSheetTretment(
-                      _controller
+                      controller
                           .MC.patientId.value,
-                      _controller
+                      controller
                           .MC.medicalRecordId.value,
-                      _controller
+                      controller
                           .MC.currentMonitoringSheet.value.id!,
                       widget.treatment.id!,
                       {
@@ -449,17 +449,17 @@ class _EditTreatmentDialogState extends State<EditTreatmentDialog> {
                         'dose': values['dose'],
                         'type': values['type'],
                       });
-                  await _controller.getTreatments();
-                  Navigator.of(context).pop();
+                  await controller.getTreatments();
+                  Get.back();
                 }
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
               child: const Text(
                 'Edit',
 
 
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
               ),
             )
             ,

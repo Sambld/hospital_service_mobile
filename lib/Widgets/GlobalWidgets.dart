@@ -19,21 +19,21 @@ class GlobalWidgets  {
         borderRadius: BorderRadius.circular(10.0),
       ),
       errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.red,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.blue,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
       disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Colors.grey,
           width: 1.0,
         ),

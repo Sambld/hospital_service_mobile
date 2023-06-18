@@ -76,7 +76,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
       ),
       body: Column(
         children: [
-          _authController.user.value['role'] == 'doctor' ? Obx(
+          Obx(
             () => Row(
               children: [
                 Expanded(
@@ -95,7 +95,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                     },
                   ),
                 ),
-                Expanded(
+                 _authController.isNurse() ? const SizedBox() : Expanded(
                   child: SwitchListTile(
                     title: Text(
                       'Mine only'.tr,
@@ -113,13 +113,13 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                 ),
               ],
             ),
-          ): Container(),
+          ),
           Expanded(
             child: Obx(() {
               final medicalRecords = controller.medicalRecords;
 
               if (controller.isLoading.value) {
-                return Center(child: const CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else {
                 if (medicalRecords.isEmpty) {
                   return Center(

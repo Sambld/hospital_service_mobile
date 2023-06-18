@@ -98,7 +98,7 @@ class EditPatientScreen extends StatelessWidget {
                   FormBuilderTextField(
                     initialValue: _editPatientController.patient.value.address,
                     name: 'address',
-                    decoration: inputDecoration('Address *', Icons.location_on),
+                    decoration: inputDecoration('Address'.tr, Icons.location_on),
                     validator: FormBuilderValidators.required(
                         errorText: 'Address is required'.tr),
                   ),

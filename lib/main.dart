@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(),
       getPages: [
         GetPage(name: '/dashboard', page: () => const DashboardScreen()),
-        GetPage(name: '/patients', page: () => const PatientsScreen()),
+        GetPage(name: '/patients', page: () =>  PatientsScreen()),
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/patient-details', page: () =>  PatientScreen()),
         GetPage(name: '/add-patient', page: () => AddPatientScreen()),
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
             transition: Transition.fade),
         GetPage(
             name: '/complementary-examinations',
-            page: () => const ComplementaryExaminationsScreen(),
+            page: () =>  ComplementaryExaminationsScreen(),
             transition: Transition.fade),
       GetPage(
             name: '/prescriptions',

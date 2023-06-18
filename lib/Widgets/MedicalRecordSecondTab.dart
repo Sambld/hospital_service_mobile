@@ -8,6 +8,8 @@ class SecondTab extends StatelessWidget {
   final medicalRecordController = Get.find<MedicalRecordController>();
   final authController = Get.find<AuthController>();
 
+   SecondTab({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

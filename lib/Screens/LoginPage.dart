@@ -1,12 +1,9 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:infectious_diseases_service/Controllers/AuthController.dart';
-import 'package:infectious_diseases_service/Screens/Dashboard.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 import '../Services/Api.dart';
@@ -34,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  String? _ValidateUsername(String? value) {
+  String? validateUsername(String? value) {
     if (value == null || value.isEmpty) {
       return 'Username is required';
     }
@@ -67,10 +64,8 @@ class _LoginPageState extends State<LoginPage> {
 
         }
       } catch (e) {
-        print("error");
         _btnController.stop();
         _btnController.reset();
-        print(e);
       }
     }else{
       _btnController.reset();
@@ -98,17 +93,17 @@ class _LoginPageState extends State<LoginPage> {
                           SvgPicture.asset(
                             'assets/images/logo.svg',
                             width: 70,
-                            theme: SvgTheme(
+                            theme: const SvgTheme(
                               xHeight: 5,
                               currentColor: Colors.blue,
                               fontSize: 1,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 15,
                           ),
                           Column(
-                            children: [
+                            children: const [
                               Text(
                                 "Infectious diseases",
                                 style: TextStyle(fontSize: 18),
@@ -121,12 +116,12 @@ class _LoginPageState extends State<LoginPage> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Text(
                         'Welcome back'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 17,
                           color: Colors.black,
                         ),
@@ -134,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 8),
                       Text(
                         'Login to your account'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 23,
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
@@ -145,8 +140,8 @@ class _LoginPageState extends State<LoginPage> {
                       TextFormField(
                         controller: _usernameController,
                         decoration: InputDecoration(
-                          labelText: 'Username',
-                          labelStyle: TextStyle(
+                          labelText: 'Username'.tr,
+                          labelStyle: const TextStyle(
                             color: Colors.black87,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -158,19 +153,19 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(color: Colors.grey[600]!),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 10,
                           ),
                         ),
-                        validator: _ValidateUsername,
+                        validator: validateUsername,
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: _passwordController,
                         decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle: TextStyle(
+                          labelText: 'Password'.tr,
+                          labelStyle: const TextStyle(
                             color: Colors.black87,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -179,10 +174,10 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
+                            borderSide: const BorderSide(color: Colors.black),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 10,
                           ),
@@ -192,10 +187,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 25),
                       RoundedLoadingButton(
-                        child: Text('Log in'.tr, style: TextStyle(color: Colors.white)),
                         controller: _btnController,
                         onPressed: login,
                         animateOnTap: false,
+                        child: Text('Log in'.tr, style: const TextStyle(color: Colors.white)),
                       ),
                       // TextButton(
                       //   onPressed: () {},

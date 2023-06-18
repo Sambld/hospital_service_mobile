@@ -19,11 +19,10 @@ class ObservationScreen extends StatefulWidget {
 }
 
 class _ObservationScreenState extends State<ObservationScreen> {
-  final _controller = Get.put(ObservationController());
-  final _authController = Get.find<AuthController>();
+  final controller = Get.put(ObservationController());
+  final authController = Get.find<AuthController>();
   final String _storageUrl = '$apiUrl/storage/images/';
-  // final String _storageUrl = 'http://10.0.2.2:8000/storage/images/';
-  //
+
   int _currentPhotoIndex = 0;
 
   @override
@@ -32,7 +31,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
       () => Scaffold(
         // add images floating action button
         floatingActionButton:
-        !_controller.OC.medicalRecord.value.isClosed() && _controller.observation.value.doctor?.id ==  _authController.user['id'] ? SpeedDial(
+        !controller.OC.medicalRecord.value.isClosed() && controller.observation.value.doctor?.id ==  authController.user['id'] ? SpeedDial(
           overlayOpacity: 0.2,
           animatedIcon: AnimatedIcons.list_view,
           children: [
@@ -40,14 +39,14 @@ class _ObservationScreenState extends State<ObservationScreen> {
               child: const Icon(Icons.photo_library),
               label: "Add photo from gallery".tr,
               onTap: () async {
-                await _controller.uploadMultipleImages();
+                await controller.uploadMultipleImages();
               },
             ),
             SpeedDialChild(
               child: const Icon(Icons.camera_alt),
               label: "Add photo from camera".tr,
               onTap: () async {
-                await _controller.uploadCameraImage();
+                await controller.uploadCameraImage();
               },
             ),
           ],
@@ -57,10 +56,10 @@ class _ObservationScreenState extends State<ObservationScreen> {
 
         appBar: AppBar(
           flexibleSpace: kAppBarColor,
-          title: Text("Observation #${_controller.observation.value.id.toString()}"),
+          title: Text("Observation #${controller.observation.value.id.toString()}"),
 
         ),
-        body: _controller.isLoading.value
+        body: controller.isLoading.value
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -74,17 +73,17 @@ class _ObservationScreenState extends State<ObservationScreen> {
                         children:  [
                           Expanded(
                             child: Text(
-                              _controller.observation.value.name ?? '',
+                              controller.observation.value.name ?? '',
                               style:  TextStyle(fontSize: ResponsiveFontSize.large()),
 
 
                             ),
                           ),
                           // edit icon button
-                          !_controller.OC.medicalRecord.value.isClosed() && _controller.OC.medicalRecord.value.userId ==  _authController.user['id'] ? IconButton(
+                          !controller.OC.medicalRecord.value.isClosed() && controller.observation.value.doctor!.id ==  authController.user['id'] ? IconButton(
                             icon: const Icon(Icons.edit , color: Colors.green,),
                             onPressed: () {
-                              _controller.editNameController.text = _controller.observation.value.name ?? '';
+                              controller.editNameController.text = controller.observation.value.name ?? '';
                               Get.defaultDialog(
 
                                 title: "Edit Observation Name".tr,
@@ -95,7 +94,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                   child: TextFormField(
                                     maxLines: 4,
                                     minLines: 1,
-                                    controller: _controller.editNameController,
+                                    controller: controller.editNameController,
                                     decoration:  InputDecoration(
                                       hintText: "Observation Name".tr,
                                     ),
@@ -107,14 +106,14 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                 buttonColor: Colors.green,
                                 confirmTextColor: Colors.white,
                                 onConfirm: () {
-                                  _controller.updateObservationName();
-                                  _controller.editNameController.clear();
+                                  controller.updateObservationName();
+                                  controller.editNameController.clear();
                                   Get.back();
                                 },
                               );
                             },
                           ): const SizedBox(),
-                          !_controller.OC.medicalRecord.value.isClosed() && _controller.observation.value.doctor?.id ==  _authController.user['id'] ? IconButton(
+                          !controller.OC.medicalRecord.value.isClosed() && controller.observation.value.doctor?.id ==  authController.user['id'] ? IconButton(
                             icon: const Icon(Icons.delete , color: Colors.redAccent,),
                             onPressed: () {
                               Get.defaultDialog(
@@ -129,7 +128,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                 buttonColor: Colors.red,
                                 confirmTextColor: Colors.white,
                                 onConfirm: () {
-                                  _controller.deleteObservation();
+                                  controller.deleteObservation();
                                   Get.back();
                                 },
                               );
@@ -139,7 +138,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                       ),
 
                       const SizedBox(height: 8),
-                      Text('${"Date".tr} : ${DateFormat('dd/MM/yyyy').format(_controller.observation.value.createdAt!)}')
+                      Text('${"Date".tr} : ${DateFormat('dd/MM/yyyy').format(controller.observation.value.createdAt!)}')
 
 
                     ], Colors.green),
@@ -164,11 +163,11 @@ class _ObservationScreenState extends State<ObservationScreen> {
                     ),
                     const SizedBox(height: 16),
                     LayoutBuilder(builder: (context, constrains) {
-                      return GridView.builder(
+                      return controller.sendImage.value ? const Center(child: CircularProgressIndicator(),) : GridView.builder(
                         padding: const EdgeInsets.all(8),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _controller
+                        itemCount: controller
                             .observation.value.images?.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: constrains.maxWidth > 600 ? 4 : 2,
@@ -176,7 +175,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                           mainAxisSpacing: 8,
                         ),
                         itemBuilder: (BuildContext context, int index) {
-                          final image_model.Image? image = _controller
+                          final image_model.Image? image = controller
                               .observation.value.images?[index];
                           return LayoutBuilder(
                             builder: (BuildContext context,
@@ -191,7 +190,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                         backgroundColor: Colors.black,
 
                                         actions:  [
-                                          !_controller.OC.medicalRecord.value.isClosed() && _controller.observation.value.doctor?.id ==  _authController.user['id'] ? Padding(
+                                          !controller.OC.medicalRecord.value.isClosed() && controller.observation.value.doctor?.id ==  authController.user['id'] ? Padding(
                                             padding: const EdgeInsets.all(12.0),
                                             child: IconButton(
                                               icon: const Icon(
@@ -209,7 +208,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                                   cancelTextColor: Colors.redAccent,
                                                   buttonColor: Colors.red,
                                                   onConfirm: () async {
-                                                    await _controller.deleteImage(image.id!);
+                                                    await controller.deleteImage(image.id!);
                                                     Get.back();
                                                     Get.back();
                                                   },
@@ -230,7 +229,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                         child: Container(
                                           constraints: const BoxConstraints.expand(),
                                           child: PhotoViewGallery.builder(
-                                            itemCount: _controller
+                                            itemCount: controller
                                                 .observation
                                                 .value
                                                 .images
@@ -238,7 +237,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                                             builder: (BuildContext context,
                                                 int index) {
                                               final image_model.Image? image =
-                                                  _controller
+                                                  controller
                                                       .observation
                                                       .value
                                                       .images?[index];

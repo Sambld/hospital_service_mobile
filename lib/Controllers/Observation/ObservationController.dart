@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
@@ -8,14 +7,13 @@ import '../../Models/Observation.dart';
 import '../../Services/Api.dart';
 import 'ObservationsController.dart';
 
-
-class ObservationController extends GetxController{
+class ObservationController extends GetxController {
   var isLoading = false.obs;
+  var sendImage = false.obs;
   var patientId = 0.obs;
   var medicalRecordId = 0.obs;
   var observationId = 0.obs;
   var OC = Get.find<ObservationsController>();
-
 
   var observation = Observation().obs;
 
@@ -23,27 +21,30 @@ class ObservationController extends GetxController{
 
   Future<void> uploadCameraImage() async {
     if (await Permission.camera.request().isGranted) {
-      XFile? image;
       try {
-        isLoading(true);
-        final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+        sendImage(true);
+        final pickedFile =
+            await ImagePicker().pickImage(source: ImageSource.camera);
         if (pickedFile != null) {
-          image = pickedFile;
           final formData = FormData.fromMap({
-            'image': await MultipartFile.fromFile(pickedFile.path, filename: 'image.jpg'),
+            'image': await MultipartFile.fromFile(pickedFile.path,
+                filename: 'image.jpg'),
           });
           try {
-            final res = await  Api.addObservationImage(patientId: patientId.value, medicalRecordId: medicalRecordId.value, observationId: observationId.value, formData: formData);
+            final res = await Api.addObservationImage(
+                patientId: patientId.value,
+                medicalRecordId: medicalRecordId.value,
+                observationId: observationId.value,
+                formData: formData);
           } catch (e) {
-            isLoading(false);
             print(e);
           }
-          isLoading(false);
           fetchImages();
         }
       } catch (e) {
-        isLoading(false);
         print(e);
+      } finally {
+        sendImage(false);
       }
     }
   }
@@ -52,11 +53,14 @@ class ObservationController extends GetxController{
     try {
       final pickedFiles = await ImagePicker().pickMultiImage();
       if (pickedFiles != null && pickedFiles.isNotEmpty) {
+        sendImage(true);
         for (var i = 0; i < pickedFiles.length; i++) {
           final formData = FormData.fromMap({
-            'image': await MultipartFile.fromFile(pickedFiles[i].path, filename: 'image_$i.jpg'),
+            'image': await MultipartFile.fromFile(pickedFiles[i].path,
+                filename: 'image_$i.jpg'),
           });
           try {
+
             final res = await Api.addObservationImage(
                 patientId: patientId.value,
                 medicalRecordId: medicalRecordId.value,
@@ -74,8 +78,11 @@ class ObservationController extends GetxController{
       }
     } catch (e) {
       print(e);
+    } finally {
+      sendImage(false);
     }
   }
+
   @override
   void onInit() {
     patientId(Get.arguments['patientId']);
@@ -86,19 +93,19 @@ class ObservationController extends GetxController{
     super.onInit();
   }
 
-  Future<void>  fetchImages() async {
-
+  Future<void> fetchImages() async {
     try {
       isLoading(true);
 
-      final res = await Api.getObservationById(patientId: patientId.value, medicalRecordId: medicalRecordId.value, observationId: observationId.value);
+      final res = await Api.getObservationById(
+          patientId: patientId.value,
+          medicalRecordId: medicalRecordId.value,
+          observationId: observationId.value);
       final data = res.data['data'];
-        // convert the list of maps to a list of observations with the fromJson constructor
+      // convert the list of maps to a list of observations with the fromJson constructor
       observation(Observation.fromJson(data));
 
-       isLoading(false);
-
-
+      isLoading(false);
     } catch (e) {
       isLoading(false);
       print(e);
@@ -107,10 +114,14 @@ class ObservationController extends GetxController{
     }
   }
 
-  Future<void> deleteImage(int i) async{
+  Future<void> deleteImage(int i) async {
     try {
       isLoading(true);
-      final res = await Api.deleteObservationImage(patientId: patientId.value, medicalRecordId: medicalRecordId.value, observationId: observationId.value, imageId: i);
+      final res = await Api.deleteObservationImage(
+          patientId: patientId.value,
+          medicalRecordId: medicalRecordId.value,
+          observationId: observationId.value,
+          imageId: i);
       print(res.data);
       fetchImages();
     } catch (e) {
@@ -123,7 +134,11 @@ class ObservationController extends GetxController{
   void updateObservationName() async {
     try {
       isLoading(true);
-      final res = await Api.updateObservationName(patientId: patientId.value, medicalRecordId: medicalRecordId.value, observationId: observationId.value, formData: {'name': editNameController.text});
+      final res = await Api.updateObservationName(
+          patientId: patientId.value,
+          medicalRecordId: medicalRecordId.value,
+          observationId: observationId.value,
+          formData: {'name': editNameController.text});
       print(res.data);
       fetchImages();
     } catch (e) {
@@ -136,7 +151,10 @@ class ObservationController extends GetxController{
   void deleteObservation() {
     try {
       isLoading(true);
-      Api.deleteObservation(patientId: patientId.value, medicalRecordId: medicalRecordId.value, observationId: observationId.value);
+      Api.deleteObservation(
+          patientId: patientId.value,
+          medicalRecordId: medicalRecordId.value,
+          observationId: observationId.value);
       OC.fetchObservations();
       Get.back();
     } catch (e) {
@@ -145,7 +163,4 @@ class ObservationController extends GetxController{
       isLoading(false);
     }
   }
-
-
 }
-

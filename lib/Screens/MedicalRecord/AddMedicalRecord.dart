@@ -6,10 +6,9 @@ import 'package:intl/intl.dart';
 
 import '../../Constants/Constants.dart';
 import '../../Controllers/MedicalRecord/AddMedicalRecordController.dart';
-import '../../Services/Api.dart';
 
 class AddMedicalRecordScreen extends StatelessWidget {
-  final _controller = Get.put(AddMedicalRecordController());
+  final controller = Get.put(AddMedicalRecordController());
 
    AddMedicalRecordScreen({super.key});
 
@@ -23,10 +22,10 @@ class AddMedicalRecordScreen extends StatelessWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.save),
-                onPressed: _controller.isLoading.value
+                onPressed: controller.isLoading.value
                     ? null
                     : () async {
-                        _controller.submitForm();
+                        controller.submitForm();
                       },
               ),
             ],
@@ -35,13 +34,13 @@ class AddMedicalRecordScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: FormBuilder(
-                key: _controller.formKey.value,
+                key: controller.formKey.value,
                 child: Column(
                   children: [
                     TextFormField(
                       enabled: false,
-                      initialValue: "${_controller.patient.value.firstName} ${_controller.patient.value.lastName }",
-                      decoration: inputDecoration('Patient', Icons.person),
+                      initialValue: "${controller.patient.value.firstName} ${controller.patient.value.lastName }",
+                      decoration: inputDecoration('Patient'.tr, Icons.person),
                     ),
                     const SizedBox(height: 15),
                     FormBuilderDateTimePicker(
@@ -70,7 +69,7 @@ class AddMedicalRecordScreen extends StatelessWidget {
                       minLines: 1,
                       maxLines: 6,
                       decoration: inputDecoration(
-                          '${"Condition Description"} *', Icons.description),
+                          '${"Condition Description".tr} *', Icons.description),
                       validator: FormBuilderValidators.required(
                           errorText: 'Condition Description is required'.tr),
                     ),

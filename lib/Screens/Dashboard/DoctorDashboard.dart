@@ -10,27 +10,7 @@ class DoctorDashboardScreen extends StatelessWidget {
   DoctorDashboardScreen({Key? key}) : super(key: key);
   final controller = Get.put(DoctorDashboardController());
 
-  // Define the tabs and their corresponding content
-  final List<Tab> tabs = <Tab>[
-    // make the tabs text have 2 lines
 
-    Tab(
-      child: Text(
-        "Active Records".tr,
-        style: TextStyle(
-            fontSize: ResponsiveFontSize.medium(),
-            fontWeight: FontWeight.normal),
-      ),
-    ),
-    Tab(
-      child: Text(
-        "Latest Updates".tr,
-        style: TextStyle(
-            fontSize: ResponsiveFontSize.medium(),
-            fontWeight: FontWeight.normal),
-      ),
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +23,13 @@ class DoctorDashboardScreen extends StatelessWidget {
           title: Text('Dashboard'.tr),
         ),
         body: DefaultTabController(
-          length: tabs.length,
+          length: 2,
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  '${"Welcome".tr} Dr. ${controller.doctor['first_name']} ${controller.doctor['last_name']}',
+                  '${"Welcome".tr} ${controller.doctor['first_name']} ${controller.doctor['last_name']}',
                   style: const TextStyle(
                       fontFamily: 'Euclid',
                       fontSize: 18,
@@ -60,12 +40,12 @@ class DoctorDashboardScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InfoCard(
-                    title: 'My Patients'.tr,
+                    title: 'Total Patients'.tr,
                     value: controller.patientsCount.toString(),
                     color: const Color(0xffF9F9F9),
                   ),
                   InfoCard(
-                    title: 'My Medical Records'.tr,
+                    title: 'Inpatients'.tr,
                     value: controller.medicalRecords.length.toString(),
                     color: const Color(0xffF9F9F9),
                     corner: 'effect2.svg',
@@ -74,7 +54,26 @@ class DoctorDashboardScreen extends StatelessWidget {
               ),
               // Add the TabBar to switch between tabs
               TabBar(
-                tabs: tabs,
+                tabs: [
+                  // make the tabs text have 2 lines
+
+                  Tab(
+                    child: Text(
+                      "${"Active Records".tr} (${controller.activeMedicalRecords.length})",
+                      style: TextStyle(
+                          fontSize: ResponsiveFontSize.medium(),
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Latest Updates".tr,
+                      style: TextStyle(
+                          fontSize: ResponsiveFontSize.medium(),
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                ],
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.grey,
               ),
@@ -106,7 +105,7 @@ class DoctorDashboardScreen extends StatelessWidget {
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText:
-                                        '${'Search'.tr} ${'patient'.tr} , ${'Bed Number'.tr}',
+                                        '${'Search'.tr} :  ${'Patient'.tr} , ${'Bed Number'.tr}',
                                     prefixIcon: const Icon(Icons.search),
                                     suffixIcon: controller.search.isNotEmpty
                                         ? Row(
@@ -157,109 +156,114 @@ class MyActiveMedicalRecords extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Obx(() {
-          if (controller.medicalRecordsLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            if (controller.medicalRecords.isEmpty) {
-              return Center(
-                child: Text('No Active Medical Records'.tr),
+    return RefreshIndicator(
+      onRefresh: () async {
+       return controller.getActiveMedicalRecords();
+      },
+      child: ListView(
+        children: [
+          Obx(() {
+            if (controller.medicalRecordsLoading.value) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             } else {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.activeMedicalRecordsSearch.length,
-                itemBuilder: (context, index) {
-                  final medicalRecord = controller.activeMedicalRecordsSearch[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 4.0, horizontal: 8.0),
-                    child: Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Get.toNamed('/medical-record-details', arguments: {
-                            'medicalRecordId': medicalRecord.id,
-                            'patientId': medicalRecord.patient!.id,
-                          });
-                        },
-                        title: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            '${medicalRecord.patient!.firstName!}  ${medicalRecord.patient!.lastName!}',
-                            style: TextStyle(
-                              fontFamily: 'Euclid',
-                              fontSize: ResponsiveFontSize.large(),
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xff252631),
+              if (controller.medicalRecords.isEmpty) {
+                return Center(
+                  child: Text('No Active Medical Records'.tr),
+                );
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.activeMedicalRecordsSearch.length,
+                  itemBuilder: (context, index) {
+                    final medicalRecord = controller.activeMedicalRecordsSearch[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 8.0),
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            Get.toNamed('/medical-record-details', arguments: {
+                              'medicalRecordId': medicalRecord.id,
+                              'patientId': medicalRecord.patient!.id,
+                            });
+                          },
+                          title: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              '${medicalRecord.patient!.firstName!}  ${medicalRecord.patient!.lastName!}',
+                              style: TextStyle(
+                                fontFamily: 'Euclid',
+                                fontSize: ResponsiveFontSize.large(),
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xff252631),
+                              ),
                             ),
                           ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // condition
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // condition
 
+                                Text(
+                                  '${'Bed Number'.tr} : ${medicalRecord.bedNumber}',
+                                  style: TextStyle(
+                                    fontFamily: 'Euclid',
+                                    fontSize: ResponsiveFontSize.small(),
+                                    color: const Color(0xff252631),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '${'Condition'.tr} : ${medicalRecord.conditionDescription}',
+                                  style: TextStyle(
+                                    fontFamily: 'Euclid',
+                                    fontSize: ResponsiveFontSize.small(),
+                                    color: const Color(0xff252631),
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Text(
-                                '${'Bed Number'.tr} : ${medicalRecord.bedNumber}',
-                                style: TextStyle(
+                                '#${medicalRecord.id}',
+                                style: const TextStyle(
                                   fontFamily: 'Euclid',
-                                  fontSize: ResponsiveFontSize.small(),
-                                  color: const Color(0xff252631),
+                                  fontSize: 14,
+                                  color: Color(0xff252631),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                '${'Condition'.tr} : ${medicalRecord.conditionDescription}',
-                                style: TextStyle(
-                                  fontFamily: 'Euclid',
-                                  fontSize: ResponsiveFontSize.small(),
-                                  color: const Color(0xff252631),
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Color(0xff252631),
                               ),
                             ],
                           ),
                         ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '#${medicalRecord.id}',
-                              style: const TextStyle(
-                                fontFamily: 'Euclid',
-                                fontSize: 14,
-                                color: Color(0xff252631),
-                              ),
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Color(0xff252631),
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                  );
-                },
-              );
+                    );
+                  },
+                );
+              }
             }
-          }
-        }),
-      ],
+          }),
+        ],
+      ),
     );
   }
 }
@@ -281,101 +285,106 @@ class LatestUpdates extends StatelessWidget {
           child: Text('No Updates In The Last 24h'.tr),
         );
       }
-      return ListView(
-        children: [
-          ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.latestMSUpdates.length,
-              itemBuilder: (context, index) {
-                final ms = controller.latestMSUpdates[index];
-                // get patient name by looping through all medical records and check if the medical record id is equal to the ms record id then get the patient name
-                final patient = ms.medicalRecord?.patient;
+      return Obx(
+        ()=> RefreshIndicator(
+          onRefresh: () { return controller.getLatestUpdates(); },
+          child: ListView(
+            children: [
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.latestMSUpdates.length,
+                  itemBuilder: (context, index) {
+                    final ms = controller.latestMSUpdates[index];
+                    // get patient name by looping through all medical records and check if the medical record id is equal to the ms record id then get the patient name
+                    final patient = ms.medicalRecord?.patient;
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 2.0, horizontal: 8.0),
-                  child: Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ListTile(
-                      onTap: () {
-                        Get.toNamed('/monitoring-sheet', arguments: {
-                          'medicalRecordId': ms.recordId,
-                          'patientId': patient?.id,
-                          'id': controller.latestMSUpdates[index].id,
-                        });
-                      },
-                      title: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          'Monitoring Sheet'.tr,
-                          style: TextStyle(
-                            fontFamily: 'Euclid',
-                            fontSize: ResponsiveFontSize.medium(),
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xff252631),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 2.0, horizontal: 8.0),
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            Get.toNamed('/monitoring-sheet', arguments: {
+                              'medicalRecordId': ms.recordId,
+                              'patientId': patient?.id,
+                              'id': controller.latestMSUpdates[index].id,
+                            });
+                          },
+                          title: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              'Monitoring Sheet'.tr,
+                              style: TextStyle(
+                                fontFamily: 'Euclid',
+                                fontSize: ResponsiveFontSize.medium(),
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xff252631),
+                              ),
+                            ),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // condition
+                                //patient name
+                                Text(
+                                  '${'Patient'.tr} : ${patient?.firstName!} ${patient?.lastName!}',
+                                  style: TextStyle(
+                                    fontFamily: 'Euclid',
+                                    fontSize: ResponsiveFontSize.small(),
+                                    color: const Color(0xff252631),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '${'Filling Date'.tr} : ${ms.fillingDate!.day == DateTime.now().day ? 'Today'.tr : '${ms.fillingDate.toString().substring(0, 10)} '}  ${ms.createdAt!.toLocal().toString().substring(10, 16)}',
+                                  style: TextStyle(
+                                    fontFamily: 'Euclid',
+                                    fontSize: ResponsiveFontSize.small(),
+                                    color: const Color(0xff252631),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '${'Filled by'.tr} : ${ms.filledBy!['first_name']} ${ms.filledBy!['last_name']}',
+                                  style: TextStyle(
+                                    fontFamily: 'Euclid',
+                                    fontSize: ResponsiveFontSize.small(),
+                                    color: const Color(0xff252631),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Color(0xff252631),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // condition
-                            //patient name
-                            Text(
-                              '${'Patient'.tr} : ${patient?.firstName!} ${patient?.lastName!}',
-                              style: TextStyle(
-                                fontFamily: 'Euclid',
-                                fontSize: ResponsiveFontSize.small(),
-                                color: const Color(0xff252631),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              '${'Filling Date'.tr} : ${ms.fillingDate!.day == DateTime.now().day ? 'Today'.tr : '${ms.fillingDate.toString().substring(0, 10)} '}  ${ms.createdAt!.toLocal().toString().substring(10, 16)}',
-                              style: TextStyle(
-                                fontFamily: 'Euclid',
-                                fontSize: ResponsiveFontSize.small(),
-                                color: const Color(0xff252631),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              '${'Filled by'.tr} : ${ms.filledBy!['first_name']} ${ms.filledBy!['last_name']}',
-                              style: TextStyle(
-                                fontFamily: 'Euclid',
-                                fontSize: ResponsiveFontSize.small(),
-                                color: const Color(0xff252631),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Color(0xff252631),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              })
-        ],
+                    );
+                  })
+            ],
+          ),
+        ),
       );
     }
   }

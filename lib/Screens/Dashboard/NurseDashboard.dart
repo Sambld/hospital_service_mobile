@@ -218,7 +218,6 @@ class AvailableMonitoringSheets extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Filling date
                             Text(
                               '${'Doctor'.tr}: ${monitoringSheet.medicalRecord?.doctorName}',
                               style: TextStyle(
@@ -370,7 +369,7 @@ class LatestFilledMonitoringSheets extends StatelessWidget {
                           ),
                           // Condition
                           Text(
-                            '${'Filling Date'.tr}: ${monitoringSheet.updatedAt.toString().substring(0, 16)}',
+                            '${'Filling Date'.tr}: ${monitoringSheet.fillingDate.toString().substring(0, 16)}',
                             style: TextStyle(
                               fontFamily: 'Euclid',
                               fontSize: ResponsiveFontSize.small(),

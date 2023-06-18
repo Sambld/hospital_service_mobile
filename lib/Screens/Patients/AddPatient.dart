@@ -3,7 +3,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:infectious_diseases_service/Widgets/GlobalWidgets.dart';
-import 'package:intl/intl.dart';
 
 import '../../Constants/Constants.dart';
 import '../../Controllers/Patient/AddPatientController.dart';
@@ -11,7 +10,8 @@ import '../../Controllers/Patient/AddPatientController.dart';
 class AddPatientScreen extends StatelessWidget {
   final _addPatientController = Get.put(AddPatientController());
 
-  final DateFormat _dateFormat = DateFormat('yyyy/mm/dd');
+   AddPatientScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {

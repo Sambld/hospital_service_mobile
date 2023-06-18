@@ -106,7 +106,7 @@ class MedicalRecordCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${medicalRecord.isActive() ? "Active".tr : "Closed".tr}',
+                  medicalRecord.isActive() ? "Active".tr : "Closed".tr,
                   style: TextStyle(
                     fontSize: ResponsiveFontSize.small(),
                     color: medicalRecord.isActive() ? Colors.green : Colors.redAccent,

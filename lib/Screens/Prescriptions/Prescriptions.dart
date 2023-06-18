@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
-
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import '../../Constants/Constants.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/Prescription/PrescriptionsController.dart';
@@ -15,8 +11,7 @@ class PrescriptionsScreen extends StatelessWidget {
 
   final controller = Get.put(PrescriptionsController());
   final authController = Get.find<AuthController>();
-  final _formKey = GlobalKey<FormBuilderState>();
-  final _nameController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +81,7 @@ class PrescriptionsScreen extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             // doctor name
-                            '${prescription.doctor!.fullName()}',
+                            prescription.doctor!.fullName(),
                             style: TextStyle(fontSize: ResponsiveFontSize.medium() , fontWeight: FontWeight.w400),
                           ),
                         ],

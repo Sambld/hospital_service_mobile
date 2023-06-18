@@ -28,7 +28,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                 '${"Medical Record".tr} (#${controller.medicalRecord.value.id ?? "0"})'),
             bottom:  TabBar(
               tabs: [
-                Tab(child: Text("Informations")),
+                Tab(child: Text("Information".tr)),
                 Tab(icon: Text("Other".tr)),
               ],
             ),

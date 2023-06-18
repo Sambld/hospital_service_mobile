@@ -38,6 +38,7 @@ class MonitoringSheetController extends GetxController {
       // make currentMonitoringSheet the one with the selected date
       final selectedDateMonitoringSheet = monitoringSheetList.firstWhere((sheet) => sheet.id == id);
       currentMonitoringSheet(selectedDateMonitoringSheet);
+      currentMonitoringSheetIndex(monitoringSheetList.indexOf(selectedDateMonitoringSheet));
 
     }
 

@@ -1,5 +1,3 @@
-
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -10,7 +8,6 @@ import '../../Services/Api.dart';
 import '../AuthController.dart';
 
 class DoctorDashboardController extends GetxController {
-
   var medicalRecordsLoading = false.obs;
   var updatesLoading = false.obs;
   var medicalRecords = <MedicalRecord>[].obs;
@@ -20,29 +17,32 @@ class DoctorDashboardController extends GetxController {
   var search = ''.obs;
   var searchController = TextEditingController().obs;
 
-  get activeMedicalRecords => medicalRecords.where((element) => element.patientLeavingDate == null).toList();
-
+  get activeMedicalRecords => medicalRecords
+      .where((element) => element.patientLeavingDate == null)
+      .toList();
 
   @override
   void onInit() {
     // TODO: implement onInit
     doctor(Get.find<AuthController>().user);
     // getDoctorMedicalRecords();
-    getMyPatientsCount();
+    getPatientsCount();
     getActiveMedicalRecords();
     getLatestUpdates();
 
     super.onInit();
   }
 
-  Future<void> getLatestUpdates() async{
+  Future<void> getLatestUpdates() async {
     updatesLoading(true);
-      final res = await Api.dio.get('monitoring-sheets/latest-updates');
-      latestMSUpdates(res.data.map<MonitoringSheet>((e) => MonitoringSheet.fromJson(e)).toList());
+    final res = await Api.dio.get('monitoring-sheets/latest-updates');
+    latestMSUpdates(res.data
+        .map<MonitoringSheet>((e) => MonitoringSheet.fromJson(e))
+        .toList());
 
-      updatesLoading(false);
+    updatesLoading(false);
+
   }
-
 
   // Future<void> getDoctorMedicalRecords() async {
   //   medicalRecordsLoading(true);
@@ -60,29 +60,27 @@ class DoctorDashboardController extends GetxController {
   // }
 
   // getActiveMedicalRecords
-  Future<void> getActiveMedicalRecords() async{
+  Future<void> getActiveMedicalRecords() async {
     medicalRecordsLoading(true);
-    try{
+    try {
       final res = await Api.getActiveMedicalRecords();
-      medicalRecords(res.data.map<MedicalRecord>((e) => MedicalRecord.fromJson(e)).toList());
-    }catch(e){
+      medicalRecords(res.data
+          .map<MedicalRecord>((e) => MedicalRecord.fromJson(e))
+          .toList());
+    } catch (e) {
       throw 'Error';
     }
     medicalRecordsLoading(false);
   }
 
-
-
-  Future<void> getMyPatientsCount() async{
-    try{
-      final res = await Api.dio.get('patients?onlyMyPatientsCount=true');
+  Future<void> getPatientsCount() async {
+    try {
+      final res = await Api.dio.get('patients?count');
       patientsCount(res.data['count']);
-
-    }catch(e){
-throw 'Error';
+    } catch (e) {
+      throw 'Error';
     }
   }
-
 
   List<MedicalRecord> get activeMedicalRecordsSearch {
     if (search.value.isEmpty) {
@@ -90,15 +88,16 @@ throw 'Error';
     } else {
       return activeMedicalRecords.where((medicalRecord) {
         // print("${medicalRecord.bedNumber.toString()} ${medicalRecord.toString()}");
-        return (medicalRecord.patient?.firstName?.toLowerCase().contains(search.value.toLowerCase()) ?? false) ||
-            (medicalRecord.patient?.lastName?.toLowerCase().contains(search.value.toLowerCase()) ?? false) ||
+        return (medicalRecord.patient?.firstName
+                    ?.toLowerCase()
+                    .contains(search.value.toLowerCase()) ??
+                false) ||
+            (medicalRecord.patient?.lastName
+                    ?.toLowerCase()
+                    .contains(search.value.toLowerCase()) ??
+                false) ||
             (medicalRecord.bedNumber.toString() == search.value);
       }).toList();
     }
   }
-
-
-
-
-
 }

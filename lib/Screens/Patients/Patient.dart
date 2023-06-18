@@ -23,8 +23,8 @@ class PatientScreen extends StatelessWidget {
             elevation: 3,
             bottom: TabBar(
               tabs: [
-                const Tab(
-                  child: Text('informations'),
+                 Tab(
+                  child: Text('Information'.tr),
                 ),
                 Tab(child: Text('Medical Records'.tr)),
               ],
@@ -44,8 +44,7 @@ class PatientScreen extends StatelessWidget {
             ],
             // backgroundColor: Colors.transparent,
             title: Text(
-              'Patient Details'.tr +
-                  '(#${_patientController.patient.value.id})',
+              '${'Patient Details'.tr}(#${_patientController.patient.value.id})',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -82,7 +81,7 @@ class PatientScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             _patientInfoRow(
-                                title: "Name",
+                                title: "Name".tr,
                                 value:
                                     '${_patientController.patient.value.firstName} ${_patientController.patient.value.lastName}'),
                             _patientInfoRow(
@@ -347,9 +346,7 @@ class PatientScreen extends StatelessWidget {
   void addMedicalRecord() {
     Get.toNamed('/add-medical-record',
             arguments: _patientController.patient.value)
-        ?.then((value) {
-      _patientController.refresh();
-    });
+        ;
   }
 
   Widget $(child) {

@@ -3,21 +3,18 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import '../../Constants/Constants.dart';
-import '../../Controllers/MedicalRecord/AddMedicalRecordController.dart';
 import '../../Controllers/MedicalRecord/EditMedicalRecordController.dart';
-import '../../Services/Api.dart';
 
 class EditMedicalRecordScreen extends StatefulWidget {
   const EditMedicalRecordScreen({super.key});
 
   @override
-  _EditMedicalRecordScreenState createState() => _EditMedicalRecordScreenState();
+  State<EditMedicalRecordScreen> createState() => _EditMedicalRecordScreenState();
 }
 
 class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
-  final _controller = Get.put(EditMedicalRecordController());
+  final controller = Get.put(EditMedicalRecordController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +22,14 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
       appBar: AppBar(
         flexibleSpace: kAppBarColor,
 
-        title:  Text('Edit Medical Record  (#${_controller.medicalRecord.value.id})' ,style: TextStyle(fontSize: 18),),
+        title:  Text('Edit Medical Record  (#${controller.medicalRecord.value.id})' ,style: const TextStyle(fontSize: 18),),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: _controller.isLoading.value
+            onPressed: controller.isLoading.value
                 ? null
                 : () async {
-              _controller.submitForm();
+              controller.submitForm();
             },
           ),
         ],
@@ -41,12 +38,12 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: FormBuilder(
-            key: _controller.formKey.value,
+            key: controller.formKey.value,
             child: Column(
               children: [
                 TextFormField(
                   enabled: false,
-                  initialValue: "${_controller.patient.value.firstName} ${_controller.patient.value.lastName }",
+                  initialValue: "${controller.patient.value.firstName} ${controller.patient.value.lastName }",
                   decoration: inputDecoration('Patient', Icons.person),
                 ),
                 const SizedBox(height: 15),
@@ -72,7 +69,7 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
                 const SizedBox(height: 15),
                 FormBuilderTextField(
                   name: 'condition_description',
-                  initialValue: _controller.medicalRecord.value.conditionDescription ,
+                  initialValue: controller.medicalRecord.value.conditionDescription ,
                   keyboardType: TextInputType.multiline,
                   minLines: 1,
                   maxLines: 6,
@@ -84,7 +81,7 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
                 const SizedBox(height: 15),
                 FormBuilderTextField(
                   name: 'standard_treatment',
-                  initialValue: _controller.medicalRecord.value.standardTreatment,
+                  initialValue: controller.medicalRecord.value.standardTreatment,
 
                   keyboardType: TextInputType.multiline,
                   minLines: 1,
@@ -97,7 +94,7 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
                 const SizedBox(height: 15),
                 FormBuilderTextField(
                   name: 'state_upon_enter',
-                  initialValue: _controller.medicalRecord.value.stateUponEnter,
+                  initialValue: controller.medicalRecord.value.stateUponEnter,
                   decoration: inputDecoration('${"State Upon Enter".tr} *',
                       Icons.airline_seat_individual_suite),
                   validator: FormBuilderValidators.required(
@@ -106,7 +103,7 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
                 const SizedBox(height: 15),
                 FormBuilderTextField(
                   name: 'bed_number',
-                  initialValue: _controller.medicalRecord.value.bedNumber.toString(),
+                  initialValue: controller.medicalRecord.value.bedNumber.toString(),
                   decoration: inputDecoration('Bed Number'.tr, Icons.king_bed),
                   validator: FormBuilderValidators.required(
                       errorText: 'Bed Number is required'.tr),
@@ -115,12 +112,12 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
 
 
                 const SizedBox(height: 10.0),
-                 Center(child: Text("Leaving Information".tr ,style: TextStyle(fontSize: 16 , color: Colors.redAccent),),),
+                 Center(child: Text("Leaving Information".tr ,style: const TextStyle(fontSize: 16 , color: Colors.redAccent),),),
                 const SizedBox(height: 15.0),
 
                 FormBuilderTextField(
                   name: 'state_upon_exit',
-                  initialValue: _controller.medicalRecord.value.stateUponExit,
+                  initialValue: controller.medicalRecord.value.stateUponExit,
                   decoration: inputDecoration('State Upon Exit'.tr, Icons.exit_to_app_outlined),
                 ),
                 const SizedBox(height: 10.0),
@@ -128,7 +125,7 @@ class _EditMedicalRecordScreenState extends State<EditMedicalRecordScreen> {
                   name: 'patient_leaving_date',
                   inputType: InputType.date,
                   format: DateFormat('yyyy-MM-dd'),
-                  initialValue: _controller.medicalRecord.value.patientLeavingDate,
+                  initialValue: controller.medicalRecord.value.patientLeavingDate,
                   decoration: inputDecoration('Leaving Date'.tr, Icons.calendar_month),
 
                 ),
